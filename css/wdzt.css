@@ -1,0 +1,128 @@
+/* 
+ * This software was developed at the National Institute of Standards and
+ * Technology by employees of the Federal Government in the course of
+ * their official duties. Pursuant to title 17 Section 105 of the United
+ * States Code this software is not subject to copyright protection and is
+ * in the public domain. This software is an experimental system. NIST assumes
+ * no responsibility whatsoever for its use by other parties, and makes no
+ * guarantees, expressed or implied, about its quality, reliability, or
+ * any other characteristic. We would appreciate acknowledgement if the
+ * software is used.
+ */
+
+.wdzt-container .ui-widget,
+.wdzt-toolbar-container .ui-widget,
+.wdzt-menu-container .ui-widget,
+.wdzt-osd-container .ui-widget {
+    font-size: 0.9em;
+}
+
+.wdzt-menu-container .ui-accordion .ui-accordion-content {
+    padding: 0.5em;
+}
+
+
+.wdzt-container,
+.wdzt-toolbar-container,
+.wdzt-menu-container,
+.wdzt-osd-container {
+    background-color: white;
+}
+.wdzt-osd-container {
+    cursor: crosshair;
+}
+
+.wdzt-wait, .wdzt-wait * {
+    cursor: wait !important;
+}
+
+.wdzt-img-button {
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.wdzt-menu-and-osd-container {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+
+.wdzt-menu-container {
+    display: table-cell;
+    vertical-align: top;
+    width: 300px;
+}
+
+.wdzt-menu-subcontainer {
+    overflow: auto;
+}
+
+.wdzt-menu-container h3 {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.wdzt-osd-container {
+    display: table-cell;
+    width: 100%;
+    vertical-align: top;
+}
+
+.wdzt-toolbar-container {
+    width: 100%;
+    display: table;
+    padding: 0;
+    margin: 0;
+}
+
+.wdzt-toolbar-buttons {
+    display: table-cell;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.wdzt-toolbar-buttons img {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.wdzt-toolbar-movie-position {
+    display: table-cell;
+    vertical-align: middle;
+    white-space: nowrap;
+    padding-left: 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.wdzt-toolbar-movie-position input {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.wdzt-toolbar-slider-container {
+    padding: 20px;
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.wdzt-table-layout {
+    display: table;
+}
+
+.wdzt-row-layout {
+    display: table-row;
+}
+
+.wdzt-cell-layout {
+    display: table-cell;
+}
+
+.wdzt-no-wrap {
+    white-space: nowrap;
+}
+
+.wdzt-full-width {
+    width: 100%;
+}

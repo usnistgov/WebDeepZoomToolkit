@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!--
+     * This software was developed at the National Institute of Standards and
+     * Technology by employees of the Federal Government in the course of
+     * their official duties. Pursuant to title 17 Section 105 of the United
+     * States Code this software is not subject to copyright protection and is
+     * in the public domain. This software is an experimental system. NIST assumes
+     * no responsibility whatsoever for its use by other parties, and makes no
+     * guarantees, expressed or implied, about its quality, reliability, or
+     * any other characteristic. We would appreciate acknowledgement if the
+     * software is used.
+    -->
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        <title>WebDeepZoomToolkit</title>
+
+        <link rel="stylesheet" type="text/css" href="libs/jquery/css/smoothness/jquery-ui.css"/>
+        <link rel="stylesheet" type="text/css" href="libs/jquery/css/smoothness/jquery.ui.theme.css"/>
+        <link rel="stylesheet" type="text/css" href="libs/jquery/css/jquery.tree.min.css"/>
+        <link rel="stylesheet" type="text/css" href="css/wdzt.css"/>
+        <link rel="stylesheet" type="text/css" href="css/layer-composition-module.css"/>
+        <link rel="stylesheet" type="text/css" href="css/display-info-module.css"/>
+        <link rel="stylesheet" type="text/css" href="css/fetching-module.css"/>
+        <link rel="stylesheet" type="text/css" href="css/recording-module.css"/>
+        <link rel="stylesheet" type="text/css" href="css/scalebar-module.css"/>
+        <link rel="stylesheet" type="text/css" href="css/colony-searching-module.css"/>
+        <link rel="stylesheet" type="text/css" href="css/colony-feature-module.css"/>
+        <link rel="stylesheet" type="text/css" href="css/transitions-widgets.css"/>
+
+        <style>
+            #container {
+                width: 100%;
+                height: 700px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h3>WDZT DEBUG</h3>
+        <div id="container"></div>
+
+        <!-- jQuery and plugins -->
+        <script type="text/javascript" src="libs/jquery/js/jquery-1.11.0.js"></script>
+        <script type="text/javascript" src="libs/jquery/js/jquery-ui-1.10.4.js"></script>
+        <script type="text/javascript" src="libs/jquery/js/jquery-ui-dialog-html-title.js"></script>
+        <script type="text/javascript" src="libs/jquery/js/jquery.tree.js"></script>
+        <script type="text/javascript" src="libs/jquery/js/jquery.fileDownload.js"></script>
+        <script type="text/javascript" src="libs/jquery/js/jquery.color-2.1.2.js"></script>
+
+
+        <!-- noty (jQuery plugin) -->
+        <script type="text/javascript" src="libs/noty/jquery.noty.js"></script>
+        <script type="text/javascript" src="libs/noty/layouts/bottomRight.js"></script>
+        <script type="text/javascript" src="libs/noty/themes/default.js"></script>
+
+
+        <!-- OpenSeadragon and plugins -->
+        <script type="text/javascript" src="libs/openseadragon/openseadragon.js"></script>
+
+        <script type="text/javascript" src="libs/openseadragon/openseadragon-viewerinputhook.js"></script>
+        <script type="text/javascript" src="libs/openseadragon/openseadragon-pixelcolor.js"></script>
+        <script type="text/javascript" src="libs/openseadragon/openseadragon-movie.js"></script>
+        <script type="text/javascript" src="libs/openseadragon/openseadragon-recorder.js"></script>
+        <script type="text/javascript" src="libs/openseadragon/openseadragon-scalebar.js"></script>
+        <script type="text/javascript" src="libs/openseadragon/openseadragon-xraytransitions.js"></script>
+
+
+
+        <!--Others--> 
+        <script type="text/javascript" src="libs/handlebars/handlebars-v1.3.0.js"></script>
+        <script type="text/javascript" src="libs/jszip/jszip.js"></script>
+        <script type="text/javascript" src="libs/filesaver/FileSaver.js"></script>
+
+        <!-- Own code -->
+        <script type="text/javascript" src="src/wdzt.js"></script>
+        <script type="text/javascript" src="src/viewer.js"></script>
+        <script type="text/javascript" src="src/toolbar.js"></script>
+        <script type="text/javascript" src="src/manifest.js"></script>
+        <script type="text/javascript" src="src/module.js"></script>
+
+        <!-- modules -->
+        <script type="text/javascript" src="src/modules/layer-selection-module.js"></script>
+        <script type="text/javascript" src="src/modules/layer-composition-module.js"></script>
+        <script type="text/javascript" src="src/modules/display-info-module.js"></script>
+        <script type="text/javascript" src="src/modules/colony-searching-module.js"></script>
+        <script type="text/javascript" src="src/modules/transitions-overlay-module.js"></script>
+        <script type="text/javascript" src="src/modules/nearby-transitions-module.js"></script>
+        <script type="text/javascript" src="src/modules/recording-module.js"></script>
+        <script type="text/javascript" src="src/modules/fetching-module.js"></script>
+        <script type="text/javascript" src="src/modules/scalebar-module.js"></script>
+        <script type="text/javascript" src="src/modules/colony-feature-module.js"></script>
+
+        <!-- logic code -->
+        <script type="text/javascript" src="src/logic/element-color.js"></script>
+        <script type="text/javascript" src="src/logic/xraytransitions.js"></script>
+        <script type="text/javascript" src="src/logic/colony-helper.js"></script>
+
+        <!-- widgets -->
+        <script type="text/javascript" src="src/widgets/transitions-tree-selector.js"></script>
+        <script type="text/javascript" src="src/widgets/nearby-transitions-displayer.js"></script>
+
+        <script type="text/javascript">
+            var wdzt = WDZT({
+                id: "container",
+//                OpenSeadragon: {
+//                    showNavigator: false
+//                },
+                NearbyTransitionsModule: {
+                    xrayUrl: "data/xrays.xml"
+                }
+            });
+//            wdzt.open("data/manifest.json", {
+//                layer: "corrected_gfp",
+//                frame: 3,
+//                ColonySearchingModule: {
+//                    colony: 10
+//                }
+//            });
+            wdzt.open("data/manifest.json");
+        </script>
+    </body>
+</html>

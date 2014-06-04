@@ -1,0 +1,7 @@
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+ <g>
+  <rect id="line" x="0" y="0" width="20" height="100" fill="#999999"/>
+  <path d="M 20 50 L 60 0 L 60 100 Z" fill="#999999"/>
+  <path d="M 60 50 L 100 0 L 100 100 Z" fill="#999999"/>
+ </g>
+</svg> 

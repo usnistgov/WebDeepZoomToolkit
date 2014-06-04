@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!--
+This software was developed at the National Institute of Standards and
+Technology by employees of the Federal Government in the course of
+their official duties. Pursuant to title 17 Section 105 of the United
+States Code this software is not subject to copyright protection and is
+in the public domain. This software is an experimental system. NIST assumes
+no responsibility whatsoever for its use by other parties, and makes no
+guarantees, expressed or implied, about its quality, reliability, or
+any other characteristic. We would appreciate acknowledgement if the
+software is used.
+-->
+<html>
+    <head>
+        <title>WDZT QUnit</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.14.0.css">
+        <link rel="stylesheet" href="build/deps/wdzt-deps.css">
+
+    </head>
+    <body>
+        <div id="qunit"></div>
+        <div id="qunit-fixture"></div>
+
+        <script src="http://code.jquery.com/qunit/qunit-1.14.0.js"></script>
+        <script src="build/deps/WebDeepZoomToolkit-deps.min.js"></script>
+
+
+        <script src="test/tests-tools.js"></script>
+
+        <script src="test/wdzt.js"></script>
+        <script src="test/manifest.js"></script>
+        <script src="test/viewer.js"></script>
+        <script src="test/toolbar.js"></script>
+        <script src="test/module.js"></script>
+
+        <script src="test/modules/layer-selection-module.js"></script>
+        <script src="test/modules/layer-composition-module.js"></script>
+        <script src="test/modules/display-info-module.js"></script>
+        <script src="test/modules/recording-module.js"></script>
+        <script src="test/modules/scalebar-module.js"></script>
+        <script src="test/modules/transitions-overlay-module.js"></script>
+        <script src="test/modules/nearby-transitions-module.js"></script>
+        <script src="test/modules/fetching-module.js"></script>
+        <script src="test/modules/colony-feature-module.js"></script>
+
+        <script src="test/logic/colony-helper.js"></script>
+        <script src="test/logic/element-color.js"></script>
+        <script src="test/logic/xraytransitions.js"></script>
+
+        <script src="test/widgets/nearby-transitions-displayer.js"></script>
+        <script src="test/widgets/transitions-tree-selector.js"></script>
+    </body>
+</html>

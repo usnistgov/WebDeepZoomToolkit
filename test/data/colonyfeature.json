@@ -1,0 +1,159 @@
+[{
+    "id": 118,
+    "timeFrame": 1,
+    "colonyId": 103,
+    "dataset": {
+      "id": 1,
+      "name": "replica1",
+      "alias": null,
+      "description": "Biology Experiment"
+    },
+    "shape": {
+      "id": 118,
+      "boxBound": {
+        "width": 283,
+        "height": 388,
+        "x": 8725,
+        "y": 7959
+      },
+      "centroid": {
+        "x": 8868.444352554065,
+        "y": 8176.766940578205
+      },
+      "areapxl": 56831,
+      "perimeterpxl": 1361.3439999999941,
+      "circularity": 0.38535358073560944,
+      "aspectRatioBB": 0.729381443298969,
+      "extendBB": 0.5175676660230957,
+      "orientation": 0.2672552806194183,
+      "eccentricity": 0.8034579189968094
+    },
+    "intensityList": [{
+        "id": 3335,
+        "layer": {
+          "id": 1,
+          "name": "PC",
+          "alias": "phase_contrast",
+          "category": "PC",
+          "description": "Phase Contrast layer"
+        },
+        "median": 12.063986778259277,
+        "mode": 13.123802974820137,
+        "mean": 12.085843569732049,
+        "standardDeviation": 12.909109026411883,
+        "skewness": 0.057043513668955756,
+        "kurtosis": 2.910732418729685,
+        "momentNumber5": 0.6091956455622889,
+        "momentNumber6": 13.895316837401607,
+        "entropy": 5.947495010696016
+      }],
+    "textureList": [{
+        "id": 13337,
+        "textureCategory": {
+          "id": 1,
+          "name": "Average Amplitude",
+          "description": ""
+        },
+        "layer": {
+          "id": 1,
+          "name": "PC",
+          "alias": "phase_contrast",
+          "category": "PC",
+          "description": "Phase Contrast layer"
+        },
+        "energy": 0.039742996851647526,
+        "contrast": 3.078444856129534,
+        "correlation": 0.21912417823658578,
+        "homogeneity": 0.5338964692595565,
+        "variance": 1.971145413494689,
+        "entropy": 4.922532066691324,
+        "invDiffMoment": 0.4797441058984526,
+        "sumAvg": 4.31860181462273,
+        "sumVar": 4.806136797849221,
+        "sumEntropy": -3.1543887930701344,
+        "diffAvg": 1.3646424192769808,
+        "diffVar": 4.806136797849221,
+        "diffEntropy": -2.085785315207367
+      }, {
+        "id": 13338,
+        "textureCategory": {
+          "id": 2,
+          "name": "Orthogonal Amplitude",
+          "description": ""
+        },
+        "layer": {
+          "id": 1,
+          "name": "PC",
+          "alias": "phase_contrast",
+          "category": "PC",
+          "description": "Phase Contrast layer"
+        },
+        "energy": 0.03983626864907182,
+        "contrast": 3.0659214893373505,
+        "correlation": 0.2112464974943742,
+        "homogeneity": 0.5348746336108793,
+        "variance": 1.9718398060765328,
+        "entropy": 4.9205670731404485,
+        "invDiffMoment": 0.48108217961667205,
+        "sumAvg": 4.315417444651909,
+        "sumVar": 4.776962343897736,
+        "sumEntropy": -3.1562604932164593,
+        "diffAvg": 1.3603936977835425,
+        "diffVar": 4.776962343897736,
+        "diffEntropy": -2.092537449914942
+      }, {
+        "id": 13339,
+        "textureCategory": {
+          "id": 3,
+          "name": "Main Amplitude Angle",
+          "description": ""
+        },
+        "layer": {
+          "id": 1,
+          "name": "PC",
+          "alias": "phase_contrast",
+          "category": "PC",
+          "description": "Phase Contrast layer"
+        },
+        "energy": 135.0,
+        "contrast": 15.0,
+        "correlation": 90.0,
+        "homogeneity": 135.0,
+        "variance": 15.0,
+        "entropy": 15.0,
+        "invDiffMoment": 135.0,
+        "sumAvg": 165.0,
+        "sumVar": 90.0,
+        "sumEntropy": 15.0,
+        "diffAvg": 15.0,
+        "diffVar": 90.0,
+        "diffEntropy": 90.0
+      }, {
+        "id": 13340,
+        "textureCategory": {
+          "id": 4,
+          "name": "Main Amplitude",
+          "description": ""
+        },
+        "layer": {
+          "id": 1,
+          "name": "PC",
+          "alias": "phase_contrast",
+          "category": "PC",
+          "description": "Phase Contrast layer"
+        },
+        "energy": 0.039841821261378654,
+        "contrast": 3.1188642925890284,
+        "correlation": 0.2270645196784687,
+        "homogeneity": 0.5362759156074851,
+        "variance": 1.9726618619739718,
+        "entropy": 4.9276945722110215,
+        "invDiffMoment": 0.4821950471986764,
+        "sumAvg": 4.334615384615386,
+        "sumVar": 4.83720552096775,
+        "sumEntropy": -3.1503788480258574,
+        "diffAvg": 1.3732242540904716,
+        "diffVar": 4.83720552096775,
+        "diffEntropy": -2.076640281332668
+      }]
+  }]

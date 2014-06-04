@@ -1,0 +1,7 @@
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+ <g>
+  <rect id="line1" x="0" y="0" height="25" width="100" rx="5" ry="5" fill="#999999"/>
+  <rect id="line2" x="0" y="37.5" height="25" width="100" rx="5" ry="5" fill="#999999"/>
+  <rect id="line3" x="0" y="75" height="25" width="100" rx="5" ry="5" fill="#999999"/>
+ </g>
+</svg> 

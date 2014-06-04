@@ -1,0 +1,89 @@
+{
+  "layersGroups": [{
+      "id": "stemcells",
+      "name": "Stem cells",
+      "layers": [{
+          "id": "phasecontrast",
+          "name": "Phase contrast",
+          "baseUrl": "data/stemcells/phasecontrast",
+          "framesPrefix": "stitched_c01t",
+          "framesSuffix": ".dzi",
+          "openOnFrame": 1,
+          "numberOfFrames": 5,
+          "paddingSize": 3,
+          "scalebar": {
+            "pixelsPerMeter": 1552795,
+            "unitType": "length"
+          },
+          "fetching": {
+            "url": "/fetching/phasecontrast"
+          }
+        }, {
+          "id": "gfp",
+          "name": "GFP",
+          "baseUrl": "data/stemcells/gfp",
+          "framesPrefix": "stitched_c02t",
+          "framesSuffix": ".dzi",
+          "openOnFrame": 1,
+          "numberOfFrames": 5,
+          "paddingSize": 3,
+          "scalebar": {
+            "pixelsPerMeter": 1552795,
+            "unitType": "length"
+          },
+          "colonyFeatures": {
+            "serviceUrl": "/colonyfeatures",
+            "featuresUrl": "/features",
+            "lineageUrl": "/lineage",
+            "dataset": "stemcells",
+            "layer": "gfp"
+          }
+        }, {
+          "id": "masks",
+          "name": "Masks",
+          "baseUrl": "data/stemcells/masks",
+          "framesPrefix": "segmented_stitched_c01t",
+          "framesSuffix": ".dzi",
+          "openOnFrame": 1,
+          "numberOfFrames": 5,
+          "paddingSize": 3,
+          "scalebar": {
+            "pixelsPerMeter": 1552795,
+            "unitType": "length"
+          }
+        }]
+    }, {
+      "id": "moche",
+      "name": "Moche",
+      "layers": [{
+          "id": "moche_xye",
+          "name": "Moche xy-energy",
+          "baseUrl": "data/moche/xy-energy",
+          "framesPrefix": "slice",
+          "framesSuffix": ".dzi",
+          "framesOffset": 97,
+          "openOnFrame": 98,
+          "numberOfFrames": 5,
+          "paddingSize": 5
+        }]
+    }, {
+      "id": "moche_eyx",
+      "name": "Moche energy-yx",
+      "layers": [{
+          "id": "moche_eyx",
+          "name": "Moche energy-yx",
+          "baseUrl": "data/moche/energy-yx",
+          "framesPrefix": "sideviewX_",
+          "framesSuffix": ".dzi",
+          "framesOffset": 5940,
+          "openOnFrame": 5941,
+          "numberOfFrames": 5,
+          "paddingSize": 5,
+          "scalebar": {
+            "pixelsPerMeter": 0.1,
+            "unitType": "energy"
+          },
+          "xrayTransitions": true
+        }]
+    }]
+}

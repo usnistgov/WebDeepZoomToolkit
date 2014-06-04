@@ -1,0 +1,52 @@
+/*
+This software was developed at the National Institute of Standards and
+Technology by employees of the Federal Government in the course of
+their official duties. Pursuant to title 17 Section 105 of the United
+States Code this software is not subject to copyright protection and is
+in the public domain. This software is an experimental system. NIST assumes
+no responsibility whatsoever for its use by other parties, and makes no
+guarantees, expressed or implied, about its quality, reliability, or
+any other characteristic. We would appreciate acknowledgement if the
+software is used.
+*/
+/* 
+    Created on : Feb 28, 2014, 4:28:43 PM
+    Author     : Antoine Vandecreme <antoine.vandecreme@nist.gov>
+*/
+
+.wdzt-features-dialog {
+    font-size: 0.8em;
+}
+
+.wdzt-features-dialog .ui-widget-header {
+    font-size: 0.8em;
+    background-image: none;
+}
+
+.wdzt-features-dialog dt {
+    cursor: pointer;
+}
+
+.wdzt-features-dialog dt .ui-icon {
+    float:left;
+}
+
+.wdzt-features-dialog dd {
+    margin: 0;
+}
+
+.wdzt-features-dialog dd dl {
+    margin-left: 10px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.wdzt-features-dialog table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.wdzt-features-dialog table th,
+.wdzt-features-dialog table td {
+    border: 1px solid black;
+}

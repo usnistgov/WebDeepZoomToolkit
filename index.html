@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!--
+     * This software was developed at the National Institute of Standards and
+     * Technology by employees of the Federal Government in the course of
+     * their official duties. Pursuant to title 17 Section 105 of the United
+     * States Code this software is not subject to copyright protection and is
+     * in the public domain. This software is an experimental system. NIST assumes
+     * no responsibility whatsoever for its use by other parties, and makes no
+     * guarantees, expressed or implied, about its quality, reliability, or
+     * any other characteristic. We would appreciate acknowledgement if the
+     * software is used.
+    -->
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        <title>WebDeepZoomToolkit</title>
+
+        <link rel="stylesheet" type="text/css" href="build/deps/wdzt-deps.css"/>
+
+        <style>
+            #container {
+                width: 100%;
+                height: 700px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h3>WDZT DEBUG</h3>
+        <div id="container"></div>
+        
+        <script type="text/javascript" src="build/deps/WebDeepZoomToolkit-deps.js"></script>
+
+        <script type="text/javascript">
+            var wdzt = WDZT({
+                id: "container",
+//                OpenSeadragon: {
+//                    showNavigator: false
+//                },
+                NearbyTransitionsModule: {
+                    xrayUrl: "data/xrays.xml"
+                },
+                imagesPrefix: "build/deps/images/"
+            });
+//            wdzt.open("data/manifest.json", {
+//                layer: "corrected_gfp",
+//                frame: 3,
+//                ColonySearchingModule: {
+//                    colony: 10
+//                }
+//            });
+            wdzt.open("data/manifest.json");
+        </script>
+    </body>
+</html>
