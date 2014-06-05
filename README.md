@@ -5,7 +5,7 @@ See it in action on https://isg.nist.gov.
 
 All the functionalities are described in the [https://isg.nist.gov/deepzoomweb/help](documentation).
 
-## Development
+## Development [![Build Status](https://travis-ci.org/NISTDeepZoom/WebDeepZoomToolkit.svg?branch=master)](https://travis-ci.org/NISTDeepZoom/WebDeepZoomToolkit)
 
 ### Building
 
