@@ -6,4 +6,4 @@ before_install:
 install:
   - npm install
 script:
-  - grunt all
+  - grunt bower all
