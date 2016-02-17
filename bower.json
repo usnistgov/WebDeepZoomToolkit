@@ -1,0 +1,19 @@
+{
+  "name": "WDZT",
+  "description": "Web Deep Zoom Toolkit",
+  "version": "0.0.1",
+  "homepage": "https://isg.nist.gov",
+  "license": "Public Domain",
+  "private": true,
+  "dependencies": {
+    "file-saver-saveas-js": "*",
+    "handlebars": "~3.0",
+    "jquery": "~1.12",
+    "jquery-ui": "~1.11",
+    "jquery-color": "~2.1",
+    "jquery-file-download": "~1.4",
+    "jszip": "~2.5",
+    "noty": "~2.2",
+    "caman": "~4.1"
+  }
+}

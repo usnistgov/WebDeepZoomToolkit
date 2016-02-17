@@ -24,66 +24,80 @@ software is used.
 
         <script src="http://code.jquery.com/qunit/qunit-1.14.0.js"></script>
 
+        <!-- build:deps js/deps.js -->
+
         <!-- jQuery and plugins -->
-        <script type="text/javascript" src="libs/jquery/js/jquery-1.11.0.js"></script>
-        <script type="text/javascript" src="libs/jquery/js/jquery-ui-1.10.4.js"></script>
-        <script type="text/javascript" src="libs/jquery/js/jquery-ui-dialog-html-title.js"></script>
-        <script type="text/javascript" src="libs/jquery/js/jquery.tree.js"></script>
-        <script type="text/javascript" src="libs/jquery/js/jquery.fileDownload.js"></script>
-        <script type="text/javascript" src="libs/jquery/js/jquery.color-2.1.2.js"></script>
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/jquery-ui/jquery-ui.js"></script>
+        <script src="libs/jquery/js/jquery-ui-dialog-html-title.js"></script>
+        <script src="libs/jquery/js/jquery.tree.js"></script>
+        <script src="bower_components/jquery-file-download/src/Scripts/jquery.fileDownload.js"></script>
+        <script src="bower_components/jquery-color/jquery.color.js"></script>
 
 
         <!-- noty (jQuery plugin) -->
-        <script type="text/javascript" src="libs/noty/jquery.noty.js"></script>
-        <script type="text/javascript" src="libs/noty/layouts/bottomRight.js"></script>
-        <script type="text/javascript" src="libs/noty/themes/default.js"></script>
+        <script src="bower_components/noty/js/noty/jquery.noty.js"></script>
+        <script src="bower_components/noty/js/noty/layouts/bottomRight.js"></script>
+        <script src="bower_components/noty/js/noty/themes/default.js"></script>
 
 
         <!-- OpenSeadragon and plugins -->
-        <script type="text/javascript" src="libs/openseadragon/openseadragon.js"></script>
+        <script src="libs/openseadragon/openseadragon.js"></script>
 
-        <script type="text/javascript" src="libs/openseadragon/openseadragon-viewerinputhook.js"></script>
-        <script type="text/javascript" src="libs/openseadragon/openseadragon-pixelcolor.js"></script>
-        <script type="text/javascript" src="libs/openseadragon/openseadragon-movie.js"></script>
-        <script type="text/javascript" src="libs/openseadragon/openseadragon-recorder.js"></script>
-        <script type="text/javascript" src="libs/openseadragon/openseadragon-scalebar.js"></script>
-        <script type="text/javascript" src="libs/openseadragon/openseadragon-xraytransitions.js"></script>
-
+        <script src="libs/openseadragon/openseadragon-viewerinputhook.js"></script>
+        <script src="libs/openseadragon/openseadragon-pixelcolor.js"></script>
+        <script src="libs/openseadragon/openseadragon-movie.js"></script>
+        <script src="libs/openseadragon/openseadragon-recorder.js"></script>
+        <script src="libs/openseadragon/openseadragon-scalebar.js"></script>
+        <script src="libs/openseadragon/openseadragon-xraytransitions.js"></script>
+        <script src="libs/openseadragon/openseadragon-filtering.js"></script>
 
 
         <!--Others--> 
-        <script type="text/javascript" src="libs/handlebars/handlebars-v1.3.0.js"></script>
-        <script type="text/javascript" src="libs/jszip/jszip.js"></script>
-        <script type="text/javascript" src="libs/filesaver/FileSaver.js"></script>
+        <script src="bower_components/handlebars/handlebars.js"></script>
+        <script src="bower_components/jszip/dist/jszip.js"></script>
+        <script src="bower_components/file-saver-saveas-js/FileSaver.js"></script>
+        <script src="bower_components/caman/dist/caman.full.js"></script>
+
+        <!-- endbuild -->
+
+        <!-- build:wdzt js/wdzt.js -->
 
         <!-- Own code -->
-        <script type="text/javascript" src="src/wdzt.js"></script>
-        <script type="text/javascript" src="src/viewer.js"></script>
-        <script type="text/javascript" src="src/toolbar.js"></script>
-        <script type="text/javascript" src="src/manifest.js"></script>
-        <script type="text/javascript" src="src/module.js"></script>
+        <script src="src/wdzt.js"></script>
+        <script src="src/viewer.js"></script>
+        <script src="src/toolbar.js"></script>
+        <script src="src/manifest.js"></script>
+        <script src="src/module.js"></script>
 
-        <!-- modules -->
-        <script type="text/javascript" src="src/modules/layer-selection-module.js"></script>
-        <script type="text/javascript" src="src/modules/layer-composition-module.js"></script>
-        <script type="text/javascript" src="src/modules/display-info-module.js"></script>
-        <script type="text/javascript" src="src/modules/colony-searching-module.js"></script>
-        <script type="text/javascript" src="src/modules/transitions-overlay-module.js"></script>
-        <script type="text/javascript" src="src/modules/nearby-transitions-module.js"></script>
-        <script type="text/javascript" src="src/modules/recording-module.js"></script>
-        <script type="text/javascript" src="src/modules/fetching-module.js"></script>
-        <script type="text/javascript" src="src/modules/scalebar-module.js"></script>
-        <script type="text/javascript" src="src/modules/colony-feature-module.js"></script>
+        <!-- modules, sorted alphabetically -->
+        <script src="src/modules/colony-feature-module.js"></script>
+        <script src="src/modules/colony-searching-module.js"></script>
+        <script src="src/modules/connectivity-analysis-module.js"></script>
+        <script src="src/modules/display-info-module.js"></script>
+        <script src="src/modules/distance-measurement-module.js"></script>
+        <script src="src/modules/fetching-module.js"></script>
+        <script src="src/modules/filtering-module.js"></script>
+        <script src="src/modules/layer-composition-module.js"></script>
+        <script src="src/modules/layer-selection-module.js"></script>
+        <script src="src/modules/nearby-transitions-module.js"></script>
+        <script src="src/modules/object-fetching-module.js"></script>
+        <script src="src/modules/recording-module.js"></script>
+        <script src="src/modules/scalebar-module.js"></script>
+        <script src="src/modules/transitions-overlay-module.js"></script>
 
         <!-- logic code -->
-        <script type="text/javascript" src="src/logic/element-color.js"></script>
-        <script type="text/javascript" src="src/logic/xraytransitions.js"></script>
-        <script type="text/javascript" src="src/logic/colony-helper.js"></script>
+        <script src="src/logic/element-color.js"></script>
+        <script src="src/logic/xraytransitions.js"></script>
+        <script src="src/logic/colony-helper.js"></script>
 
         <!-- widgets -->
-        <script type="text/javascript" src="src/widgets/transitions-tree-selector.js"></script>
-        <script type="text/javascript" src="src/widgets/nearby-transitions-displayer.js"></script>
+        <script src="src/widgets/transitions-tree-selector.js"></script>
+        <script src="src/widgets/nearby-transitions-displayer.js"></script>
+        <script src="src/widgets/spinner-slider.js"></script>
+        <script src="src/widgets/spinner.js"></script>
 
+        <!-- endbuild -->
 
 
         <script src="test/tests-tools.js"></script>
@@ -94,15 +108,21 @@ software is used.
         <script src="test/toolbar.js"></script>
         <script src="test/module.js"></script>
 
-        <script src="test/modules/layer-selection-module.js"></script>
-        <script src="test/modules/layer-composition-module.js"></script>
+        <!-- Modules tests, sorted alphabetically. Missing ones are commented out. -->
+        <script src="test/modules/colony-feature-module.js"></script>
+        <script src="test/modules/colony-searching-module.js"></script>
+        <script src="test/modules/connectivity-analysis-module.js"></script>
         <script src="test/modules/display-info-module.js"></script>
+        <!--<script src="test/modules/distance-measurement-module.js"></script>-->
+        <script src="test/modules/fetching-module.js"></script>
+        <script src="test/modules/filtering-module.js"></script>
+        <script src="test/modules/layer-composition-module.js"></script>
+        <script src="test/modules/layer-selection-module.js"></script>
+        <script src="test/modules/nearby-transitions-module.js"></script>
+        <!--<script src="test/modules/object-fetching-module.js"></script>-->
         <script src="test/modules/recording-module.js"></script>
         <script src="test/modules/scalebar-module.js"></script>
         <script src="test/modules/transitions-overlay-module.js"></script>
-        <script src="test/modules/nearby-transitions-module.js"></script>
-        <script src="test/modules/fetching-module.js"></script>
-        <script src="test/modules/colony-feature-module.js"></script>
 
         <script src="test/logic/colony-helper.js"></script>
         <script src="test/logic/element-color.js"></script>

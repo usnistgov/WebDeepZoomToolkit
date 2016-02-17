@@ -20,6 +20,7 @@
 
     // Colors assigned to elements copied from Jmol color scheme:
     // http://jmol.sourceforge.net/jscolors/
+    /* jshint latedef: false */
     var elementsColors = {
         "H": "#ffffff",
         "D": "#ffffc0",

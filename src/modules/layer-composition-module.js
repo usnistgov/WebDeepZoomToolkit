@@ -12,6 +12,8 @@
 
 (function($$) {
 
+    'use strict';
+
     var name = "LayerCompositionModule";
 
     $$.LayerCompositionModule = function(options) {
@@ -48,7 +50,7 @@
             '            <label for="{{../prefix}}-{{id}}-{{../suffix}}">{{name}}</label>',
             '        </div>',
             '        <div class="wdzt-cell-layout wdzt-full-width">',
-            '            <div class="{{../sliderClass}} wdzt-layer-composition-slider"',
+            '            <div class="{{../sliderClass}} wdzt-menu-slider"',
             '                 data-layer-id="{{id}}">',
             '            </div>',
             '        </div>',
@@ -68,57 +70,57 @@
             var slider = $("." + _this.sliderClass +
                     "[data-layer-id='" + layer.id + "']");
             var opacity = slider.slider("value");
+            var index = getLayerIndex(layerId);
 
             var options = {
                 tileSource: url,
-                opacity: opacity
+                opacity: opacity,
+                index: index,
+                error: function(event) {
+                    checkBox.prop("checked", false);
+                    slider.slider("disable");
+                    _this.viewer.displayError("Cannot superpose layer \"" +
+                            layer.name + "\": " + event.message);
+                },
+                success: function(event) {
+                    superposedLayers[layer.id] = event.item;
+                    checkBox.prop("checked", true);
+                    slider.slider("enable");
+                }
             };
-            var osd = _this.viewer.osd;
-            osd.addHandler("add-layer-failed", function addLayerFailedHandler(event) {
-                if (options !== event.options) {
-                    return;
-                }
-                osd.removeHandler("add-layer-failed", addLayerFailedHandler);
-                checkBox.prop("checked", false);
-                slider.slider("disable");
-                _this.viewer.displayError("Cannot superpose layer \"" +
-                        layer.name + "\": " + event.message);
-            });
-            osd.addHandler("add-layer", function addLayerHandler(event) {
-                if (options !== event.options) {
-                    return;
-                }
-                osd.removeHandler("add-layer", addLayerHandler);
-                superposedLayers[layer.id] = event.drawer;
-                checkBox.prop("checked", true);
-                slider.slider("enable");
-                refreshLayersOrder();
-            });
-            osd.addLayer(options);
+            _this.viewer.osd.addTiledImage(options);
         }
 
         function removeSuperposedLayer(layerId) {
-            var drawer = superposedLayers[layerId];
-            if (drawer !== undefined) {
+            var item = superposedLayers[layerId];
+            if (item !== undefined) {
                 delete superposedLayers[layerId];
-                _this.viewer.osd.removeLayer(drawer);
+                _this.viewer.osd.world.removeItem(item);
             }
             $("." + _this.inputClass + "[data-layer-id='" + layerId + "']").
                     prop("checked", false);
             $("." + _this.sliderClass + "[data-layer-id='" + layerId + "']").
                     slider("disable");
         }
-        
+
         function refreshLayersOrder() {
             var osd = _this.viewer.osd;
-            var layersCount = osd.getLayersCount();
+            var layersCount = osd.world.getItemCount();
             $("." + _this.inputClass + ":checked").each(function(index) {
                 var layerId = $(this).attr("data-layer-id");
-                var drawer = superposedLayers[layerId];
-                if (drawer) {
-                    _this.viewer.osd.setLayerLevel(drawer, layersCount - index - 1);
+                var item = superposedLayers[layerId];
+                if (item) {
+                    osd.world.setItemIndex(item, layersCount - index - 1);
                 }
             });
+        }
+
+        function getLayerIndex(layerId) {
+            var $layer = $("." + _this.inputClass + "[data-layer-id='" +
+                    layerId + "']");
+            var layersCount = _this.viewer.osd.world.getItemCount();
+            return layersCount -
+                    $("." + _this.inputClass + ":checked").index($layer);
         }
 
         this._layerChangedHandler = function(event) {
@@ -163,9 +165,9 @@
                 slide: function(event, ui) {
                     var opacity = ui.value;
                     var layerId = $(event.target).attr("data-layer-id");
-                    var drawer = superposedLayers[layerId];
-                    if (drawer) {
-                        drawer.setOpacity(opacity);
+                    var item = superposedLayers[layerId];
+                    if (item) {
+                        item.setOpacity(opacity);
                     }
                 }
             });
@@ -181,8 +183,16 @@
             });
         };
 
-        this._frameChangedHandler = function() {
+        this._frameChangeHandler = function() {
+            var world = _this.viewer.osd.world;
+            var count  = world.getItemCount();
+            for (var i = count - 1; i > 0; i--) {
+                world.removeItem(world.getItemAt(i));
+            }
             superposedLayers = {};
+        };
+
+        this._frameChangedHandler = function() {
             $("." + _this.inputClass + ":checked").each(function() {
                 var layerId = $(this).attr("data-layer-id");
                 addSuperposedLayer(layerId);
@@ -190,6 +200,7 @@
         };
 
         this.viewer.addHandler("layer-changed", this._layerChangedHandler);
+        this.viewer.osdMovie.addHandler("frame-change", this._frameChangeHandler);
         this.viewer.osdMovie.addHandler("frame-changed", this._frameChangedHandler);
     };
 
@@ -205,6 +216,7 @@
         },
         destroy: function() {
             this.viewer.removeHandler("layer-changed", this._layerChangedHandler);
+            this.viewer.osdMovie.removeHandler("frame-change", this._frameChangeHandler);
             this.viewer.osdMovie.removeHandler("frame-changed", this._frameChangedHandler);
         }
     });

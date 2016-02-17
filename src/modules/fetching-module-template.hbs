@@ -1,0 +1,84 @@
+{{!--
+    This software was developed at the National Institute of Standards and
+    Technology by employees of the Federal Government in the course of
+    their official duties. Pursuant to title 17 Section 105 of the United
+    States Code this software is not subject to copyright protection and is
+    in the public domain. This software is an experimental system. NIST assumes
+    no responsibility whatsoever for its use by other parties, and makes no
+    guarantees, expressed or implied, about its quality, reliability, or
+    any other characteristic. We would appreciate acknowledgement if the
+    software is used.
+--}}
+
+<div id="{{fetchingFormId}}" class="wdzt-fetching-form">
+    <div>
+        <input type="checkbox" id="{{originalResolutionId}}" checked/>
+        <label for="{{originalResolutionId}}">Original resolution</label>
+    </div>
+    <div>
+        <input type="checkbox" id="{{manualSettingsId}}"/>
+        <label for="{{manualSettingsId}}">Manually set bounds</label>
+    </div>
+    <form id="{{manualSettingsFormId}}">
+        <fieldset>
+            <legend>Fetching bounds</legend>
+            <div class="wdzt-table-layout">
+                <div class="wdzt-row-layout">
+                    <label for="{{formZoomLevelId}}"
+                           class="wdzt-cell-layout wdzt-no-wrap">
+                        Zoom (%)
+                    </label>
+                    <input type="text"
+                           id="{{formZoomLevelId}}"
+                           class="ui-widget-content ui-corner-all wdzt-cell-layout"/>
+                </div>
+                <div class="wdzt-row-layout">
+                    <label for="{{formXId}}"
+                           class="wdzt-cell-layout wdzt-no-wrap">
+                        x (top left)
+                    </label>
+                    <input type="text"
+                           id="{{formXId}}"
+                           class="ui-widget-content ui-corner-all wdzt-cell-layout"/>
+                </div>
+                <div class="wdzt-row-layout">
+                    <label for="{{formYId}}"
+                           class="wdzt-cell-layout wdzt-no-wrap">
+                        y (top left)</label>
+                    <input type="text"
+                           id="{{formYId}}"
+                           class="ui-widget-content ui-corner-all wdzt-cell-layout"/>
+                </div>
+                <div class="wdzt-row-layout">
+                    <label for="{{formWidthId}}"
+                           class="wdzt-cell-layout wdzt-no-wrap">
+                        Width
+                    </label>
+                    <input type="text"
+                           id="{{formWidthId}}"
+                           class="ui-widget-content ui-corner-all wdzt-cell-layout"/>
+                </div>
+                <div class="wdzt-row-layout">
+                    <label for="{{formHeightId}}"
+                           class="wdzt-cell-layout wdzt-no-wrap">
+                        Height
+                    </label>
+                    <input type="text"
+                           id="{{formHeightId}}"
+                           class="ui-widget-content ui-corner-all wdzt-cell-layout"/>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div id="{{layersDivId}}"/>
+    <label for="{{formFramesRangeId}}">
+        Frame range
+        <img src="{{imagesPrefix}}help-browser-2.png"
+             title="For example, type 1,3 or 5-12 to retrieve a selection of frames"
+             alt="help">
+    </label>
+    <input type="text"
+           id="{{formFramesRangeId}}"
+           class="ui-widget-content ui-corner-all"/>
+    <button id="{{formFetchButtonId}}">Fetch</button>
+</div>

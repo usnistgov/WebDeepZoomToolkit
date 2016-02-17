@@ -12,6 +12,8 @@
 
 (function($$) {
 
+    'use strict';
+
     var name = "ColonyFeatureModule";
 
     $$.ColonyFeatureModule = function(options) {
@@ -30,18 +32,12 @@
 
         this.isEnabled = false;
 
-        this.viewer.osd.addViewerInputHook({
-            hooks: [{
-                    tracker: "viewer",
-                    handler: "clickHandler",
-                    hookHandler: function(event) {
-                        event.preventDefaultAction = true;
-                        if (event.quick && _this.isEnabled) {
-                            showColonyFeatures(_this, event.position);
-                        }
-                    }
-                }
-            ]
+        // We want this module to have the click handler as much as possible.
+        this.viewer.setClickHandler(_this);
+        this.viewer.addHandler("click-handler-changed", function(event) {
+            if (!event.module) {
+                _this.viewer.setClickHandler(_this);
+            }
         });
     };
 
@@ -51,6 +47,11 @@
     $.extend($$.ColonyFeatureModule.prototype, $$.Module.prototype, {
         supportLayer: function(layer) {
             return !!layer.colonyFeatures;
+        },
+        clickHandler: function(event) {
+            if (this.isEnabled) {
+                showColonyFeatures(this, event.position);
+            }
         },
         enable: function() {
             this.isEnabled = true;
@@ -63,8 +64,7 @@
         }
     });
 
-    var featuresGroupTemplate = Handlebars.compile([
-        '{{#each featuresGroup}}',
+    var featuresGroupHtml = ['{{#each featuresGroup}}',
         '<dl>',
         '    <dt>',
         '        <span class="ui-icon ui-icon-triangle-1-s"></span>',
@@ -90,12 +90,38 @@
         '        {{/if}}',
         '    </dd>',
         '</dl>',
-        '{{/each}}'
-    ].join(''));
+        '{{/each}}'].join('');
+
+    var dialogContentHtmlWithAnnotation = ['<div id="wdzt-annotation-container">',
+        '    <div id="wdzt-annotation-label-container">',
+        '        <label for="wdzt-annotation-textarea-{{hash}}" id="wdzt-annotation-label-{{hash}}">Annotation</label>',
+        '        <div id="wdzt-annotation-saved-{{hash}}" class="wdzt-annotation-saved"> <strong> Saved </strong> ',
+        '        </div>',
+        '    </div>',
+//            '    <div id="wdzt-annotation-textarea-container">',
+//            '        <textarea rows="5" id="wdzt-annotation-textarea-{{hash}}" class="wdzt-annotation-textarea" placeholder="Enter some text here ..."></textarea>',
+//            '    </div>',
+        '    <div class="wdzt-tags-container">',
+        '        <div class="wdzt-tags-head" id="wdzt-tags-head-{{hash}}">Tags :&nbsp;&nbsp;',
+        '            <div class="wdzt-tags-list" id="wdzt-tags-list-{{hash}}"></div>',
+        '        </div>',
+        '        <div class="wdzt-tags-menu" id="wdzt-tags-menu-{{hash}}"></div>',
+        '    </div>',
+        '</div>'].join('') + featuresGroupHtml;
+
+
+
+    var featuresGroupTemplate = Handlebars.compile(featuresGroupHtml);
+
+    var dialogContentTemplateWithAnnotation = Handlebars.compile(dialogContentHtmlWithAnnotation);
+    var dialogContentTemplate = Handlebars.compile(featuresGroupHtml);
+
+
 
     Handlebars.registerHelper('featuresGroupHelper', function(featuresGroup) {
         return featuresGroupTemplate(featuresGroup);
     });
+
     Handlebars.registerHelper('featureValueFormatter', function(value) {
         var f = parseFloat(value);
         var i = parseInt(value);
@@ -115,6 +141,8 @@
         var y = Math.round(imagePosition.y);
 
         var settings = viewer.selectedLayer.colonyFeatures;
+        var layer = settings.layer;
+
 
         function onSuccess(result) {
             var colony = result.colony;
@@ -127,34 +155,46 @@
             var color = $$.ColonyHelper.getColonyColor(colony);
 
             var boundBox = result.boundingBox;
-            var boundBoxRect = viewport.imageToViewportRectangle(
-                    boundBox.x, boundBox.y, boundBox.width, boundBox.height);
+            var boundBoxRect = viewport.imageToViewportRectangle(boundBox.x, boundBox.y, boundBox.width, boundBox.height);
             var $boundBoxOverlay = $("<div/>");
-            $boundBoxOverlay.attr("id",
-                    "wdzt-features-overlay-boundbox-colony-" + hash);
+            $boundBoxOverlay.attr("id", "wdzt-features-overlay-boundbox-colony-" + hash);
             $boundBoxOverlay.css({
                 border: "2px solid " + color
             });
             osd.addOverlay($boundBoxOverlay.get(0), boundBoxRect);
 
             var centroid = result.centroid;
-            var centroidRect = viewport.imageToViewportRectangle(
-                    centroid.x, centroid.y, 1, 1);
+            var centroidRect = viewport.imageToViewportRectangle(centroid.x, centroid.y, 1, 1);
             var $centroidOverlay = $("<div/>");
-            $centroidOverlay.attr("id",
-                    "wdzt-features-overlay-centroid-colony-" + hash);
+            $centroidOverlay.attr("id", "wdzt-features-overlay-centroid-colony-" + hash);
             $centroidOverlay.css({
                 backgroundColor: color
             });
             osd.addOverlay($centroidOverlay.get(0), centroidRect);
 
+
+
             var $dialog = $("<div/>");
             $dialog.attr("id", "wdzt-features-dialog-colony-" + hash);
             $dialog.attr("title", "Colony " + colony);
-            var content = featuresGroupTemplate({
-                featuresGroup: result.featuresGroup
-            });
+
+            var content;
+
+            if (!_this.disableAnnotations && settings.annotations) {
+                content = dialogContentTemplateWithAnnotation({
+                    featuresGroup: result.featuresGroup,
+                    hash: hash
+                });
+            } else {
+                content = dialogContentTemplate({
+                    featuresGroup: result.featuresGroup,
+                    hash: hash
+                });
+            }
+
+
             $dialog.html(content);
+
             $dialog.find("dt").click(function() {
                 var $dd = $(this).next("dd");
                 if ($dd.is(":hidden")) {
@@ -165,6 +205,7 @@
                     $(this).find("span").attr("class", "ui-icon ui-icon-triangle-1-e");
                 }
             });
+
 
             // Build the title with eventual links to other views.
             var dialogTitle = "Colony " + colony;
@@ -177,12 +218,23 @@
                         "&frame=" + frame +
                         "\">data view</a>");
             }
+
             if (settings.lineageUrl && settings.dataset) {
                 links.push("<a href=\"" + settings.lineageUrl +
-                        "?data=" + settings.dataset +
+                        "?dataset=" + settings.dataset +
                         "&colony=" + colony +
                         "\">lineage view</a>");
             }
+
+            if (settings.dataset && settings.annotations &&
+                    settings.annotations.viewUrl) {
+                links.push("<a href=\"" + settings.annotations.viewUrl +
+                        "?dataset=" + settings.dataset +
+                        "&colony=" + colony +
+                        "&frame=" + frame +
+                        "\">annotation view</a>");
+            }
+
             if (links.length !== 0) {
                 dialogTitle += " (" + links.join(", ") + ")";
             }
@@ -204,20 +256,187 @@
                 title: dialogTitle,
                 dialogClass: "wdzt-features-dialog wdzt-features-dialog-colony-" + hash,
                 minWidth: 310,
-                minHeight: 75,
-                height: $(viewer.osdContainer).height() / 4,
+                height: 300,
                 close: closeHandler
             });
 
+
+            var ajaxTimer;
+
+
+            var tags = "Heterogeneous,Homogeneous,Dark";
+            var tagSetting = "";
+
+            var $tagMenu = $("#wdzt-tags-menu-" + hash);
+
+            var tagOutput;
+
+            function toTree() {
+                var tagArray = tags.split(',');
+                var settingArray;
+
+                if (tagSetting) {
+                    settingArray = tagSetting.split(',');
+                }
+
+                var nodes = {};
+
+                var $root = $("<ul/>");
+
+                tagArray.forEach(function(tag) {
+
+                    var checked = false;
+
+                    if (settingArray) {
+                        if ($.inArray(tag, settingArray) !== -1) {
+                            checked = true;
+                        }
+                    }
+
+                    var $ele;
+
+                    var index = tag.lastIndexOf('/');
+
+                    if (index === -1) {
+                        $ele = $("<li> <div style=\"display:block\"><input type=\"radio\" name=\"gfp_label\" value=\"" + tag + "\" " + ((checked) ? "checked" : "") + " ><span>" + tag + "</span> </div> </li>");
+                        nodes[tag] = $ele;
+                        $root.append($ele);
+
+                    } else {
+                        var sub = tag.substring(0, index);
+                        $ele = $("<li> <div style=\"display:block\"><input type=\"radio\" name=\"gfp_label\" value=\"" + tag + "\" " + ((checked) ? "checked" : "") + " ><span>" + tag.substring(index + 1) + "</span> </div> </li>");
+
+                        nodes[tag] = $ele;
+
+                        if (nodes[sub]) {
+                            if (nodes[sub].find("ul").length === 0) {
+                                nodes[sub].append($("<ul />"));
+                            }
+                            nodes[sub].find("ul").eq(0).append($ele);
+
+                        }
+                    }
+
+                });
+
+                return $root;
+            }
+
+            function showTags() {
+                tagOutput = "";
+
+                $("#wdzt-tags-list-" + hash).empty();
+                $("#wdzt-tags-menu-" + hash + " :checked").each(function() {
+                    if (this.checked) {
+                        var $txt = $("<span>" + $(this).val() + "&nbsp;</span>");
+                        $("#wdzt-tags-list-" + hash).append($txt);
+
+                        if (tagOutput === "") {
+                            tagOutput += $(this).val();
+                        } else {
+                            tagOutput += "," + $(this).val();
+                        }
+                    }
+                });
+
+                return tagOutput;
+
+            }
+
+            function pushToServer() {
+                if (settings.annotations.serviceUrl) {
+                    var annotation_service_url = settings.annotations.serviceUrl;
+                    var txt = $('#wdzt-annotation-textarea-' + hash).val();
+
+                    var annotation = {
+                        "data": txt,
+                        "tags": tagOutput,
+                        "colonyFrame": {"id": result.id},
+                        "layer": {"name": layer}
+                    };
+
+                    if (ajaxTimer) {
+                        clearTimeout(ajaxTimer);
+                    }
+
+                    ajaxTimer = setTimeout(function() {
+                        $.ajax({
+                            url: annotation_service_url + "/",
+                            type: "PUT",
+                            contentType: "application/json",
+                            data: JSON.stringify(annotation),
+                            success: function() {
+                                $("#wdzt-annotation-saved-" + hash).show();
+                                $("#wdzt-annotation-saved-" + hash).fadeOut(3000);
+                            }
+                        });
+
+                    }, 500);
+                }
+            }
+
+            $("#wdzt-tags-head-" + hash).click(function() {
+
+                if ($tagMenu.is(":visible")) {
+                    $tagMenu.hide();
+                } else {
+                    $tagMenu.show();
+                }
+
+            });
+
+            function initTags() {
+                $tagMenu.empty();
+                $tagMenu.append(toTree());
+                $tagMenu.hide();
+                showTags();
+
+                $("#wdzt-tags-menu-" + hash + " input").click(function() {
+                    showTags();
+                    pushToServer();
+                });
+
+            }
+
+            $('#wdzt-annotation-textarea-' + hash).on('change keyup paste', function() {
+                pushToServer();
+            });
+
+            $('#wdzt-annotation-textarea-' + hash).ready(function() {
+
+                if (!_this.disableAnnotations && settings.annotations.serviceUrl) {
+                    var getAnnotationUrl = settings.annotations.serviceUrl +
+                            "/colonyframe/" + result.id + "/layer/" + layer;
+
+                    $.getJSON(getAnnotationUrl, function(annt) {
+
+                        if (annt) {
+                            $('#wdzt-annotation-textarea-' + hash).val(annt.data);
+                            if (annt.tags) {
+                                tagSetting = annt.tags;
+                            }
+                        } else {
+                            tagSetting = "";
+                        }
+
+                        tagOutput = tagSetting;
+                        initTags();
+
+                    });
+
+                }
+            });
+
+
             // Keep dialogs when switching from/to fullscreen
             var dialogContainer = $(".wdzt-features-dialog-colony-" + hash);
-            var preFullPageHandler = function() {
+            function preFullPageHandler() {
                 dialogContainer.detach();
-            };
-            var fullPageHandler = function() {
+            }
+            function fullPageHandler() {
                 dialogContainer.appendTo(document.body);
-            };
-            var resizeHandler = function() {
+            }
+            function resizeHandler() {
                 // Capture body dimensions before adding dialog
                 var bodyWidth = $(document.body).width();
                 var bodyHeight = $(document.body).height();
@@ -233,16 +452,16 @@
                     offset.top = bodyHeight - height;
                 }
                 dialogContainer.offset(offset);
-            };
+            }
             viewer.addHandler("pre-full-page", preFullPageHandler);
             viewer.addHandler("full-page", fullPageHandler);
             osd.addHandler("resize", resizeHandler);
 
             $dialog.siblings(".ui-widget-header").css("background-color", color);
-            var movieFrameChangedHandler = function() {
+            function movieFrameChangedHandler() {
                 $dialog.dialogHtmlTitle("close");
                 $dialog.remove();
-            };
+            }
             movie.addHandler("movie-change", movieFrameChangedHandler);
             movie.addHandler("frame-change", movieFrameChangedHandler);
         }

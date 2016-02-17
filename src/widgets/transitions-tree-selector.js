@@ -12,6 +12,8 @@
 
 (function($$) {
 
+    'use strict';
+
     $$.TransitionsTreeSelector = function(options) {
 
         $.extend(true, this, {
@@ -59,6 +61,7 @@
             $elementLi.append($elementTitle);
 
             var $familiesUl = $("<ul/>");
+            var $transitionUl;
 
             // Keep outside of loop for performance
             function generateTransitionLine(transition) {
@@ -74,7 +77,7 @@
                         familyName + "</span>");
                 $familyLi.append($familyTitle);
 
-                var $transitionUl = $("<ul/>");
+                $transitionUl = $("<ul/>");
                 families[familyName].forEach(generateTransitionLine);
                 $familyLi.append($transitionUl);
                 $familiesUl.append($familyLi);

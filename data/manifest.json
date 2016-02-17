@@ -11,12 +11,32 @@
           "openOnFrame": 1,
           "numberOfFrames": 5,
           "paddingSize": 3,
+          "acquiredIntensity": {
+            "type": "threshold",
+            "min": 100,
+            "max": 2650
+          },
           "scalebar": {
             "pixelsPerMeter": 1552795,
             "unitType": "length"
           },
           "fetching": {
             "url": "/fetching/phasecontrast"
+          },
+          "colonyFeatures": {
+            "serviceUrl": "/colonyfeatures",
+            "featuresUrl": "/features",
+            "lineageUrl": "/lineage",
+            "dataset": "stemcells",
+            "layer": "phasecontrast",
+            "annotations": {
+              "serviceUrl": "/deepzoomweb/api/data/colonyannotation",
+              "viewUrl": "/deepzoomweb/view/data/colonyannotation"
+            }
+          },
+          "colonySearching": {
+            "serviceUrl": "/boundingbox",
+            "dataset": "stemcells"
           }
         }, {
           "id": "gfp",
@@ -27,6 +47,11 @@
           "openOnFrame": 1,
           "numberOfFrames": 5,
           "paddingSize": 3,
+          "acquiredIntensity": {
+            "type": "gamma",
+            "min": 0,
+            "max": 1000
+          },
           "scalebar": {
             "pixelsPerMeter": 1552795,
             "unitType": "length"
@@ -36,7 +61,15 @@
             "featuresUrl": "/features",
             "lineageUrl": "/lineage",
             "dataset": "stemcells",
-            "layer": "gfp"
+            "layer": "gfp",
+            "annotations": {
+              "serviceUrl": "/deepzoomweb/api/data/colonyannotation",
+              "viewUrl": "/deepzoomweb/view/data/colonyannotation"
+            }
+          },
+          "colonySearching": {
+            "serviceUrl": "/boundingbox",
+            "dataset": "stemcells"
           }
         }, {
           "id": "masks",
@@ -84,6 +117,70 @@
             "unitType": "energy"
           },
           "xrayTransitions": true
+        }]
+    }, {
+      "id": "moche_single_frame",
+      "name": "Moche single frame",
+      "layers": [{
+          "id": "moche_single_frame",
+          "name": "Moche single frame",
+          "baseUrl": "data/moche/xy-energy/slice00098.dzi",
+          "singleFrame": true
+        }]
+    }, {
+      "id": "phase_contrast_holes",
+      "name": "Phase contrast holes",
+      "layers": [{
+          "id": "phase_contrast_holes",
+          "name": "Phase contrast holes",
+          "baseUrl": "data/stemcells/phasecontrast",
+          "framesPrefix": "stitched_c01t",
+          "framesSuffix": ".dzi",
+          "framesList": [1, 3, 5],
+          "numberOfFrames": 5,
+          "openOnFrame": 1,
+          "paddingSize": 3,
+          "fetching": {
+            "url": "/fetching/phase_contrast_holes",
+            "originalResolutionOnly": true
+          }
+        }, {
+          "id": "gfp_holes",
+          "name": "GFP holes",
+          "baseUrl": "data/stemcells/gfp",
+          "framesPrefix": "stitched_c02t",
+          "framesSuffix": ".dzi",
+          "framesList": [2, 5],
+          "openOnFrame": 1,
+          "numberOfFrames": 5,
+          "paddingSize": 3
+        }]
+    }, {
+      "id": "synthetic1_single_frame",
+      "name": "Binary1 single frame",
+      "layers": [{
+          "id": "binary1_single_frame",
+          "name": "Binary1 single frame",
+          "baseUrl": "data/synthetic/binary/binary1.dzi",
+          "singleFrame": true
+        }]
+    }, {
+      "id": "synthetic2_single_frame",
+      "name": "Binary2 single frame",
+      "layers": [{
+          "id": "binary2_single_frame",
+          "name": "Binary2 single frame",
+          "baseUrl": "data/synthetic/binary/binary2.dzi",
+          "singleFrame": true
+        }]
+    }, {
+      "id": "synthetic3_single_frame",
+      "name": "Binary3 single frame",
+      "layers": [{
+          "id": "binary3_single_frame",
+          "name": "Binary3 single frame",
+          "baseUrl": "data/synthetic/binary/binary3.dzi",
+          "singleFrame": true
         }]
     }]
 }

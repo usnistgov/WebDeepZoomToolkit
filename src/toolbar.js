@@ -12,6 +12,8 @@
 
 (function($$) {
 
+    'use strict';
+
     $$.Toolbar = function(options) {
 
         $.extend(true, this, {

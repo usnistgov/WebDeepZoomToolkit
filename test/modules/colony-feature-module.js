@@ -42,7 +42,7 @@
 
     test("getOrderIndex", function() {
         equal(moduleInstance.getOrderIndex(), 100,
-                "Fetching module should have index 100 (not set).");
+                "Colony feature module should have index 100 (not set).");
     });
 
     test("supportLayer", function() {
@@ -64,7 +64,7 @@
 
         var getFeaturesBackup = WDZT.ColonyHelper.getFeatures;
         WDZT.ColonyHelper.getFeatures = function(options) {
-            equal(options.serviceUrl, "/colonyfeatures", "Servive URL.");
+            equal(options.serviceUrl, "/colonyfeatures", "Service URL.");
             equal(options.dataset, "stemcells", "Dataset.");
             equal(options.layer, "gfp", "Layer.");
             equal(options.x, imageClickPosition.x, "x coordinate.");
@@ -82,6 +82,14 @@
                     y: 207
                 },
                 featuresGroup: {}
+            });
+        };
+
+        try {
+            wdzt.osd.innerTracker.clickHandler({
+                quick: true,
+                position: wdzt.osd.viewport.imageToViewerElementCoordinates(
+                        imageClickPosition)
             });
 
             setTimeout(function() {
@@ -107,14 +115,7 @@
 
                 start();
             }, 0);
-        };
 
-        try {
-            wdzt.osd.innerTracker.clickHandler({
-                quick: true,
-                position: wdzt.osd.viewport.imageToViewerElementCoordinates(
-                        imageClickPosition)
-            });
         } finally {
             WDZT.ColonyHelper.getFeatures = getFeaturesBackup;
         }

@@ -1,0 +1,47 @@
+{{!--
+    This software was developed at the National Institute of Standards and
+    Technology by employees of the Federal Government in the course of
+    their official duties. Pursuant to title 17 Section 105 of the United
+    States Code this software is not subject to copyright protection and is
+    in the public domain. This software is an experimental system. NIST assumes
+    no responsibility whatsoever for its use by other parties, and makes no
+    guarantees, expressed or implied, about its quality, reliability, or
+    any other characteristic. We would appreciate acknowledgement if the
+    software is used.
+--}}
+
+<div class="wdzt-display-info-div">
+    <fieldset id="{{cursorInfoFsId}}" class="wdzt-display-cursor-info-fs">
+    </fieldset>
+    <fieldset class="wdzt-display-fov-info-fs">
+        <legend>Field of view info</legend>
+        <ol>
+            <li>
+                <div class="wdzt-display-label">Zoom:</div>
+                <div class="wdzt-dispay-value">
+                    <input type="text" name="editable-zoom-level" 
+                           id="{{formZoomLevelId}}"
+                           size="4"
+                           class="ui-widget-content ui-corner-all"/>
+                    %
+                </div>
+            </li>
+            <li>
+                <div class="wdzt-display-label">X (top left):</div>
+                <div class="wdzt-dispay-value" id={{topLeftXId}}/>
+            </li>
+            <li>
+                <div class="wdzt-display-label">Y (top left):</div>
+                <div class="wdzt-dispay-value" id={{topLeftYId}}/>
+            </li>
+            <li>
+                <div class="wdzt-display-label">Width:</div>
+                <div class="wdzt-dispay-value" id={{widthId}}/>
+            </li>
+            <li>
+                <div class="wdzt-display-label">Height:</div>
+                <div class="wdzt-dispay-value" id={{heightId}}/>
+            </li>
+        </ol>
+    </fieldset>
+</div>

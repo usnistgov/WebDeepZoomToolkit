@@ -12,6 +12,8 @@
 
 (function($$) {
 
+    'use strict';
+
     $$.NearbyTransitionsDisplayer = function(options) {
 
         $.extend(true, this, {

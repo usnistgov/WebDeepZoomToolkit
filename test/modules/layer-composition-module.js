@@ -86,28 +86,29 @@
     asyncTest("frame change", function() {
         var osd = wdzt.osd;
         TestsTools.chainTriggersHandlers([{
-                eventSource: osd,
-                eventName: "add-layer",
+                eventSource: osd.world,
+                eventName: "add-item",
                 trigger: function() {
                     $("." + moduleInstance.inputClass +
                             "[data-layer-id='masks']").trigger("click");
                 },
                 handler: function(event) {
-                    equal(osd.getLayersCount(), 2,
+                    equal(osd.world.getItemCount(), 2,
                             "2 layers should be presents.");
-                    equal(osd.getLevelOfLayer(event.drawer), 1,
+                    equal(osd.world.getIndexOfItem(event.item), 1,
                             "New layer should be at level 1.");
                 }
             }, {
-                eventSource: osd,
-                eventName: "add-layer",
+                eventSource: osd.world,
+                eventName: "add-item",
+                eventRaisedCount: 2,
                 trigger: function() {
                     wdzt.osdMovie.displayNextFrame();
                 },
                 handler: function(event) {
-                    equal(osd.getLayersCount(), 2,
+                    equal(osd.world.getItemCount(), 2,
                             "2 layers should be presents.");
-                    equal(osd.getLevelOfLayer(event.drawer), 1,
+                    equal(osd.world.getIndexOfItem(event.item), 1,
                             "Masks layer should be at level 1.");
                 }
             }], start);
@@ -115,59 +116,62 @@
 
     asyncTest("ui", function() {
         var osd = wdzt.osd;
-        var masksDrawer, gfpDrawer;
+        var masksItem, gfpItem;
 
         TestsTools.chainTriggersHandlers([{
-                eventSource: osd,
-                eventName: "add-layer",
+                eventSource: osd.world,
+                eventName: "add-item",
                 trigger: function() {
                     $("." + moduleInstance.inputClass +
                             "[data-layer-id='masks']").trigger("click");
                 },
                 handler: function(event) {
-                    equal(osd.getLayersCount(), 2,
+                    equal(osd.world.getItemCount(), 2,
                             "2 layers should be presents.");
-                    masksDrawer = event.drawer;
-                    equal(osd.getLevelOfLayer(masksDrawer), 1,
+                    masksItem = event.item;
+                    equal(osd.world.getIndexOfItem(masksItem), 1,
                             "New layer should be at level 1.");
                 }
             }, {
-                eventSource: osd,
-                eventName: "add-layer",
+                eventSource: osd.world,
+                eventName: "add-item",
                 trigger: function() {
                     $("." + moduleInstance.inputClass + "[data-layer-id='gfp']")
                             .trigger("click");
                 },
                 handler: function(event) {
-                    equal(osd.getLayersCount(), 3,
+                    equal(osd.world.getItemCount(), 3,
                             "3 layers should be presents.");
-                    gfpDrawer = event.drawer;
-                    equal(osd.getLevelOfLayer(gfpDrawer), 2,
+                    gfpItem = event.item;
+                    equal(osd.world.getIndexOfItem(gfpItem), 2,
                             "New layer should be at level 2.");
                 }
             }, {
-                eventSource: osd,
-                eventName: "layer-level-changed",
+                eventSource: osd.world,
+                eventName: "item-index-change",
                 trigger: function() {
-                    // Fake drag and drop
-                    // First reorder rows
-                    var rows = $("#" + moduleInstance.sortableId +
-                            " .wdzt-row-layout");
-                    rows.last().insertBefore(rows.first());
-                    // Then "trigger" the update event
-                    var sortable = $("#" + moduleInstance.sortableId);
-                    sortable.sortable('option', 'update').call(sortable);
+                    // setTimeout necessary to let OSD update the navigator's items.
+                    setTimeout(function() {
+                        // Fake drag and drop
+                        // First reorder rows
+                        var rows = $("#" + moduleInstance.sortableId +
+                                " .wdzt-row-layout");
+                        rows.last().insertBefore(rows.first());
+                        // Then "trigger" the update event
+                        var sortable = $("#" + moduleInstance.sortableId);
+                        sortable.sortable('option', 'update').call(sortable);
+                    }, 10);
                 },
                 handler: function() {
-                    equal(osd.getLayersCount(), 3,
+                    equal(osd.world.getItemCount(), 3,
                             "3 layers should be presents.");
-                    equal(osd.getLevelOfLayer(masksDrawer), 2,
+                    equal(osd.world.getIndexOfItem(masksItem), 2,
                             "Masks layer should be at level 2.");
-                    equal(osd.getLevelOfLayer(gfpDrawer), 1,
+                    equal(osd.world.getIndexOfItem(gfpItem), 1,
                             "GFP layer should be at level 1.");
 
                     // Slider test. No trigger/handler needed.
-                    equal(masksDrawer.getOpacity(), 0.5,
+                    equal(masksItem.getOpacity(), 0.5,
                             "Masks opacity should be 0.5");
                     // Fake slide
                     var $slider = $("." + moduleInstance.sliderClass +
@@ -178,34 +182,34 @@
                     }, {
                         value: $slider.slider("value")
                     });
-                    equal(masksDrawer.getOpacity(), 0.3,
+                    equal(masksItem.getOpacity(), 0.3,
                             "Masks opacity should be 0.3");
                 }
             }, {
-                eventSource: osd,
-                eventName: "remove-layer",
+                eventSource: osd.world,
+                eventName: "remove-item",
                 trigger: function() {
                     $("." + moduleInstance.inputClass +
                             "[data-layer-id='masks']").trigger("click");
                 },
                 handler: function(event) {
-                    equal(osd.getLayersCount(), 2,
+                    equal(osd.world.getItemCount(), 2,
                             "2 layers should be presents.");
-                    equal(event.drawer, masksDrawer,
-                            "The masks drawer should have been removed.");
+                    equal(event.item, masksItem,
+                            "The masks item should have been removed.");
                 }
             }, {
-                eventSource: osd,
-                eventName: "remove-layer",
+                eventSource: osd.world,
+                eventName: "remove-item",
                 trigger: function() {
                     $("." + moduleInstance.inputClass + "[data-layer-id='gfp']")
                             .trigger("click");
                 },
                 handler: function(event) {
-                    equal(osd.getLayersCount(), 1,
+                    equal(osd.world.getItemCount(), 1,
                             "1 layer should be present.");
-                    equal(event.drawer, gfpDrawer,
-                            "The gfp drawer should have been removed.");
+                    equal(event.item, gfpItem,
+                            "The gfp item should have been removed.");
                 }
             }], start);
     });

@@ -1,0 +1,39 @@
+/*
+This software was developed at the National Institute of Standards and
+Technology by employees of the Federal Government in the course of
+their official duties. Pursuant to title 17 Section 105 of the United
+States Code this software is not subject to copyright protection and is
+in the public domain. This software is an experimental system. NIST assumes
+no responsibility whatsoever for its use by other parties, and makes no
+guarantees, expressed or implied, about its quality, reliability, or
+any other characteristic. We would appreciate acknowledgement if the
+software is used.
+*/
+/* 
+    Created on : Sept 12, 2014, 17:43:52 PM
+    Author     : Jing Gao <jing.gao@nist.gov>
+*/
+.wdzt-object-fetching-table {
+	padding: 0;
+	margin: 0;
+}
+
+.wdzt-object-fetching-table span {
+    color:red;
+    text-decoration:none;
+}
+
+.wdzt-object-fetching-table span:hover {
+    text-decoration:underline;
+    cursor:pointer;
+}
+
+.wdzt-object-fetching-editableframe {
+    min-width: 10px;
+    border: dotted 1px silver;
+    display: inline;
+}
+
+.wdzt-object-fetching-editableframe:hover{
+    border: solid 2px silver;
+}

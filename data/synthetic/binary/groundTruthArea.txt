@@ -1,0 +1,70 @@
+binary3
+width/columns = 845
+height/rows = 437
+ImageMask	        Count
+Area (outside square)	326,857
+Area (square)	        228 x 186 = 42,408
+Area (image)    845 x 437=369,265
+++++++++++++++
+Mag=100%
+
+Mag=200%
+Area (square)	         	169630 ?= 4*42,408=169,632
+Sometimes 16932 (both numbers were verified in ImageJ and Im2learn)
+if invert is applied then 169631
+
+Mag=50%
+Area (square)	        10,602 == 42,408/4
+Sometimes 10,601 (verified in ImageJ)
+
+Area (outside square)	16,499  != 326,857/4; 50,393 !=326,857/4
++++++++++++++++++++
+
+binary1
+Mag = 100%  Im2learn
+ImageMask	Count
+weird shape	69811 
+doughnut hole	6960
+doughnut rim	26508
+
+Mag=100 browser
+doughnut rim 	26508
+doughnut hole 	6960
+
+Mag = 200% browser
+doughnut rim 	107424
+doughnut hole 	27392
+cross 		15184//15182
+
+doughnut rim 	107424
+doughnut hole	27390
+
+
+Mag = 200% im2learn
+doughnut hole	27496
+doughnut rim	107076
+cross 		14644//15603
+
+doughnut hole	27194
+doughnut rim	108033
+
++++++++++++++++++++
+
+binary2
+
+ImageMask	Count
+5-star middle	7001
+arrow right	6919
+arrow down	8398
+elipse		10,490
+pentagon	8001
+circle left top	3458
+rectangle top	15,438
+polygon		10,660
+
+Mag = 100% browser
+rectangle 	15438
+
+Mag = 200% browser
+circle left top 	13831 ?= 3458*4 = 13832
+rectangle 			61,751 ?= 15,438 *4 = 61752

@@ -47,18 +47,17 @@
                 "Layer selection module should support any layer.");
     });
 
-    function isFovUpdated() {
-        var osd = wdzt.osd;
-        var viewport = osd.viewport;
+    function isFovUpdated(assert) {
+        var viewport = wdzt.osd.viewport;
         var bounds = viewport.viewportToImageRectangle(
                 viewport.getBounds());
         var zoom = (viewport.viewportToImageZoom(
                 viewport.getZoom(true)) * 100).toPrecision(4);
-        return $("#" + moduleInstance.topLeftXId).text() == bounds.x.toFixed(0)
-                && $("#" + moduleInstance.topLeftYId).text() == bounds.y.toFixed(0)
-                && $("#" + moduleInstance.widthId).text() == bounds.width.toFixed(0)
-                && $("#" + moduleInstance.heightId).text() == bounds.height.toFixed(0)
-                && $("#" + moduleInstance.formZoomLevelId).val() == zoom;
+        assert($("#" + moduleInstance.topLeftXId).text(), bounds.x.toFixed(0), "x");
+        assert($("#" + moduleInstance.topLeftYId).text(), bounds.y.toFixed(0), "y");
+        assert($("#" + moduleInstance.widthId).text(), bounds.width.toFixed(0), "width");
+        assert($("#" + moduleInstance.heightId).text(), bounds.height.toFixed(0), "height");
+        assert($("#" + moduleInstance.formZoomLevelId).val(), zoom, "zoom");
     }
 
     asyncTest("enable disable", function() {
@@ -71,25 +70,25 @@
                 trigger: function() {
                     ok(moduleInstance.isEnabled, "Module should be enabled.");
                     var bounds = viewport.imageToViewportRectangle(
-                            0, 0, 150, 150);
+                            1, 1, 150, 150);
                     viewport.fitBounds(bounds, true);
                 },
                 handler: function() {
-                    ok(isFovUpdated(), "Fov should have been updated.");
+                    isFovUpdated(equal);
                 }
             }, {
                 eventSource: wdzt.osd,
                 eventName: "animation-finish",
                 trigger: function() {
                     moduleInstance.disable();
-                    ok(!moduleInstance.isEnabled, "Module should be diabled.");
+                    ok(!moduleInstance.isEnabled, "Module should be disabled.");
 
                     var bounds = viewport.imageToViewportRectangle(
-                            150, 150, 150, 150);
+                            10, 10, 100, 100);
                     viewport.fitBounds(bounds, true);
                 },
                 handler: function() {
-                    ok(!isFovUpdated(), "Fov should not have been updated.");
+                    isFovUpdated(notEqual);
 
                     moduleInstance.enable();
                     ok(moduleInstance.isEnabled, "Module should be enabled.");

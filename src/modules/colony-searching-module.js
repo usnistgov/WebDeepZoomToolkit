@@ -12,6 +12,8 @@
 
 (function($$) {
 
+    'use strict';
+
     var name = "ColonySearchingModule";
 
     $$.ColonySearchingModule = function(options) {
@@ -73,9 +75,10 @@
                     requestColonyDisplay(_this);
                 };
 
-                if (!this.viewer.osd.drawer) {
-                    this.viewer.osd.addHandler("open", function openHandler() {
-                        _this.viewer.osd.removeHandler("open", openHandler);
+                var osdMovie = this.viewer.osdMovie;
+                if (!this.viewer.osd.drawer || !osdMovie.isOpen()) {
+                    osdMovie.addHandler("movie-changed", function openHandler() {
+                        osdMovie.removeHandler("movie-changed", openHandler);
                         loadColony();
                     });
                 } else {
@@ -109,17 +112,26 @@
             frame: frame,
             colony: colony,
             onSuccess: function(boundBox) {
-                var boundBoxRect = viewport.imageToViewportRectangle(
-                        boundBox.x,
-                        boundBox.y,
-                        boundBox.width,
-                        boundBox.height);
-                var $overlay = $("<div id=\"" + _this.overlayId + "\"/>");
-                $overlay.css({
-                    border: "3px solid red"
-                });
-                osd.addOverlay($overlay.get(0), boundBoxRect);
-                fitBoundsWithZoomConstraints(boundBoxRect, viewport);
+                function onOsdReady() {
+                    osd.removeHandler("tile-drawn", onOsdReady);
+                    var boundBoxRect = viewport.imageToViewportRectangle(
+                            boundBox.x,
+                            boundBox.y,
+                            boundBox.width,
+                            boundBox.height);
+                    var $overlay = $("<div id=\"" + _this.overlayId + "\"/>");
+                    $overlay.css({
+                        border: "3px solid red"
+                    });
+                    osd.addOverlay($overlay.get(0), boundBoxRect);
+                    fitBoundsWithZoomConstraints(boundBoxRect, viewport);
+                }
+                if (osd.world.getItemCount() === 0) {
+                    // We must wait that OSD is ready.
+                    osd.addHandler("tile-drawn", onOsdReady);
+                } else {
+                    onOsdReady();
+                }
             },
             onError: function(request) {
                 var message = "Cannot get colony " + colony + " in frame " + frame;

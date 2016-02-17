@@ -50,3 +50,94 @@ software is used.
 .wdzt-features-dialog table td {
     border: 1px solid black;
 }
+
+#wdzt-annotation-container {
+  display: block;
+  width: 90%; 
+  border: 1px solid #e1e1e8; 
+  background-color: #f7f7f9; 
+  padding: 5px ;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#wdzt-annotation-textarea-container {
+  display: block;
+  width: 80%; 
+  padding-right: 5px; 
+  margin: 5px 0;
+}
+
+#wdzt-annotation-label-container {
+  display: inline;
+  margin: 5px 0;
+}
+
+.wdzt-annotation-saved {
+  display: none; 
+  float: right; 
+  padding: 0 3px; 
+  text-align: center; 
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+  border-radius: 4px;
+}
+
+.wdzt-annotation-textarea {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+
+.wdzt-tags-container {
+  border: 1px solid #e1e1e8;
+  background-color: #f7f7f9;
+  border-radius: 4px;
+}
+
+.wdzt-tags-head {
+  border:1px solid #e1e1e8;
+  padding: 2px 4px;
+}
+
+.wdzt-tags-head:hover {
+  background:#eee;
+}
+
+.wdzt-tags-head span {
+  color: #468847;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  border-radius: 3px;
+  margin: 0 3px;
+  font-weight: bold;
+  display: inline-block;
+  vertical-align: baseline;
+  padding: 2px 4px;
+}
+
+.wdzt-tags-list {
+  display:inline-block;
+}
+
+.wdzt-tags-menu {
+  height: 100px;
+  overflow: auto;
+  display: none;
+  border-color: #eed3d7;
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
+.wdzt-tags-menu ul {
+  margin: 0;
+  list-style: none;
+  float: left;
+  padding: 0;
+  padding-left: 1em;
+}

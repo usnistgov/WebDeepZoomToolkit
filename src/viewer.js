@@ -12,6 +12,8 @@
 
 (function($$) {
 
+    'use strict';
+
     $$.Viewer = function(options) {
 
         $.extend(true, this, {
@@ -26,8 +28,18 @@
             /**
              * Set the images prefix
              */
-            imagesPrefix: "images/"
-        }, $$.DEFAULT_SETTINGS, options);
+            imagesPrefix: "images/",
+            /**
+             * Defines if the viewer should adjust it height depending on the
+             * available space
+             */
+            autoAdjustHeight: false,
+            /**
+             * Defines the minimum height the viewer will have when
+             * autoAdjustHeight is on.
+             */
+            autoAdjustMinHeight: 500
+        }, options);
 
         if (!this.id) {
             throw new Error("An id must be specified to WDZT.");
@@ -76,7 +88,7 @@
                 .addClass("wdzt-osd-container")
                 .appendTo(this.$menuAndOsdContainer);
 
-        adjustMenuAndOsdHeight(this);
+        autoAdjustHeight(this);
 
         /**
          * OpenSeadragon movie instance
@@ -104,10 +116,25 @@
         this.manifest = null;
         this.selectedLayer = null;
         this.isMenuDisplayed = true;
-
         var _this = this;
+
+        this.clickHandlerModule = null;
+        this.osd.addViewerInputHook({
+            hooks: [{
+                    tracker: "viewer",
+                    handler: "clickHandler",
+                    hookHandler: function(event) {
+                        event.preventDefaultAction = true;
+                        if (event.quick && _this.clickHandlerModule) {
+                            _this.clickHandlerModule.clickHandler(event);
+                        }
+                    }
+                }
+            ]
+        });
+
         $(window).resize(function() {
-            adjustMenuAndOsdHeight(_this);
+            autoAdjustHeight(_this);
         });
 
         this._modules = [];
@@ -141,11 +168,13 @@
             return a.instance.getOrderIndex() - b.instance.getOrderIndex();
         });
 
-        // Re-insert all modules in correct order, remove the ones without title.
+        // Re-insert all modules in correct order, remove the ones without title,
+        // and hide them by default.
         for (var i = 0; i < this._modules.length; i++) {
             var m = this._modules[i];
             if (m.instance.getTitle() !== null) {
                 m.$div.appendTo(this.$menuSubContainer);
+                m.$div.hide();
             } else {
                 m.$div.remove();
             }
@@ -155,7 +184,8 @@
     $$.Viewer.prototype = {
         /**
          * Open a new manifest.
-         * @param {String} url The url of the manifest to open.
+         * @param {Object|String} manifest The manifest to open. It can be an
+         * url to a Json file or a plain object.
          * @param {Object} options An options object specifying opening options
          * @param {String} options.url The url of the manifest to open.
          * @param {String} options.layer The layer to open on initialization.
@@ -163,23 +193,30 @@
          * @param {Object} options.ModuleName The initialization options for the
          * module specified by ModuleName.
          */
-        open: function(url, options) {
+        open: function(manifest, options) {
             options = options || {};
             var _this = this;
             this.manifest = null;
-            var manifest = new $$.Manifest({
-                url: url,
-                success: function(response) {
-                    _this.manifest = manifest;
+            var manifestObj = new $$.Manifest({
+                manifest: manifest,
+                success: function() {
+                    _this.manifest = manifestObj;
                     _this.raiseEvent("open");
+                    var layer = manifestObj.getFirstLayer();
                     if (options.layer) {
-                        _this.displayLayer(manifest.getLayer(options.layer), options);
-                    } else {
-                        _this.displayLayer(response.layersGroups[0].layers[0], options);
+                        layer = manifestObj.getLayer(options.layer);
+                        if (!layer) {
+                            window.console.error("Layer " + options.layer +
+                                    " not found in the manifest. " +
+                                    "Opening first layer.");
+                        }
+                    }
+                    if (layer) {
+                        _this.displayLayer(layer, options);
                     }
                 },
                 error: function(message) {
-                    var txt = "Cannot open manifest " + url + ".<br>" + message;
+                    var txt = "Cannot open the specified manifest.<br>" + message;
                     _this.displayError(txt);
                 }
             });
@@ -195,8 +232,8 @@
                 this.selectedLayer = layer;
                 this.osdMovie.openMovie({
                     movieName: layer.name,
-                    openOnFrame: options.frame || layer.openOnFrame,
-                    numberOfFrames: layer.numberOfFrames,
+                    openOnFrame: options.frame || layer.openOnFrame || 1,
+                    numberOfFrames: layer.numberOfFrames || 1,
                     getTileSourceOfFrame: this.manifest.getFrameUrlFunc(layer)
                 });
             }
@@ -276,6 +313,12 @@
         toggleFullScreen: function() {
             toggleFullScreen(this);
             return this;
+        },
+        setClickHandler: function(module) {
+            this.clickHandlerModule = module;
+            this.raiseEvent("click-handler-changed", {
+                module: module
+            });
         }
     };
 
@@ -314,8 +357,8 @@
                 return;
             }
             var containerStyle = _this.$container.get(0).style;
-            this.fullPageStyleWidth = containerStyle.width;
-            this.fullPageStyleHeight = containerStyle.height;
+            _this.fullPageStyleWidth = containerStyle.width;
+            _this.fullPageStyleHeight = containerStyle.height;
             containerStyle.width = '100%';
             containerStyle.height = '100%';
 
@@ -465,6 +508,17 @@
         _this.$menuContainer.height(height);
         _this.$menuSubContainer.height(height);
         _this.$osdContainer.height(height);
+    }
+
+    function autoAdjustHeight(_this) {
+        if (_this.autoAdjustHeight) {
+            var height = $(window).height() - _this.$container.position().top - 20;
+            if (height < _this.autoAdjustMinHeight) {
+                height = _this.autoAdjustMinHeight;
+            }
+            _this.$container.height(height);
+        }
+        adjustMenuAndOsdHeight(_this);
     }
 
 }(WDZT));

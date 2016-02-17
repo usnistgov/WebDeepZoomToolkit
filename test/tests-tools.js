@@ -31,10 +31,17 @@
             var test = tests.shift();
             var eventSource = test.eventSource;
             var eventName = test.eventName;
+            var eventRaisedCount = test.eventRaisedCount || 1;
             var trigger = test.trigger;
             var handler = test.handler;
 
+            var count = 0;
+            
             eventSource.addHandler(eventName, function thisHandler(eventData) {
+                count++;
+                if (count !== eventRaisedCount) {
+                    return;
+                }
                 eventSource.removeHandler(eventName, thisHandler);
                 setTimeout(function() {
                     handler(eventData);

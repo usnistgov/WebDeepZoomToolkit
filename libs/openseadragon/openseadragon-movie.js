@@ -37,6 +37,7 @@
 
         var movieName = null;
         var getTileSourceOfFrame = null;
+        var currentTileSource = null;
         var numberOfFrames = 0;
         var currentFrame = 1;
         var isOpeningFrame = false;
@@ -48,8 +49,8 @@
         this.openMovie = function(options) {
             options = options || {};
             if (options.movieName === movieName
-                && options.getTileSourceOfFrame === getTileSourceOfFrame
-                && options.numberOfFrames === numberOfFrames) {
+                    && options.getTileSourceOfFrame === getTileSourceOfFrame
+                    && options.numberOfFrames === numberOfFrames) {
                 return;
             }
 
@@ -58,7 +59,7 @@
             var self = this;
             var doOpenMovie = function() {
                 if (isOpeningFrame || (hadOpenedMovie && !self.viewer.isOpen())) {
-                    setTimeout(doOpenMovie, 1);
+                    setTimeout(doOpenMovie, 0);
                     return;
                 }
                 isOpeningFrame = true;
@@ -83,7 +84,7 @@
                         var newRatio = self.viewer.source.aspectRatio;
                         var ratioOfRatios = newRatio / refRatio;
                         ratioOfRatios = ratioOfRatios < 1 ? 1 / ratioOfRatios :
-                            ratioOfRatios;
+                                ratioOfRatios;
                         if (ratioOfRatios - 1 < keepZoomOnNewMovieRatio) {
                             self.viewer.viewport.fitBounds(refBounds, true);
                         }
@@ -105,39 +106,51 @@
                     currentFrame = numberOfFrames;
                 }
                 var tileSource = getTileSourceOfFrame(currentFrame);
+                currentTileSource = tileSource;
                 self.viewer.open(tileSource);
             };
-            setTimeout(doOpenMovie, 1);
+            setTimeout(doOpenMovie, 0);
         };
 
         this.displayFrame = function(frame) {
             if (frame === currentFrame || frame < 1 ||
-                frame > numberOfFrames) {
+                    frame > numberOfFrames) {
                 return;
             }
 
             var self = this;
-            var doDisplayFrame = function() {
+            function doDisplayFrame() {
                 if (isOpeningFrame || !self.viewer.isOpen()) {
-                    setTimeout(doDisplayFrame, 1);
+                    setTimeout(doDisplayFrame, 0);
                     return;
                 }
                 isOpeningFrame = true;
 
                 self.raiseEvent("frame-change", self);
+                currentFrame = frame;
+                var tileSource = getTileSourceOfFrame(frame);
+                if (tileSource === currentTileSource) {
+                    onOpeningDone();
+                    return;
+                }
+                currentTileSource = tileSource;
+                
                 var refBounds = self.viewer.viewport.getBounds();
-                var zoomBackAnfFireEvent = function() {
+                function zoomBackAnfFireEvent() {
                     self.viewer.removeHandler("open", zoomBackAnfFireEvent);
                     self.viewer.viewport.fitBounds(refBounds, true);
+                    onOpeningDone();
+                }
+                self.viewer.addHandler("open", zoomBackAnfFireEvent);
+                self.viewer.open(tileSource);
+
+                function onOpeningDone() {
                     isOpeningFrame = false;
                     self.raiseEvent("frame-changed", self);
-                };
-                self.viewer.addHandler("open", zoomBackAnfFireEvent);
-                var tileSource = getTileSourceOfFrame(frame);
-                currentFrame = frame;
-                self.viewer.open(tileSource);
-            };
-            setTimeout(doDisplayFrame, 1);
+                }
+            }
+
+            setTimeout(doDisplayFrame, 0);
         };
 
         this.displayFirstFrame = function() {
@@ -184,6 +197,10 @@
 
         this.getCurrentFrame = function() {
             return currentFrame;
+        };
+
+        this.isOpen = function() {
+            return movieName !== null;
         };
 
         this.getNumberOfFrames = function() {

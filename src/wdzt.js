@@ -17,8 +17,7 @@ window.WDZT = window.WDZT || function(options) {
 
 (function($$) {
 
-    $$.DEFAULT_SETTINGS = {
-    };
+    'use strict';
 
     /**
      * Generate a GUID. Taken from http://stackoverflow.com/a/2117523/1440403
@@ -42,11 +41,44 @@ window.WDZT = window.WDZT || function(options) {
         character = character || "0";
         return str.length < min ? $$.pad(character + str, min, character) : str;
     };
-    
+
     /**
      * Set to true if window.URL.createObjectURL is supported, false otherwise.
      */
     $$.isObjectURLSupported = typeof window.URL === "function" &&
-                typeof window.URL.createObjectURL === "function";
+            typeof window.URL.createObjectURL === "function";
+
+    $$.getHbsTemplate = function(url, success, error) {
+        if (Handlebars.templates && Handlebars.templates[url]) {
+            setTimeout(function() {
+                success(Handlebars.templates[url]);
+            }, 0);
+            return;
+        }
+
+        $.get(url, function(data) {
+            var template = Handlebars.compile(data);
+            success(template);
+        }, error);
+    };
+
+    $$.getHbsTemplates = function(urls, success, error) {
+        var successCount = 0;
+        var templates = [];
+
+        function requestTemplate(index) {
+            $$.getHbsTemplate(urls[index], function(template) {
+                templates[index] = template;
+                successCount++;
+                if (successCount === urls.length) {
+                    success(templates);
+                }
+            }, error);
+        }
+
+        for (var i = 0; i < urls.length; i++) {
+            requestTemplate(i);
+        }
+    };
 
 }(WDZT));

@@ -15,23 +15,28 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
         <title>WebDeepZoomToolkit</title>
 
-        <link rel="stylesheet" type="text/css" href="libs/jquery/css/smoothness/jquery-ui.css"/>
-        <link rel="stylesheet" type="text/css" href="libs/jquery/css/smoothness/jquery.ui.theme.css"/>
-        <link rel="stylesheet" type="text/css" href="libs/jquery/css/jquery.tree.min.css"/>
-        <link rel="stylesheet" type="text/css" href="css/wdzt.css"/>
-        <link rel="stylesheet" type="text/css" href="css/layer-composition-module.css"/>
-        <link rel="stylesheet" type="text/css" href="css/display-info-module.css"/>
-        <link rel="stylesheet" type="text/css" href="css/fetching-module.css"/>
-        <link rel="stylesheet" type="text/css" href="css/recording-module.css"/>
-        <link rel="stylesheet" type="text/css" href="css/scalebar-module.css"/>
-        <link rel="stylesheet" type="text/css" href="css/colony-searching-module.css"/>
-        <link rel="stylesheet" type="text/css" href="css/colony-feature-module.css"/>
-        <link rel="stylesheet" type="text/css" href="css/transitions-widgets.css"/>
+        <!-- build:cssdeps css/deps.css -->
+        <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>
+        <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/theme.css"/>
+        <link rel="stylesheet" href="libs/jquery/css/jquery.tree.css"/>
+        <!-- endbuild -->
+
+        <!-- build:csswdzt css/wdzt.css -->
+        <link rel="stylesheet" href="css/wdzt.css"/>
+        <link rel="stylesheet" href="css/filtering-module.css"/>
+        <link rel="stylesheet" href="css/display-info-module.css"/>
+        <link rel="stylesheet" href="css/fetching-module.css"/>
+        <link rel="stylesheet" href="css/recording-module.css"/>
+        <link rel="stylesheet" href="css/scalebar-module.css"/>
+        <link rel="stylesheet" href="css/colony-searching-module.css"/>
+        <link rel="stylesheet" href="css/colony-feature-module.css"/>
+        <link rel="stylesheet" href="css/transitions-widgets.css"/>
+        <link rel="stylesheet" href="css/connectivity-analysis-module.css"/>
+        <!-- endbuild -->
 
         <style>
             #container {
                 width: 100%;
-                height: 700px;
             }
         </style>
     </head>
@@ -40,84 +45,101 @@
         <h3>WDZT DEBUG</h3>
         <div id="container"></div>
 
+        <!-- build:deps js/deps.js -->
+
         <!-- jQuery and plugins -->
-        <script type="text/javascript" src="libs/jquery/js/jquery-1.11.0.js"></script>
-        <script type="text/javascript" src="libs/jquery/js/jquery-ui-1.10.4.js"></script>
-        <script type="text/javascript" src="libs/jquery/js/jquery-ui-dialog-html-title.js"></script>
-        <script type="text/javascript" src="libs/jquery/js/jquery.tree.js"></script>
-        <script type="text/javascript" src="libs/jquery/js/jquery.fileDownload.js"></script>
-        <script type="text/javascript" src="libs/jquery/js/jquery.color-2.1.2.js"></script>
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/jquery-ui/jquery-ui.js"></script>
+        <script src="libs/jquery/js/jquery-ui-dialog-html-title.js"></script>
+        <script src="libs/jquery/js/jquery.tree.js"></script>
+        <script src="bower_components/jquery-file-download/src/Scripts/jquery.fileDownload.js"></script>
+        <script src="bower_components/jquery-color/jquery.color.js"></script>
 
 
         <!-- noty (jQuery plugin) -->
-        <script type="text/javascript" src="libs/noty/jquery.noty.js"></script>
-        <script type="text/javascript" src="libs/noty/layouts/bottomRight.js"></script>
-        <script type="text/javascript" src="libs/noty/themes/default.js"></script>
+        <script src="bower_components/noty/js/noty/jquery.noty.js"></script>
+        <script src="bower_components/noty/js/noty/layouts/bottomRight.js"></script>
+        <script src="bower_components/noty/js/noty/themes/default.js"></script>
 
 
         <!-- OpenSeadragon and plugins -->
-        <script type="text/javascript" src="libs/openseadragon/openseadragon.js"></script>
+        <script src="libs/openseadragon/openseadragon.js"></script>
 
-        <script type="text/javascript" src="libs/openseadragon/openseadragon-viewerinputhook.js"></script>
-        <script type="text/javascript" src="libs/openseadragon/openseadragon-pixelcolor.js"></script>
-        <script type="text/javascript" src="libs/openseadragon/openseadragon-movie.js"></script>
-        <script type="text/javascript" src="libs/openseadragon/openseadragon-recorder.js"></script>
-        <script type="text/javascript" src="libs/openseadragon/openseadragon-scalebar.js"></script>
-        <script type="text/javascript" src="libs/openseadragon/openseadragon-xraytransitions.js"></script>
-
+        <script src="libs/openseadragon/openseadragon-viewerinputhook.js"></script>
+        <script src="libs/openseadragon/openseadragon-pixelcolor.js"></script>
+        <script src="libs/openseadragon/openseadragon-movie.js"></script>
+        <script src="libs/openseadragon/openseadragon-recorder.js"></script>
+        <script src="libs/openseadragon/openseadragon-scalebar.js"></script>
+        <script src="libs/openseadragon/openseadragon-xraytransitions.js"></script>
+        <script src="libs/openseadragon/openseadragon-filtering.js"></script>
 
 
         <!--Others--> 
-        <script type="text/javascript" src="libs/handlebars/handlebars-v1.3.0.js"></script>
-        <script type="text/javascript" src="libs/jszip/jszip.js"></script>
-        <script type="text/javascript" src="libs/filesaver/FileSaver.js"></script>
+        <script src="bower_components/handlebars/handlebars.js"></script>
+        <script src="bower_components/jszip/dist/jszip.js"></script>
+        <script src="bower_components/file-saver-saveas-js/FileSaver.js"></script>
+        <script src="bower_components/caman/dist/caman.full.js"></script>
+        <script src="libs/IFJS/src/features-extractor.js"></script>
+
+        <!-- endbuild -->
+
+        <!-- build:wdzt js/wdzt.js -->
 
         <!-- Own code -->
-        <script type="text/javascript" src="src/wdzt.js"></script>
-        <script type="text/javascript" src="src/viewer.js"></script>
-        <script type="text/javascript" src="src/toolbar.js"></script>
-        <script type="text/javascript" src="src/manifest.js"></script>
-        <script type="text/javascript" src="src/module.js"></script>
+        <script src="src/wdzt.js"></script>
+        <script src="src/viewer.js"></script>
+        <script src="src/toolbar.js"></script>
+        <script src="src/manifest.js"></script>
+        <script src="src/module.js"></script>
 
-        <!-- modules -->
-        <script type="text/javascript" src="src/modules/layer-selection-module.js"></script>
-        <script type="text/javascript" src="src/modules/layer-composition-module.js"></script>
-        <script type="text/javascript" src="src/modules/display-info-module.js"></script>
-        <script type="text/javascript" src="src/modules/colony-searching-module.js"></script>
-        <script type="text/javascript" src="src/modules/transitions-overlay-module.js"></script>
-        <script type="text/javascript" src="src/modules/nearby-transitions-module.js"></script>
-        <script type="text/javascript" src="src/modules/recording-module.js"></script>
-        <script type="text/javascript" src="src/modules/fetching-module.js"></script>
-        <script type="text/javascript" src="src/modules/scalebar-module.js"></script>
-        <script type="text/javascript" src="src/modules/colony-feature-module.js"></script>
+        <!-- modules, sorted alphabetically -->
+        <script src="src/modules/colony-feature-module.js"></script>
+        <script src="src/modules/colony-searching-module.js"></script>
+        <script src="src/modules/connectivity-analysis-module.js"></script>
+        <script src="src/modules/display-info-module.js"></script>
+        <script src="src/modules/distance-measurement-module.js"></script>
+        <script src="src/modules/fetching-module.js"></script>
+        <script src="src/modules/filtering-module.js"></script>
+        <script src="src/modules/layer-composition-module.js"></script>
+        <script src="src/modules/layer-selection-module.js"></script>
+        <script src="src/modules/nearby-transitions-module.js"></script>
+        <script src="src/modules/object-fetching-module.js"></script>
+        <script src="src/modules/recording-module.js"></script>
+        <script src="src/modules/scalebar-module.js"></script>
+        <script src="src/modules/transitions-overlay-module.js"></script>
 
         <!-- logic code -->
-        <script type="text/javascript" src="src/logic/element-color.js"></script>
-        <script type="text/javascript" src="src/logic/xraytransitions.js"></script>
-        <script type="text/javascript" src="src/logic/colony-helper.js"></script>
+        <script src="src/logic/element-color.js"></script>
+        <script src="src/logic/xraytransitions.js"></script>
+        <script src="src/logic/colony-helper.js"></script>
 
         <!-- widgets -->
-        <script type="text/javascript" src="src/widgets/transitions-tree-selector.js"></script>
-        <script type="text/javascript" src="src/widgets/nearby-transitions-displayer.js"></script>
+        <script src="src/widgets/transitions-tree-selector.js"></script>
+        <script src="src/widgets/nearby-transitions-displayer.js"></script>
+        <script src="src/widgets/spinner-slider.js"></script>
+        <script src="src/widgets/spinner.js"></script>
 
-        <script type="text/javascript">
+        <!-- endbuild -->
+
+        <script>            
             var wdzt = WDZT({
                 id: "container",
-//                OpenSeadragon: {
-//                    showNavigator: false
-//                },
+                OpenSeadragon: {
+                    maxZoomPixelRatio: Infinity
+                },
                 NearbyTransitionsModule: {
                     xrayUrl: "data/xrays.xml"
+                },
+                autoAdjustHeight: true,
+                autoAdjustMinHeight: 500
+            });
+            wdzt.open("data/manifest.json", {
+                layer: "gfp",
+                frame: 3,
+                ColonySearchingModule: {
+                    colony: 10
                 }
             });
-//            wdzt.open("data/manifest.json", {
-//                layer: "corrected_gfp",
-//                frame: 3,
-//                ColonySearchingModule: {
-//                    colony: 10
-//                }
-//            });
-            wdzt.open("data/manifest.json");
         </script>
     </body>
 </html>

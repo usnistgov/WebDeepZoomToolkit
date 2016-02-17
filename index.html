@@ -15,7 +15,7 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
         <title>WebDeepZoomToolkit</title>
 
-        <link rel="stylesheet" type="text/css" href="build/deps/wdzt-deps.css"/>
+        <link rel="stylesheet" href="build/deps/wdzt-deps.css"/>
 
         <style>
             #container {
@@ -29,27 +29,28 @@
         <h3>WDZT DEBUG</h3>
         <div id="container"></div>
         
-        <script type="text/javascript" src="build/deps/WebDeepZoomToolkit-deps.js"></script>
+        <script src="build/deps/WebDeepZoomToolkit-deps.min.js"></script>
 
-        <script type="text/javascript">
+        <script>
             var wdzt = WDZT({
                 id: "container",
-//                OpenSeadragon: {
-//                    showNavigator: false
-//                },
+                OpenSeadragon: {
+                    maxZoomPixelRatio: Infinity
+                },
                 NearbyTransitionsModule: {
                     xrayUrl: "data/xrays.xml"
                 },
+                autoAdjustHeight: true,
+                autoAdjustMinHeight: 500,
                 imagesPrefix: "build/deps/images/"
             });
-//            wdzt.open("data/manifest.json", {
-//                layer: "corrected_gfp",
-//                frame: 3,
-//                ColonySearchingModule: {
-//                    colony: 10
-//                }
-//            });
-            wdzt.open("data/manifest.json");
+            wdzt.open("data/manifest.json", {
+                layer: "gfp",
+                frame: 3,
+                ColonySearchingModule: {
+                    colony: 10
+                }
+            });
         </script>
     </body>
 </html>

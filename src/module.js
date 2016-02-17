@@ -13,6 +13,8 @@
 
 (function($$) {
 
+    'use strict';
+
     $$.Module = function(options) {
         this.viewer = options.viewer;
         this.$container = options.$container;
@@ -59,6 +61,15 @@
         loadState: function(options) {
             /*jshint unused:vars */
             return this;
+        },
+        /**
+         * Handle a click event by the module. This is called by the viewer
+         * when this module is the current click handler.
+         * @param {type} event
+         * @returns {undefined}
+         */
+        clickHandler: function(event) {
+            /*jshint unused:vars */
         },
         /**
          * Re-enable the module after it has been disabled.

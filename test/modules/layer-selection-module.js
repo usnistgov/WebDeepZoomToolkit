@@ -47,10 +47,10 @@
                 "No option should be present before opening.");
 
         wdzt.addHandler("open", function() {
-            equal(moduleInstance.layers.length, 5,
-                    "5 layers should be present after opening.");
-            equal($("#" + moduleInstance.selectId + " option").length, 5,
-                    "5 options should be present after opening.");
+            equal(moduleInstance.layers.length, 11,
+                    "11 layers should be present after opening.");
+            equal($("#" + moduleInstance.selectId + " option").length, 11,
+                    "11 options should be present after opening.");
             start();
         });
 

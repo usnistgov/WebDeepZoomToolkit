@@ -13,6 +13,8 @@
 
 (function($$) {
 
+    'use strict';
+
     var name = "DisplayInfoModule";
 
     $$.DisplayInfoModule = function(options) {
@@ -27,79 +29,165 @@
 
         $$.Module.apply(this, [options]);
 
-        this.imageCoordsId = "wdzt-display-info-image-coords-" + this.hash;
-        this.screenCoordsId = "wdzt-display-info-screen-coords-" + this.hash;
-        this.intensityId = "wdzt-display-info-intensity-" + this.hash;
+        this.cursorInfoFsId = "wdzt-display-cursor-info-fs" + this.hash;
         this.formZoomLevelId = "wdzt-display-info-zoom-" + this.hash;
         this.topLeftXId = "wdzt-display-info-top-left-x-" + this.hash;
         this.topLeftYId = "wdzt-display-info-top-left-y-" + this.hash;
         this.widthId = "wdzt-display-info-width-" + this.hash;
         this.heightId = "wdzt-display-info-height-" + this.hash;
 
-        this.$container.html(
-                Handlebars.compile([
-                    '<div class="wdzt-display-info-div">',
-                    '    <fieldset class="wdzt-display-cursor-info-fs">',
-                    '        <legend>Cursor info</legend>',
-                    '        <ol>',
-                    '            <li>',
-                    '                <div class="wdzt-display-label">Image coords:</div>',
-                    '                <div class="wdzt-dispay-value" id="{{imageCoordsId}}"/>',
-                    '            </li>',
-                    '            <li>',
-                    '                <div class="wdzt-display-label">Screen coords:</div>',
-                    '                <div class="wdzt-dispay-value" id="{{screenCoordsId}}"/>',
-                    '            </li>',
-                    '            <li>',
-                    '                <div class="wdzt-display-label">Intensity:</div>',
-                    '                <div class="wdzt-dispay-value" id="{{intensityId}}"/>',
-                    '            </li>',
-                    '        </ol>',
-                    '    </fieldset>',
-                    '    <fieldset class="wdzt-display-fov-info-fs">',
-                    '        <legend>Field of view info</legend>',
-                    '        <ol>',
-                    '            <li>',
-                    '                <div class="wdzt-display-label">Zoom:</div>',
-                    '                <div class="wdzt-dispay-value">',
-                    '                    <input type="text" name="editable-zoom-level" ',
-                    '                           id="{{formZoomLevelId}}"',
-                    '                           size="4"',
-                    '                           class="ui-widget-content ui-corner-all"/>',
-                    '                    %',
-                    '                </div>',
-                    '            </li>',
-                    '            <li>',
-                    '                <div class="wdzt-display-label">X (top left):</div>',
-                    '                <div class="wdzt-dispay-value" id={{topLeftXId}}/>',
-                    '            </li>',
-                    '            <li>',
-                    '                <div class="wdzt-display-label">Y (top left):</div>',
-                    '                <div class="wdzt-dispay-value" id={{topLeftYId}}/>',
-                    '            </li>',
-                    '            <li>',
-                    '                <div class="wdzt-display-label">Width:</div>',
-                    '                <div class="wdzt-dispay-value" id={{widthId}}/>',
-                    '            </li>',
-                    '            <li>',
-                    '                <div class="wdzt-display-label">Height:</div>',
-                    '                <div class="wdzt-dispay-value" id={{heightId}}/>',
-                    '            </li>',
-                    '        </ol>',
-                    '    </fieldset>',
-                    '</div>'
-                ].join(''))({
-            imageCoordsId: this.imageCoordsId,
-            screenCoordsId: this.screenCoordsId,
-            intensityId: this.intensityId,
-            formZoomLevelId: this.formZoomLevelId,
-            topLeftXId: this.topLeftXId,
-            topLeftYId: this.topLeftYId,
-            widthId: this.widthId,
-            heightId: this.heightId
+        this.moduleTemplate = null;
+        this.cursorInfoTemplate = null;
+        this.intensityConverterHelpTemplate = null;
+
+        $$.getHbsTemplate('src/modules/display-info-module-template.hbs',
+                function(template) {
+                    _this.moduleTemplate = template;
+                    onTemplateReceived(_this);
+                });
+        $$.getHbsTemplate('src/modules/display-info-cursor-info-template.hbs',
+                function(template) {
+                    _this.cursorInfoTemplate = template;
+                    onTemplateReceived(_this);
+                });
+        $$.getHbsTemplate('src/modules/display-info-intensity-converter-template.hbs',
+                function(template) {
+                    _this.intensityConverterHelpTemplate = template;
+                    onTemplateReceived(_this);
+                });
+
+        this.allTemplatesLoaded = function() {
+            return _this.moduleTemplate !== null &&
+                    _this.cursorInfoTemplate !== null &&
+                    _this.intensityConverterHelpTemplate !== null;
+        };
+
+        this.mouseTracker = new OpenSeadragon.MouseTracker({
+            element: _this.viewer.osd.element,
+            stopHandler: function(event) {
+                _this.refreshCursorInfo(event.position);
+            }
+        }).setTracking(false);
+
+        this._zoomLevelKeyPressHandler = function(e) {
+            if (e.keyCode === 13 && _this.viewer.osd.viewport) {
+                var zoom = parseFloat($("#" + _this.formZoomLevelId).val()) / 100;
+                var viewport = _this.viewer.osd.viewport;
+                viewport.zoomTo(viewport.imageToViewportZoom(zoom), null, true);
+            }
+        };
+
+        this.updateFovHandler = function() {
+            if (!_this.allTemplatesLoaded()) {
+                return;
+            }
+            var viewport = _this.viewer.osd.viewport;
+            var item = _this.viewer.osd.world.getItemAt(0);
+            var zoom = "";
+            var x = "";
+            var y = "";
+            var width = "";
+            var height = "";
+            if (viewport && item) {
+                zoom = (item.viewportToImageZoom(viewport.getZoom(true)) * 100)
+                        .toPrecision(4);
+                var bounds = item.viewportToImageRectangle(
+                        viewport.getBounds(true));
+                x = bounds.x.toFixed(0);
+                y = bounds.y.toFixed(0);
+                width = bounds.width.toFixed(0);
+                height = bounds.height.toFixed(0);
+            }
+            $("#" + _this.formZoomLevelId).val(zoom);
+            $("#" + _this.topLeftXId).text(x);
+            $("#" + _this.topLeftYId).text(y);
+            $("#" + _this.widthId).text(width);
+            $("#" + _this.heightId).text(height);
+        };
+
+        this.refreshCursorInfo = function(position) {
+            if (!_this.allTemplatesLoaded()) {
+                return;
+            }
+            var context = {
+                screenCoords: "",
+                imageCoords: "",
+                intensity: "",
+                acquiredIntensity: "",
+                imagesPrefix: _this.viewer.imagesPrefix
+            };
+
+            if (position) {
+                context.screenCoords = position.x.toFixed(0) + "," +
+                        position.y.toFixed(0);
+                if (_this.viewer.osd.viewport) {
+                    var imagePosition = _this.viewer.osd.world.getItemAt(0).
+                            viewerElementToImageCoordinates(position);
+                    context.imageCoords = imagePosition.x.toFixed(0) + "," +
+                            imagePosition.y.toFixed(0);
+
+                    var colorData = null;
+                    try {
+                        colorData = _this.viewer.osd.getPixelColor(position);
+                    } catch (O_o) {
+                        // Probably a cross origin policy error
+                        window.console.log(O_o);
+                        context.intensity = '';
+                        context.acquiredIntensity = '';
+                    }
+                    if (colorData !== null) {
+                        var intensity =
+                                (colorData[0] + colorData[1] + colorData[2]) / 3;
+                        context.intensity = intensity.toFixed(0);
+                        if (_this.intensityConverter) {
+                            context.acquiredIntensity = _this.intensityConverter(
+                                    intensity).toFixed(0);
+                        }
+                    }
+                }
+            }
+            $("#" + _this.cursorInfoFsId).html(_this.cursorInfoTemplate(context));
+            if (context.acquiredIntensity) {
+                var options = _this.viewer.selectedLayer.acquiredIntensity;
+                var tooltip = _this.intensityConverterHelpTemplate({
+                    imagesPrefix: _this.viewer.imagesPrefix,
+                    intensityConverter: options.type,
+                    min: options.min,
+                    max: options.max
+                });
+                $("#" + _this.cursorInfoFsId +
+                        " .wdzt-display-info-acquired-intensity-help")
+                        .tooltip({
+                            items: ".wdzt-display-info-acquired-intensity-help",
+                            content: tooltip,
+                            open: function(event, ui) {
+                                /*jshint unused:vars */
+                                ui.tooltip.css("max-width", "none");
+                            }
+                        });
+            }
+        };
+
+        this.isEnabled = false;
+    };
+
+    function onTemplateReceived(_this) {
+        if (_this.allTemplatesLoaded()) {
+            onTemplatesReceived(_this);
+        }
+    }
+
+    function onTemplatesReceived(_this) {
+        _this.$container.html(_this.moduleTemplate({
+            cursorInfoFsId: _this.cursorInfoFsId,
+            formZoomLevelId: _this.formZoomLevelId,
+            topLeftXId: _this.topLeftXId,
+            topLeftYId: _this.topLeftYId,
+            widthId: _this.widthId,
+            heightId: _this.heightId
         }));
 
-        var $spinner = $("#" + this.formZoomLevelId).spinner({
+        var $spinner = $("#" + _this.formZoomLevelId).spinner({
             spin: function(event, ui) {
                 if (!_this.viewer.osd.viewport) {
                     return;
@@ -114,62 +202,44 @@
             }
         });
 
-        this._zoomLevelKeyPressHandler = function(e) {
-            if (e.keyCode === 13 && _this.viewer.osd.viewport) {
-                var zoom = parseFloat($("#" + _this.formZoomLevelId).val()) / 100;
-                var viewport = _this.viewer.osd.viewport;
-                viewport.zoomTo(viewport.imageToViewportZoom(zoom), null, true);
-            }
-        };
+        _this.refreshCursorInfo();
 
-        this.updateFovHandler = function() {
-            var viewport = _this.viewer.osd.viewport;
-            var zoom = "";
-            var x = "";
-            var y = "";
-            var width = "";
-            var height = "";
-            if (viewport) {
-                zoom = (viewport.viewportToImageZoom(viewport.getZoom(true)) * 100).toPrecision(4);
-                var bounds = viewport.viewportToImageRectangle(viewport.getBounds(true));
-                x = bounds.x.toFixed(0);
-                y = bounds.y.toFixed(0);
-                width = bounds.width.toFixed(0);
-                height = bounds.height.toFixed(0);
-            }
-            $("#" + _this.formZoomLevelId).val(zoom);
-            $("#" + _this.topLeftXId).text(x);
-            $("#" + _this.topLeftYId).text(y);
-            $("#" + _this.widthId).text(width);
-            $("#" + _this.heightId).text(height);
-        };
-
-        this.mouseTracker = new OpenSeadragon.MouseTracker({
-            element: _this.viewer.osd.element,
-            stopHandler: function(event) {
-                var position = event.position;
-
-                $("#" + _this.screenCoordsId).text(
-                        position.x.toFixed(0) + "," + position.y.toFixed(0));
-
-                if (!_this.viewer.osd.viewport) {
-                    return;
-                }
-                var imagePosition = _this.viewer.osd.viewport.
-                        viewerElementToImageCoordinates(position);
-                $("#" + _this.imageCoordsId).text(
-                        imagePosition.x.toFixed(0) + "," + imagePosition.y.toFixed(0));
-
-                var colorData = _this.viewer.osd.getPixelColor(position);
-                if (colorData !== null) {
-                    var intensity = (colorData[0] + colorData[1] + colorData[2]) / 3;
-                    $("#" + _this.intensityId).text(intensity);
+        _this.intensityConverter = undefined;
+        function getThresholdingFunction(min, max) {
+            var ratio = (max - min) / 255.0;
+            return function(intensity) {
+                return intensity * ratio + min;
+            };
+        }
+        function getGammaFunction(min, max) {
+            var gammaReciprocal = Math.log(max - min) / Math.log(255);
+            return function(intensity) {
+                return Math.exp(gammaReciprocal * Math.log(intensity)) + min;
+            };
+        }
+        _this.viewer.addHandler("layer-changed", function(event) {
+            var layer = event.layer;
+            if (!layer.acquiredIntensity) {
+                _this.intensityConverter = undefined;
+            } else {
+                switch (layer.acquiredIntensity.type) {
+                    case "threshold":
+                        _this.intensityConverter = getThresholdingFunction(
+                                layer.acquiredIntensity.min,
+                                layer.acquiredIntensity.max);
+                        break;
+                    case "gamma":
+                        _this.intensityConverter = getGammaFunction(
+                                layer.acquiredIntensity.min,
+                                layer.acquiredIntensity.max);
+                        break;
+                    default:
+                        _this.intensityConverter = undefined;
                 }
             }
-        }).setTracking(false);
-
-        this.isEnabled = false;
-    };
+            _this.refreshCursorInfo();
+        });
+    }
 
     // Register itself
     $$.Module.MODULES[name] = $$.DisplayInfoModule;
@@ -188,6 +258,7 @@
                 this.viewer.osd.addHandler("open", this.updateFovHandler);
                 this.viewer.osd.addHandler("animation", this.updateFovHandler);
                 this.updateFovHandler();
+                this.refreshCursorInfo();
                 $("#" + this.formZoomLevelId).bind("keyup", this._zoomLevelKeyPressHandler);
                 this.isEnabled = true;
             }
@@ -196,7 +267,7 @@
         disable: function() {
             if (this.isEnabled) {
                 this.mouseTracker.setTracking(false);
-                this.viewer.removeHandler("movie-changed", this.updateFovHandler);
+                this.viewer.removeHandler("layer-changed", this.updateFovHandler);
                 this.viewer.osd.removeHandler("open", this.updateFovHandler);
                 this.viewer.osd.removeHandler("animation", this.updateFovHandler);
                 $("#" + this.formZoomLevelId).unbind("keyup", this._zoomLevelKeyPressHandler);

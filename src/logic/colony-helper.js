@@ -55,7 +55,9 @@
                         return;
                     }
                     var response = results[0];
+                    var id = response.id;
                     var colony = response.colonyId;
+                    var dataset = response.dataset;
                     var boundingBox = response.shape.boxBound;
                     var centroid = response.shape.centroid;
 
@@ -124,7 +126,9 @@
                     }
 
                     options.onSuccess({
+                        id: id,
                         colony: colony,
+                        dataset: dataset,
                         boundingBox: boundingBox,
                         centroid: centroid,
                         featuresGroup: featuresGroup

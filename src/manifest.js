@@ -12,10 +12,11 @@
 
 (function($$) {
 
+    'use strict';
+
     $$.Manifest = function(options) {
 
         $.extend(true, this, {
-            url: null,
             manifest: null,
             success: function() {
             },
@@ -25,22 +26,41 @@
 
         var _this = this;
 
-        $.ajax(this.url, {
-            dataType: "json",
-            success: function(data) {
-                _this.manifest = data;
-                _this.success(data);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                /*jshint unused:true */
-                var message = textStatus;
-                if (errorThrown) {
-                    message += ": " + errorThrown;
-                }
-                _this.error(message);
+        function validateManifest() {
+            if (!_this.manifest) {
+                _this.error("The manifest should not be empty.");
+                return;
             }
-        });
 
+            var layersGroups = _this.manifest.layersGroups;
+            if (!(layersGroups instanceof Array)) {
+                _this.error("The layers groups property of the manifest " +
+                        "must be an array.");
+                return;
+            }
+
+            _this.success(_this.manifest);
+        }
+
+        if (typeof this.manifest === "string") {
+            $.ajax(this.manifest, {
+                dataType: "json",
+                success: function(data) {
+                    _this.manifest = data;
+                    validateManifest();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    /*jshint unused:true */
+                    var message = textStatus;
+                    if (errorThrown) {
+                        message += ": " + errorThrown;
+                    }
+                    _this.error(message);
+                }
+            });
+        } else {
+            setTimeout(validateManifest);
+        }
     };
 
     $$.Manifest.prototype = {
@@ -71,8 +91,10 @@
             var result = [];
             for (var j = 0; j < groups.length; j++) {
                 var group = groups[j];
-                for (var k = 0; k < group.layers.length; k++) {
-                    result.push(group.layers[k]);
+                if (group.layers) {
+                    for (var k = 0; k < group.layers.length; k++) {
+                        result.push(group.layers[k]);
+                    }
                 }
             }
 
@@ -95,6 +117,17 @@
                 }
             }
             return null;
+        },
+        /**
+         * Retrieve the first layer
+         * @returns {Object}
+         */
+        getFirstLayer: function() {
+            var layers = this.getLayers();
+            if (!layers || !layers.length) {
+                return null;
+            }
+            return layers[0];
         },
         /**
          * Retrieve the group of a layer.
@@ -121,6 +154,40 @@
          * @returns {Function}
          */
         getFrameUrlFunc: function(layer) {
+            if (layer.singleFrame) {
+                return function() {
+                    return layer.baseUrl;
+                };
+            }
+
+            if (layer.framesList) {
+                layer.framesList.sort(function(a, b) {
+                    return a - b;
+                });
+                return function(frame) {
+                    var current;
+                    var previous = null;
+                    // TODO: improve by using binary search
+                    for (var i = 0; i < layer.framesList.length; i++) {
+                        current = layer.framesList[i];
+                        if (current >= frame) {
+                            break;
+                        }
+                        previous = current;
+                    }
+                    var actualFrame;
+                    if (previous === null) {
+                        actualFrame = current;
+                    } else {
+                        var middle = (current + previous) / 2;
+                        actualFrame = frame <= middle ? previous : current;
+                    }
+                    return layer.baseUrl + "/" + layer.framesPrefix +
+                            $$.pad(actualFrame + "", layer.paddingSize) +
+                            layer.framesSuffix;
+                };
+            }
+
             return function(frame) {
                 var framesOffset = layer.framesOffset || 0;
                 return layer.baseUrl + "/" + layer.framesPrefix +

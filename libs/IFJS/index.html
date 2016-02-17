@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!--
+This software was developed at the National Institute of Standards and
+Technology by employees of the Federal Government in the course of
+their official duties. Pursuant to title 17 Section 105 of the United
+States Code this software is not subject to copyright protection and is
+in the public domain. This software is an experimental system. NIST assumes
+no responsibility whatsoever for its use by other parties, and makes no
+guarantees, expressed or implied, about its quality, reliability, or
+any other characteristic. We would appreciate acknowledgement if the
+software is used.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div id="result"></div>
+
+        <script src="src/features-extractor.js"></script>
+
+        <script>
+            (function() {
+                var img = new Image();
+                var mask = new Image();
+                img.onload = loadMask;
+                img.src = "data/single_colony_pc.png";
+
+                function loadMask() {
+                    mask.onload = computeFeatures;
+                    mask.src = "data/single_colony_mask.png";
+                }
+
+                function computeFeatures() {
+                    var canvas = document.createElement("canvas");
+                    var width = canvas.width = img.width;
+                    var height = canvas.height = img.height;
+                    var context = canvas.getContext("2d");
+
+                    context.drawImage(img, 0, 0);
+                    var imageData = context.getImageData(0, 0, width, height);
+
+                    context.drawImage(mask, 0, 0);
+                    var maskData = context.getImageData(0, 0, width, height);
+
+                    var featuresExtractor = new IFJS.FeaturesExtractor({
+                        image: imageData,
+                        mask: maskData
+                    });
+
+                    console.time("featureExtraction");
+                    var centroid = featuresExtractor.getCentroid();
+                    var boundingBox = featuresExtractor.getBoundingBox();
+
+                    var results = [
+                        "area: " + featuresExtractor.getArea(),
+                        "centroid: (" + centroid.x + ", " + centroid.y + ")",
+                        "eccentricity: " + featuresExtractor.getEccentricity(),
+                        "orientation: " + featuresExtractor.getOrientation(),
+                        "perimeter: " + featuresExtractor.getPerimeter(),
+                        "circularity: " + featuresExtractor.getCircularity(),
+                        "boundingBox: (" + boundingBox.x + ", " + boundingBox.y +
+                                ", " + boundingBox.width + ", " + boundingBox.height + ")",
+                        "bbAspectRatio:  " + featuresExtractor.getBoundingBoxAspectRatio(),
+                        "bbExtend:  " + featuresExtractor.getBoundingBoxExtend(),
+                        "",
+                        "mean: " + featuresExtractor.getMean(),
+                        "min: " + featuresExtractor.getMin(),
+                        "max: " + featuresExtractor.getMax(),
+                        "range: " + featuresExtractor.getRange(),
+                    ];
+                    console.timeEnd("featureExtraction");
+
+                    document.getElementById("result").innerHTML =
+                            results.join("<br>");
+                }
+            }());
+        </script>
+    </body>
+</html>

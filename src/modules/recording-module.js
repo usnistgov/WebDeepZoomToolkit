@@ -12,6 +12,8 @@
 
 (function($$) {
 
+    'use strict';
+
     var name = "RecordingModule";
 
     // 20MB

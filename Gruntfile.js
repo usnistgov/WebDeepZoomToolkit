@@ -1,47 +1,16 @@
 /*global module:false*/
 module.exports = function(grunt) {
 
-    var srcFiles = [
-        'src/wdzt.js',
-        'src/viewer.js',
-        'src/toolbar.js',
-        'src/manifest.js',
-        'src/module.js',
-        'src/logic/*.js',
-        'src/modules/*.js',
-        'src/widgets/*.js'];
-
-    var libSrcFiles = [
-        'libs/jquery/js/*.js',
-        '!libs/jquery/js/*.min.js',
-        'libs/noty/jquery.noty.js',
-        'libs/noty/layouts/bottomRight.js',
-        'libs/noty/themes/default.js',
-        'libs/openseadragon/openseadragon.js',
-        'libs/openseadragon/*.js',
-        '!libs/openseadragon/*.min.js',
-        'libs/handlebars/handlebars-v1.3.0.js',
-        'libs/jszip/jszip.js',
-        'libs/filesaver/FileSaver.js'
-    ];
-
-    var allSrcFiles = libSrcFiles.concat(srcFiles);
-
-    var cssFiles = [
-        'css/*.css'
-    ];
-
-    var libCssFiles = [
-        'libs/jquery/css/smoothness/jquery-ui.css',
-        'libs/jquery/css/smoothness/jquery.ui.theme.css',
-        'libs/jquery/css/jquery.tree.min.css'
-    ];
-
-    var allCssFiles = libCssFiles.concat(cssFiles);
-
     var images = ['images/*'];
 
-    var libImages = ['libs/jquery/css/images/*'];
+    var libImages = [
+        'bower_components/jquery-ui/themes/smoothness/images/*',
+        'libs/jquery/css/images/*'
+    ];
+
+    var hbsTemplateOutputFile = 'build/hbs-templates.js';
+    var handlebarsFilesOption = {};
+    handlebarsFilesOption[hbsTemplateOutputFile] = 'src/**/*.hbs';
 
     var allImages = libImages.concat(images);
 
@@ -62,17 +31,76 @@ module.exports = function(grunt) {
                 '* software is used.\n' +
                 '*/\n',
         // Task configuration.
+        bower: {
+            install: {
+                options: {
+                    copy: false
+                }
+            }
+        },
+        handlebars: {
+            compile: {
+                options: {
+                    namespace: 'Handlebars.templates'
+                },
+                files: handlebarsFilesOption
+            }
+        },
+        useminPrepare: {
+            wdzt: 'debug.html',
+            options: {
+                flow: {
+                    steps: {
+                        wdzt: ['concat'],
+                        deps: ['concat'],
+                        csswdzt: ['cssmin'],
+                        cssdeps: ['cssmin']
+                    },
+                    post: {
+                        wdzt: [{
+                                name: 'concat',
+                                createConfig: function(context, block) {
+                                    context.options.basic.src = 
+                                            [hbsTemplateOutputFile].concat(block.src);
+                                    context.options.deps.src =
+                                            context.options.deps.src.concat(
+                                                    context.options.basic.src);
+                                }
+                            }],
+                        deps: [{
+                                name: 'concat',
+                                createConfig: function(context, block) {
+                                    context.options.deps.src = block.src;
+                                }
+
+                            }],
+                        csswdzt: [{
+                                name: 'cssmin',
+                                createConfig: function(context, block) {
+                                    context.options.basic.src = block.src;
+                                    context.options.deps.src = context.options.deps.src.concat(block.src);
+                                }
+                            }],
+                        cssdeps: [{
+                                name: 'cssmin',
+                                createConfig: function(context, block) {
+                                    context.options.deps.src = block.src;
+                                }
+
+                            }]
+                    }
+                }
+            }
+        },
         concat: {
             options: {
                 banner: '<%= banner %>',
                 stripBanners: true
             },
             basic: {
-                src: srcFiles,
                 dest: 'build/basic/<%= pkg.name %>.js'
             },
             deps: {
-                src: allSrcFiles,
                 dest: 'build/deps/<%= pkg.name %>-deps.js'
             }
         },
@@ -81,11 +109,9 @@ module.exports = function(grunt) {
                 banner: '<%= banner %>'
             },
             basic: {
-                src: cssFiles,
                 dest: "build/basic/wdzt.css"
             },
             deps: {
-                src: allCssFiles,
                 dest: "build/deps/wdzt-deps.css"
             }
         },
@@ -124,7 +150,7 @@ module.exports = function(grunt) {
                 curly: true,
                 eqeqeq: true,
                 immed: true,
-                latedef: true,
+                latedef: "nofunc",
                 newcap: true,
                 noarg: true,
                 sub: true,
@@ -139,6 +165,8 @@ module.exports = function(grunt) {
                     Handlebars: true,
                     noty: true,
                     saveAs: true,
+                    Caman: true,
+                    IFJS: true,
                     WDZT: true
                 }
             },
@@ -223,28 +251,35 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-compress');
+    grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-usemin');
     grunt.loadNpmTasks('grunt-closure-tools');
     grunt.loadNpmTasks('grunt-qunit-junit');
+    grunt.loadNpmTasks('grunt-bower-task');
 
     // Default task.
     grunt.registerTask('default', [
-        'clean', 
+        'clean',
         'jshint',
+        'handlebars',
+        'useminPrepare',
         'concat:basic',
-        'cssmin:basic', 
+        'cssmin:basic',
         'uglify:basic'
     ]);
-    
+
     grunt.registerTask('all', [
-        'clean', 
-        'jshint', 
+        'clean',
+        'jshint',
+        'handlebars',
+        'useminPrepare',
         'concat',
-        'cssmin', 
-        'uglify', 
-        'copy', 
-        'qunit_junit', 
-        'qunit', 
+        'cssmin',
+        'uglify',
+        'copy',
+        'qunit_junit',
+        'qunit',
         'compress'
     ]);
 

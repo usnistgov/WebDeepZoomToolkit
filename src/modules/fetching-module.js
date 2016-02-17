@@ -12,6 +12,8 @@
 
 (function($$) {
 
+    'use strict';
+
     var name = "FetchingModule";
 
     $$.FetchingModule = function(options) {
@@ -28,8 +30,8 @@
         var _this = this;
         this.fetchingFormId = "wdzt-fetching-form-" + this.hash;
         this.manualSettingsId = "wdzt-fetching-manual-settings-" + this.hash;
+        this.originalResolutionId = "wdzt-fetching-original-resolution-" + this.hash;
         this.manualSettingsFormId = "wdzt-fetching-manual-settings-form-" + this.hash;
-        this.formOriginalResolutionId = "wdzt-fetching-form-original-resolution-" + this.hash;
         this.formZoomLevelId = "wdzt-fetching-form-zoom-level-" + this.hash;
         this.formXId = "wdzt-fetching-form-x-" + this.hash;
         this.formYId = "wdzt-fetching-form-y-" + this.hash;
@@ -39,214 +41,31 @@
         this.formFramesRangeId = "wdzt-fetching-form-frames-range-" + this.hash;
         this.formFetchButtonId = "wdzt-fetching-form-fetch-button-" + this.hash;
 
-        this.$container.html(
-                Handlebars.compile([
-                    '<div id="{{fetchingFormId}}" class="wdzt-fetching-form">',
-                    '    <input id="{{manualSettingsId}}" type="checkbox"/>',
-                    '    <label for="{{manualSettingsId}}">Manually set bounds</label>',
-                    '    <form id="{{manualSettingsFormId}}">',
-                    '        <fieldset>',
-                    '            <legend>Fetching bounds</legend>',
-                    '            <div class="wdzt-table-layout">',
-                    '                <div class="wdzt-row-layout">',
-                    '                    <label for="{{formOriginalResolutionId}}"',
-                    '                           class="wdzt-cell-layout wdzt-no-wrap">',
-                    '                        Original resolution',
-                    '                    </label>',
-                    '                    <input type="checkbox"',
-                    '                           id="{{formOriginalResolutionId}}"',
-                    '                           class="wdzt-cell-layout"/>',
-                    '                </div>',
-                    '                <div class="wdzt-row-layout">',
-                    '                    <label for="{{formZoomLevelId}}"',
-                    '                           class="wdzt-cell-layout wdzt-no-wrap">',
-                    '                        Zoom (%)',
-                    '                    </label>',
-                    '                    <input type="text"',
-                    '                           id="{{formZoomLevelId}}"',
-                    '                           class="ui-widget-content ui-corner-all wdzt-cell-layout"/>',
-                    '                </div>',
-                    '                <div class="wdzt-row-layout">',
-                    '                    <label for="{{formXId}}"',
-                    '                           class="wdzt-cell-layout wdzt-no-wrap">',
-                    '                        x (top left)',
-                    '                    </label>',
-                    '                    <input type="text"',
-                    '                           id="{{formXId}}"',
-                    '                           class="ui-widget-content ui-corner-all wdzt-cell-layout"/>',
-                    '                </div>',
-                    '                <div class="wdzt-row-layout">',
-                    '                    <label for="{{formYId}}"',
-                    '                           class="wdzt-cell-layout wdzt-no-wrap">',
-                    '                        y (top left)</label>',
-                    '                    <input type="text"',
-                    '                           id="{{formYId}}"',
-                    '                           class="ui-widget-content ui-corner-all wdzt-cell-layout"/>',
-                    '                </div>',
-                    '                <div class="wdzt-row-layout">',
-                    '                    <label for="{{formWidthId}}"',
-                    '                           class="wdzt-cell-layout wdzt-no-wrap">',
-                    '                        Width',
-                    '                    </label>',
-                    '                    <input type="text"',
-                    '                           id="{{formWidthId}}"',
-                    '                           class="ui-widget-content ui-corner-all wdzt-cell-layout"/>',
-                    '                </div>',
-                    '                <div class="wdzt-row-layout">',
-                    '                    <label for="{{formHeightId}}"',
-                    '                           class="wdzt-cell-layout wdzt-no-wrap">',
-                    '                        Height',
-                    '                    </label>',
-                    '                    <input type="text"',
-                    '                           id="{{formHeightId}}"',
-                    '                           class="ui-widget-content ui-corner-all wdzt-cell-layout"/>',
-                    '                </div>',
-                    '            </div>',
-                    '        </fieldset>',
-                    '    </form>',
-                    '    <div id="{{layersDivId}}"/>',
-                    '    <label for="{{formFramesRangeId}}">',
-                    '        Frame range',
-                    '        <img src="{{imagesPrefix}}help-browser-2.png"',
-                    '             title="For example, type 1,3 or 5-12 to retrieve a selection of frames"',
-                    '             alt="help">',
-                    '    </label>',
-                    '    <input type="text"',
-                    '           id="{{formFramesRangeId}}"',
-                    '           class="ui-widget-content ui-corner-all"/>',
-                    '    <button id="{{formFetchButtonId}}">Fetch</button>',
-                    '</div>'
-                ].join(''))({
-            fetchingFormId: this.fetchingFormId,
-            manualSettingsId: this.manualSettingsId,
-            manualSettingsFormId: this.manualSettingsFormId,
-            formOriginalResolutionId: this.formOriginalResolutionId,
-            formZoomLevelId: this.formZoomLevelId,
-            formXId: this.formXId,
-            formYId: this.formYId,
-            formWidthId: this.formWidthId,
-            formHeightId: this.formHeightId,
-            layersDivId: this.layersDivId,
-            formFramesRangeId: this.formFramesRangeId,
-            formFetchButtonId: this.formFetchButtonId,
-            imagesPrefix: this.viewer.imagesPrefix
-        }));
+        $$.getHbsTemplates([
+            'src/modules/fetching-module-template.hbs',
+            'src/modules/fetching-module-layers-template.hbs'],
+                function(templates) {
+                    onTemplateReceived(templates[0], templates[1]);
+                });
 
-        $("#" + this.manualSettingsId).change(function() {
-            var manual = $("#" + _this.manualSettingsId).prop("checked");
-            $("#" + _this.manualSettingsFormId + " input").prop("disabled", !manual);
-            if (manual) {
-                $("#" + _this.manualSettingsFormId).removeClass("ui-state-disabled");
-            } else {
-                $("#" + _this.manualSettingsFormId).addClass("ui-state-disabled");
-                $("#" + _this.formOriginalResolutionId).prop("checked", false).change();
-            }
-            refreshEventsRegistration(_this);
-        }).change();
-
-        $("#" + this.formOriginalResolutionId).change(function() {
-            var original = $("#" + _this.formOriginalResolutionId).prop("checked");
-            $("#" + _this.formZoomLevelId).prop("disabled", original);
-            if (original) {
-                $("#" + _this.formZoomLevelId).addClass("ui-state-disabled");
-                $("#" + _this.formZoomLevelId).val(100);
-            } else {
-                $("#" + _this.formZoomLevelId).removeClass("ui-state-disabled");
-            }
-        });
-
-        $("#" + this.formFetchButtonId).click(function() {
-            $("#" + _this.layersDivId + " input:checked").each(function() {
-                var layerId = $(this).attr("name");
-                var layer = _this.viewer.manifest.getLayer(layerId);
-                getProbingVideo({
-                    url: layer.fetching.url,
-                    zoom: parseFloat($("#" + _this.formZoomLevelId).val()) / 100,
-                    x: parseInt($("#" + _this.formXId).val()),
-                    y: parseInt($("#" + _this.formYId).val()),
-                    width: parseInt($("#" + _this.formWidthId).val()),
-                    height: parseInt($("#" + _this.formHeightId).val()),
-                    frames: $("#" + _this.formFramesRangeId).val(),
-                    failCallback: function(responseHtml) {
-                        var text = "Error while requesting probing for layer \"" + layer.name + "\".";
-                        if (responseHtml) {
-                            text += "\n" + responseHtml;
-                        }
-                        _this.viewer.displayError(text);
-                        enableForm(_this, true);
-                    },
-                    successCallback: function() {
-                        _this.viewer.displayNotification(
-                                "Fetching completed for layer \"" + layer.name + "\".");
-                        enableForm(_this, true);
-                    },
-                    prepareCallback: function() {
-                        _this.viewer.displayNotification(
-                                "Fetching started for layer \"" + layer.name + "\".");
-                        enableForm(_this, false);
-                    }
-                }, _this.viewer);
-            });
-        });
-
-        var layersTemplate = Handlebars.compile([
-            '{{#if layers}}',
-            '<fieldset>',
-            '    <legend>Layers to fetch</legend>',
-            '    <div class="wdzt-table-layout">',
-            '        {{#each layers}}',
-            '        <div class="wdzt-row-layout">',
-            '            <label for="{{../prefix}}-{{id}}-{{../suffix}}"',
-            '                   class="wdzt-cell-layout wdzt-no-wrap">',
-            '                {{name}}',
-            '            </label>',
-            '            <input type="checkbox"',
-            '                   id="{{../prefix}}-{{id}}-{{../suffix}}"',
-            '                   class="wdzt-cell-layout"',
-            '                   name="{{id}}" />',
-            '        </div>',
-            '        {{/each}}',
-            '    </div>',
-            '</fieldset>',
-            '{{/if}}'
-        ].join(''));
-
-        this._layerChangedHandler = function(event) {
-            var layer = event.layer;
-            if (!layer.fetching) {
-                return;
-            }
-
-            var group = _this.viewer.manifest.getLayerGroup(layer);
-            var layers = group.layers;
-            var fetchingLayers = [layer];
-            for (var i = 0; i < layers.length; i++) {
-                var l = layers[i];
-                if (l !== layer && l.fetching) {
-                    fetchingLayers.push(l);
-                }
-            }
-
-            var html = layersTemplate({
-                layers: fetchingLayers,
-                prefix: "wdzt-fetching",
-                suffix: _this.hash
-            });
-            $("#" + _this.layersDivId).html(html);
-            $("#" + _this.layersDivId + " input[name='" + layer.id + "']").
-                    prop("checked", true);
-        };
-        this.viewer.addHandler("layer-changed", this._layerChangedHandler);
+        this.isEnabled = false;
+        this.isRegistered = false;
 
         this._updateBounds = function() {
             var viewport = _this.viewer.osd.viewport;
-            if (!viewport) {
+            var item = _this.viewer.osd.world.getItemAt(0);
+            if (!viewport || !item) {
                 $("#" + _this.manualSettingsFormId + " input").val("");
             } else {
-                var bounds = viewport.viewportToImageRectangle(
+                if (!$("#" + _this.originalResolutionId).prop("checked")) {
+                    var zoom = item.viewportToImageZoom(
+                            viewport.getZoom(true)) * 100;
+                    $("#" + _this.formZoomLevelId).val(zoom.toPrecision(4));
+                } else {
+                    $("#" + _this.formZoomLevelId).val(100);
+                }
+                var bounds = item.viewportToImageRectangle(
                         viewport.getBounds(true));
-                var zoom = viewport.viewportToImageZoom(viewport.getZoom(true)) * 100;
-                $("#" + _this.formZoomLevelId).val(zoom.toPrecision(4));
                 $("#" + _this.formXId).val(Math.round(bounds.x));
                 $("#" + _this.formYId).val(Math.round(bounds.y));
                 $("#" + _this.formWidthId).val(Math.round(bounds.width));
@@ -254,8 +73,130 @@
             }
         };
 
-        this.isEnabled = false;
-        this.isRegistered = false;
+        function onTemplateReceived(template, layersTemplate) {
+            _this.$container.html(template({
+                fetchingFormId: _this.fetchingFormId,
+                manualSettingsId: _this.manualSettingsId,
+                manualSettingsFormId: _this.manualSettingsFormId,
+                originalResolutionId: _this.originalResolutionId,
+                formZoomLevelId: _this.formZoomLevelId,
+                formXId: _this.formXId,
+                formYId: _this.formYId,
+                formWidthId: _this.formWidthId,
+                formHeightId: _this.formHeightId,
+                layersDivId: _this.layersDivId,
+                formFramesRangeId: _this.formFramesRangeId,
+                formFetchButtonId: _this.formFetchButtonId,
+                imagesPrefix: _this.viewer.imagesPrefix
+            }));
+
+            var $originalResolution = $("#" + _this.originalResolutionId);
+            var $formZoomLevel = $("#" + _this.formZoomLevelId);
+            var $manualSetting = $("#" + _this.manualSettingsId);
+            var $manualSettingForm = $("#" + _this.manualSettingsFormId);
+
+            _this._layerChangedHandler = function(event) {
+                var layer = event.layer;
+                if (!layer.fetching) {
+                    return;
+                }
+
+                var group = _this.viewer.manifest.getLayerGroup(layer);
+                var layers = group.layers;
+                var fetchingLayers = [layer];
+                for (var i = 0; i < layers.length; i++) {
+                    var l = layers[i];
+                    if (l !== layer && l.fetching) {
+                        fetchingLayers.push(l);
+                    }
+                }
+
+                var html = layersTemplate({
+                    layers: fetchingLayers,
+                    prefix: "wdzt-fetching",
+                    suffix: _this.hash
+                });
+                $("#" + _this.layersDivId).html(html);
+                $("#" + _this.layersDivId + " input[name='" + layer.id + "']").
+                        prop("checked", true);
+
+                var originalResolutionOnly = !!layer.fetching.originalResolutionOnly;
+                $originalResolution.prop("disabled", originalResolutionOnly);
+                if (originalResolutionOnly) {
+                    $originalResolution.addClass("ui-state-disabled");
+                } else {
+                    $originalResolution.removeClass("ui-state-disabled");
+                }
+                $originalResolution.change();
+            };
+            _this.viewer.addHandler("layer-changed", _this._layerChangedHandler);
+            // If a layer is already selected, manually call the event.
+            if (_this.viewer.selectedLayer) {
+                _this._layerChangedHandler({
+                    layer: _this.viewer.selectedLayer
+                });
+            }
+
+            $manualSetting.change(function() {
+                var manual = $manualSetting.prop("checked");
+                $("#" + _this.manualSettingsFormId + " input").prop("disabled", !manual);
+                if (manual) {
+                    $manualSettingForm.removeClass("ui-state-disabled");
+                } else {
+                    $manualSettingForm.addClass("ui-state-disabled");
+                }
+                $originalResolution.change();
+                refreshEventsRegistration(_this);
+            }).change();
+
+            $originalResolution.change(function() {
+                var original = $originalResolution.prop("checked");
+                $formZoomLevel.prop("disabled", original);
+                if (original) {
+                    $formZoomLevel.addClass("ui-state-disabled");
+                } else {
+                    $formZoomLevel.removeClass("ui-state-disabled");
+                }
+                _this._updateBounds();
+            });
+
+            $("#" + _this.formFetchButtonId).click(function() {
+                $("#" + _this.layersDivId + " input:checked").each(function() {
+                    var layerId = $(this).attr("name");
+                    var layer = _this.viewer.manifest.getLayer(layerId);
+                    getProbingVideo({
+                        url: layer.fetching.url,
+                        zoom: parseFloat($formZoomLevel.val()) / 100,
+                        x: parseInt($("#" + _this.formXId).val()),
+                        y: parseInt($("#" + _this.formYId).val()),
+                        width: parseInt($("#" + _this.formWidthId).val()),
+                        height: parseInt($("#" + _this.formHeightId).val()),
+                        frames: $("#" + _this.formFramesRangeId).val(),
+                        framesOffset: layer.framesOffset,
+                        failCallback: function(responseHtml) {
+                            var text = "Error while requesting probing for layer \"" + layer.name + "\".";
+                            if (responseHtml) {
+                                text += "<br>" + responseHtml;
+                            } else {
+                                text += "<br>The requested ROI is probably too big.";
+                            }
+                            _this.viewer.displayError(text);
+                            enableForm(_this, true);
+                        },
+                        successCallback: function() {
+                            _this.viewer.displayNotification(
+                                    "Fetching completed for layer \"" + layer.name + "\".");
+                            enableForm(_this, true);
+                        },
+                        prepareCallback: function() {
+                            _this.viewer.displayNotification(
+                                    "Fetching started for layer \"" + layer.name + "\".");
+                            enableForm(_this, false);
+                        }
+                    }, _this.viewer);
+                });
+            });
+        }
     };
 
     // Register itself
@@ -352,7 +293,7 @@
             return;
         }
 
-        var url = settings.url + "/probing" +
+        var url = settings.url +
                 "?x=" + settings.x +
                 "&y=" + settings.y +
                 "&width=" + settings.width +
@@ -361,6 +302,9 @@
 
         if (settings.frames) {
             url += "&frames=" + settings.frames;
+            if (settings.framesOffset) {
+                url += "&framesOffset=" + settings.framesOffset;
+            }
         }
 
         $.fileDownload(url, {

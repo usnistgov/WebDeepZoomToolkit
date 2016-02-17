@@ -58,13 +58,10 @@
         var viewport = osd.viewport;
         var bounds = viewport.viewportToImageRectangle(
                 viewport.getBounds());
-        var zoom = (viewport.viewportToImageZoom(
-                viewport.getZoom(true)) * 100).toPrecision(4);
         return $("#" + moduleInstance.formXId).val() == bounds.x.toFixed(0)
                 && $("#" + moduleInstance.formYId).val() == bounds.y.toFixed(0)
                 && $("#" + moduleInstance.formWidthId).val() == bounds.width.toFixed(0)
-                && $("#" + moduleInstance.formHeightId).val() == bounds.height.toFixed(0)
-                && $("#" + moduleInstance.formZoomLevelId).val() == zoom;
+                && $("#" + moduleInstance.formHeightId).val() == bounds.height.toFixed(0);
     }
 
     asyncTest("enable disable", function() {
@@ -121,7 +118,7 @@
         var fileDownloadBackup = $.fileDownload;
         $.fileDownload = function(url, options) {
             var z = zoom / 100;
-            equal(url, "/fetching/phasecontrast/probing?x=" + x + "&y=" + y +
+            equal(url, "/fetching/phasecontrast?x=" + x + "&y=" + y +
                     "&width=" + width + "&height=" + height + "&zoom=" + z +
                     "&frames=" + frames,
                     "Wrong computed url.");
