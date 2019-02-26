@@ -1,4 +1,4 @@
-/* 
+/*
  * This software was developed at the National Institute of Standards and
  * Technology by employees of the Federal Government in the course of
  * their official duties. Pursuant to title 17 Section 105 of the United
@@ -104,7 +104,7 @@
     padding: 20px;
     display: table-cell;
     vertical-align: middle;
-    width: 100%;
+    width: 50%;
 }
 
 .wdzt-table-layout {

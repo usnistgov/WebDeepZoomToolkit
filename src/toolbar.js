@@ -1,4 +1,4 @@
-/* 
+/*
  * This software was developed at the National Institute of Standards and
  * Technology by employees of the Federal Government in the course of
  * their official duties. Pursuant to title 17 Section 105 of the United
@@ -48,9 +48,14 @@
         this.pauseId = "wdzt-toolbar-pause-" + this.hash;
         this.seekForwardId = "wdzt-toolbar-seek-forward-" + this.hash;
         this.skipForwardId = "wdzt-toolbar-skip-forward-" + this.hash;
+
         this.sliderId = "wdzt-toolbar-slider-" + this.hash;
         this.currentFrameId = "wdzt-toolbar-current-frame-" + this.hash;
         this.totalFramesId = "wdzt-toolbar-total-frames-" + this.hash;
+
+        this.sliceSliderId = "wdzt-toolbar-slice-slider-" + this.hash;
+        this.currentSliceId = "wdzt-toolbar-current-slice-" + this.hash;
+        this.totalSlicesId = "wdzt-toolbar-total-slices" + this.hash;
 
         this.$container.html(
                 Handlebars.compile([
@@ -136,6 +141,13 @@
                     '</div>',
                     '<div class="wdzt-toolbar-slider-container">',
                     '    <div id="{{sliderId}}" class="wdzt-toolbar-slider"/>',
+                    '</div>',
+                    '<div class="wdzt-toolbar-movie-position">',
+                    '    Slice <input type="text" id="{{currentSliceId}}"/>/',
+                    '    <span id="{{totalSlicesId}}"/>',
+                    '</div>',
+                    '<div class="wdzt-toolbar-slider-container">',
+                    '    <div id="{{sliceSliderId}}" class="wdzt-toolbar-slider"/>',
                     '</div>'
                 ].join(''))({
             menuButtonId: this.menuButtonId,
@@ -153,6 +165,9 @@
             sliderId: this.sliderId,
             currentFrameId: this.currentFrameId,
             totalFramesId: this.totalFramesId,
+            sliceSliderId: this.sliceSliderId,
+            currentSliceId: this.currentSliceId,
+            totalSlicesId: this.totalSlicesId,
             imagesPrefix: this.viewer.imagesPrefix
         }));
 
@@ -162,6 +177,7 @@
 
         this.viewer.addHandler("open", function() {
             initSlider(_this);
+            initSliceSlider(_this);
             initVideoControls(_this);
         });
         this.viewer.addHandler("full-page", function(event) {
@@ -189,7 +205,7 @@
         var movie = _this.viewer.osdMovie;
 
         var isChangingMovie = false;
-        var numberOfFrames = movie.getNumberOfFrames();
+        var numberOfFrames = _this.viewer.zslice ? 1 : movie.getNumberOfFrames();
         $("#" + _this.sliderId).slider({
             value: 1,
             min: 1,
@@ -210,9 +226,10 @@
         movie.addHandler("movie-change", changeHandler);
 
         var updateSliders = function() {
-            var frameNumber = movie.getCurrentFrame();
-            var numberOfFrames = movie.getNumberOfFrames();
-            var length = (numberOfFrames + "").length;
+          var frameNumber = movie.getCurrentFrame();
+          var numberOfFrames = movie.getNumberOfFrames();
+          var length = (numberOfFrames + "").length;
+          if (!_this.viewer.zslice) {
             $("#" + _this.currentFrameId).val(frameNumber);
             $("#" + _this.currentFrameId).prop("size", length);
             $("#" + _this.currentFrameId).prop("maxlength", length);
@@ -220,6 +237,13 @@
             $("#" + _this.sliderId).slider("option", "value", frameNumber);
             $("#" + _this.sliderId).slider("option", "max", numberOfFrames);
             isChangingMovie = false;
+          } else {
+            $("#" + _this.currentFrameId).val(1);
+            $("#" + _this.currentFrameId).prop("size", length);
+            $("#" + _this.totalFramesId).text(1);
+            $("#" + _this.sliderId).slider("option", "value", 1);
+            $("#" + _this.sliderId).slider("option", "max", 1);
+          }
         };
         movie.addHandler("frame-changed", updateSliders);
         movie.addHandler("movie-changed", updateSliders);
@@ -231,6 +255,65 @@
                     movie.displayFrame(frameIndex);
                 } else {
                     _this.viewer.displayError("Invalid frame index.");
+                }
+            }
+        });
+    }
+
+    function initSliceSlider(_this) {
+        var movie = _this.viewer.osdMovie;
+
+        var isChangingMovie = false;
+        var numberOfSlices = movie.getNumberOfFrames();
+        $("#" + _this.sliceSliderId).slider({
+            value: 1,
+            min: 1,
+            step: 1,
+            max: numberOfSlices,
+            change: function(event, ui) {
+                /*jshint unused:true */
+                if (!isChangingMovie) {
+                    movie.displayFrame(ui.value);
+                }
+            }
+        });
+
+        var changeHandler = function() {
+            isChangingMovie = true;
+        };
+        movie.addHandler("frame-change", changeHandler);
+        movie.addHandler("movie-change", changeHandler);
+
+        var updateSliders = function() {
+          var sliceNumber = movie.getCurrentFrame();
+          var numberOfSlices = movie.getNumberOfFrames();
+          var length = (numberOfSlices + "").length;
+          if (_this.viewer.zslice) {
+            $("#" + _this.currentSliceId).val(sliceNumber);
+            $("#" + _this.currentSliceId).prop("size", length);
+            $("#" + _this.currentSliceId).prop("maxlength", length);
+            $("#" + _this.totalSlicesId).text(numberOfSlices);
+            $("#" + _this.sliceSliderId).slider("option", "value", sliceNumber);
+            $("#" + _this.sliceSliderId).slider("option", "max", numberOfSlices);
+            isChangingMovie = false;
+          } else {
+            $("#" + _this.currentSliceId).val(1);
+            $("#" + _this.currentSliceId).prop("size", length);
+            $("#" + _this.totalSlicesId).text(1);
+            $("#" + _this.sliceSliderId).slider("option", "value", 1);
+            $("#" + _this.sliceSliderId).slider("option", "max", 1);
+          }
+        };
+        movie.addHandler("frame-changed", updateSliders);
+        movie.addHandler("movie-changed", updateSliders);
+
+        $("#" + _this.currentSliceId).keyup(function(event) {
+            if (event.keyCode === 13) {
+                var sliceIndex = parseInt($("#" + _this.currentSliceId).val());
+                if (sliceIndex > 0 && sliceIndex <= movie.getNumberOfFrames()) {
+                    movie.displayFrame(sliceIndex);
+                } else {
+                    _this.viewer.displayError("Invalid slice index.");
                 }
             }
         });

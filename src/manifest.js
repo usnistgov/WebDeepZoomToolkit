@@ -1,4 +1,4 @@
-/* 
+/*
  * This software was developed at the National Institute of Standards and
  * Technology by employees of the Federal Government in the course of
  * their official duties. Pursuant to title 17 Section 105 of the United
@@ -65,7 +65,7 @@
 
     $$.Manifest.prototype = {
         /**
-         * 
+         *
          * @returns {Object[]}
          */
         getLayersGroups: function() {
@@ -73,7 +73,7 @@
         },
         /**
          * Get the layers defined in the manifest.
-         * @param {Object|String} [layersGroup=null] If defined, filter only 
+         * @param {Object|String} [layersGroup=null] If defined, filter only
          * layers from the specified group. Otherwise return all layers.
          * @returns {Object[]} array of layers objects
          */
@@ -189,10 +189,17 @@
             }
 
             return function(frame) {
+              if (!!layer.zslice) {
+                var slicesOffset = layer.slicesOffset || 0;
+                return layer.baseUrl + "/" + layer.slicesPrefix +
+                        $$.pad(frame + slicesOffset + "", layer.paddingSize) +
+                        layer.sliceSuffix;
+              } else {
                 var framesOffset = layer.framesOffset || 0;
                 return layer.baseUrl + "/" + layer.framesPrefix +
                         $$.pad(frame + framesOffset + "", layer.paddingSize) +
                         layer.framesSuffix;
+              }
             };
         }
     };

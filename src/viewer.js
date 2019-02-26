@@ -1,4 +1,4 @@
-/* 
+/*
  * This software was developed at the National Institute of Standards and
  * Technology by employees of the Federal Government in the course of
  * their official duties. Pursuant to title 17 Section 105 of the United
@@ -116,6 +116,7 @@
         this.manifest = null;
         this.selectedLayer = null;
         this.isMenuDisplayed = true;
+        this.zslice = false;
         var _this = this;
 
         this.clickHandlerModule = null;
@@ -223,17 +224,18 @@
         },
         /**
          * Display the specified layer. The options allows to specify at what
-         * frame to open 
+         * frame to open
          */
         displayLayer: function(layer, options) {
             options = options || {};
 
             if (this.selectedLayer !== layer) {
                 this.selectedLayer = layer;
+                this.zslice = layer.zslice;
                 this.osdMovie.openMovie({
                     movieName: layer.name,
                     openOnFrame: options.frame || layer.openOnFrame || 1,
-                    numberOfFrames: layer.numberOfFrames || 1,
+                    numberOfFrames: layer.numberOfFrames || layer.numberOfSlices || 1,
                     getTileSourceOfFrame: this.manifest.getFrameUrlFunc(layer)
                 });
             }

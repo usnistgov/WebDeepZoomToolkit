@@ -92,12 +92,13 @@
           "id": "moche_xye",
           "name": "Moche xy-energy",
           "baseUrl": "data/moche/xy-energy",
-          "framesPrefix": "slice",
-          "framesSuffix": ".dzi",
-          "framesOffset": 97,
-          "openOnFrame": 98,
-          "numberOfFrames": 5,
-          "paddingSize": 5
+          "slicesPrefix": "slice",
+          "sliceSuffix": ".dzi",
+          "slicesOffset": 97,
+          "openOnSlice": 98,
+          "numberOfSlices": 5,
+          "paddingSize": 5,
+          "zslice": true
         }]
     }, {
       "id": "moche_eyx",
