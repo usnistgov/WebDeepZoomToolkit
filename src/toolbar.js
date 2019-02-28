@@ -205,7 +205,7 @@
         var movie = _this.viewer.osdMovie;
 
         var isChangingMovie = false;
-        var numberOfFrames = _this.viewer.zslice ? 1 : movie.getNumberOfFrames();
+        var numberOfFrames = movie.getNumberOfFrames();
         $("#" + _this.sliderId).slider({
             value: 1,
             min: 1,
@@ -215,8 +215,8 @@
                 /*jshint unused:true */
                 if (!isChangingMovie) {
                     movie.displayFrame(ui.value);
+                  }
                 }
-            }
         });
 
         var changeHandler = function() {
@@ -229,7 +229,6 @@
           var frameNumber = movie.getCurrentFrame();
           var numberOfFrames = movie.getNumberOfFrames();
           var length = (numberOfFrames + "").length;
-          if (!_this.viewer.zslice) {
             $("#" + _this.currentFrameId).val(frameNumber);
             $("#" + _this.currentFrameId).prop("size", length);
             $("#" + _this.currentFrameId).prop("maxlength", length);
@@ -237,13 +236,6 @@
             $("#" + _this.sliderId).slider("option", "value", frameNumber);
             $("#" + _this.sliderId).slider("option", "max", numberOfFrames);
             isChangingMovie = false;
-          } else {
-            $("#" + _this.currentFrameId).val(1);
-            $("#" + _this.currentFrameId).prop("size", length);
-            $("#" + _this.totalFramesId).text(1);
-            $("#" + _this.sliderId).slider("option", "value", 1);
-            $("#" + _this.sliderId).slider("option", "max", 1);
-          }
         };
         movie.addHandler("frame-changed", updateSliders);
         movie.addHandler("movie-changed", updateSliders);
@@ -264,7 +256,7 @@
         var movie = _this.viewer.osdMovie;
 
         var isChangingMovie = false;
-        var numberOfSlices = movie.getNumberOfFrames();
+        var numberOfSlices = _this.viewer.numberOfSlices;
         $("#" + _this.sliceSliderId).slider({
             value: 1,
             min: 1,
@@ -273,7 +265,13 @@
             change: function(event, ui) {
                 /*jshint unused:true */
                 if (!isChangingMovie) {
-                    movie.displayFrame(ui.value);
+                  if (_this.viewer.zslice) {
+                  _this.viewer.currentSliceIndex = ui.value;
+                  var frameIndex = parseInt($("#" + _this.currentFrameId).val()) + '';
+                    movie.displayFrame(frameIndex + 1);
+                    movie.displayFrame(frameIndex - 1);
+                    movie.displayFrame(frameIndex);
+                  }
                 }
             }
         });
@@ -285,8 +283,8 @@
         movie.addHandler("movie-change", changeHandler);
 
         var updateSliders = function() {
-          var sliceNumber = movie.getCurrentFrame();
-          var numberOfSlices = movie.getNumberOfFrames();
+          var sliceNumber = _this.viewer.currentSliceIndex;
+          var numberOfSlices = _this.viewer.numberOfSlices;
           var length = (numberOfSlices + "").length;
           if (_this.viewer.zslice) {
             $("#" + _this.currentSliceId).val(sliceNumber);
@@ -309,9 +307,10 @@
 
         $("#" + _this.currentSliceId).keyup(function(event) {
             if (event.keyCode === 13) {
-                var sliceIndex = parseInt($("#" + _this.currentSliceId).val());
-                if (sliceIndex > 0 && sliceIndex <= movie.getNumberOfFrames()) {
-                    movie.displayFrame(sliceIndex);
+                var frameIndex = parseInt($("#" + _this.currentFrameId).val()) + '';
+
+                if (frameIndex > 0 && frameIndex <= movie.getNumberOfFrames()) {
+                    movie.displayFrame(frameIndex);
                 } else {
                     _this.viewer.displayError("Invalid slice index.");
                 }

@@ -153,7 +153,7 @@
          * @param {Object} layer
          * @returns {Function}
          */
-        getFrameUrlFunc: function(layer) {
+        getFrameUrlFunc: function(layer, viewer) {
             if (layer.singleFrame) {
                 return function() {
                     return layer.baseUrl;
@@ -189,17 +189,21 @@
             }
 
             return function(frame) {
-              if (!!layer.zslice) {
-                var slicesOffset = layer.slicesOffset || 0;
-                return layer.baseUrl + "/" + layer.slicesPrefix +
-                        $$.pad(frame + slicesOffset + "", layer.paddingSize) +
-                        layer.sliceSuffix;
-              } else {
-                var framesOffset = layer.framesOffset || 0;
+              var framesOffset = layer.framesOffset || 0;
+              if (!layer.zslice) {
                 return layer.baseUrl + "/" + layer.framesPrefix +
                         $$.pad(frame + framesOffset + "", layer.paddingSize) +
                         layer.framesSuffix;
               }
+              var slicesOffset = layer.slicesOffset || 0;
+
+              var sliceIndex = viewer.currentSliceIndex;
+              var frameIndex = frame;
+
+              sliceIndex = $$.pad(parseInt(sliceIndex) + slicesOffset + "", layer.paddingSliceSize);
+              frameIndex = $$.pad(parseInt(frameIndex) + framesOffset + "", layer.paddingSize);
+
+              return layer.baseUrl + "/" + layer.slicesPrefix + sliceIndex + layer.framesPrefix + frameIndex + layer.framesSuffix;
             };
         }
     };

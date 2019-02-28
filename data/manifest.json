@@ -86,19 +86,39 @@
           }
         }]
     }, {
+      "id": "moche_slice",
+      "name": "Moche slice",
+      "layers": [{
+          "id": "moche_xye_slice",
+          "name": "Moche xy-energy-slice",
+          "baseUrl": "data/moche/xy-energy-slice",
+          "framesPrefix": "frame",
+          "framesSuffix": ".dzi",
+          "framesOffset": 10,
+          "openOnFrame": 11,
+          "numberOfFrames": 2,
+          "paddingSize": 3,
+          "zslice": true,
+          "slicesPrefix": "slice",
+          "slicesSuffix": ".dzi",
+          "slicesOffset": 97,
+          "openOnSlice": 98,
+          "numberOfSlices": 5,
+          "paddingSliceSize": 5
+        }]
+    }, {
       "id": "moche",
       "name": "Moche",
       "layers": [{
           "id": "moche_xye",
           "name": "Moche xy-energy",
           "baseUrl": "data/moche/xy-energy",
-          "slicesPrefix": "slice",
-          "sliceSuffix": ".dzi",
-          "slicesOffset": 97,
-          "openOnSlice": 98,
-          "numberOfSlices": 5,
-          "paddingSize": 5,
-          "zslice": true
+          "framesPrefix": "slice",
+          "framesSuffix": ".dzi",
+          "framesOffset": 97,
+          "openOnFrame": 98,
+          "numberOfFrames": 5,
+          "paddingSize": 5
         }]
     }, {
       "id": "moche_eyx",

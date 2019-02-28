@@ -117,6 +117,8 @@
         this.selectedLayer = null;
         this.isMenuDisplayed = true;
         this.zslice = false;
+        this.numberOfSlices = null;
+        this.currentSliceIndex = null;
         var _this = this;
 
         this.clickHandlerModule = null;
@@ -232,11 +234,13 @@
             if (this.selectedLayer !== layer) {
                 this.selectedLayer = layer;
                 this.zslice = layer.zslice;
+                this.numberOfSlices = layer.numberOfSlices || 1;
+                this.currentSliceIndex = 1;
                 this.osdMovie.openMovie({
                     movieName: layer.name,
                     openOnFrame: options.frame || layer.openOnFrame || 1,
-                    numberOfFrames: layer.numberOfFrames || layer.numberOfSlices || 1,
-                    getTileSourceOfFrame: this.manifest.getFrameUrlFunc(layer)
+                    numberOfFrames: layer.numberOfFrames || 1,
+                    getTileSourceOfFrame: this.manifest.getFrameUrlFunc(layer, this)
                 });
             }
             if (options.frame) {
