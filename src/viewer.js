@@ -235,7 +235,7 @@
                 this.selectedLayer = layer;
                 this.zslice = layer.zslice;
                 this.numberOfSlices = layer.numberOfSlices || 1;
-                this.currentSliceIndex = 1;
+                this.currentSliceIndex = layer.openOnSlice - layer.slicesOffset;
                 this.osdMovie.openMovie({
                     movieName: layer.name,
                     openOnFrame: options.frame || layer.openOnFrame || 1,

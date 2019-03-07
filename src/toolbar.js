@@ -56,6 +56,7 @@
         this.sliceSliderId = "wdzt-toolbar-slice-slider-" + this.hash;
         this.currentSliceId = "wdzt-toolbar-current-slice-" + this.hash;
         this.totalSlicesId = "wdzt-toolbar-total-slices" + this.hash;
+        this.toolbarMovieSliceId = "wdzt-toolbar-move-slice" + this.hash;
 
         this.$container.html(
                 Handlebars.compile([
@@ -142,7 +143,7 @@
                     '<div class="wdzt-toolbar-slider-container">',
                     '    <div id="{{sliderId}}" class="wdzt-toolbar-slider"/>',
                     '</div>',
-                    '<div class="wdzt-toolbar-movie-position">',
+                    '<div id="{{toolbarMovieSliceId}}" class="wdzt-toolbar-movie-position">',
                     '    Slice <input type="text" id="{{currentSliceId}}"/>/',
                     '    <span id="{{totalSlicesId}}"/>',
                     '</div>',
@@ -168,7 +169,8 @@
             sliceSliderId: this.sliceSliderId,
             currentSliceId: this.currentSliceId,
             totalSlicesId: this.totalSlicesId,
-            imagesPrefix: this.viewer.imagesPrefix
+            imagesPrefix: this.viewer.imagesPrefix,
+            toolbarMovieSliceId: this.toolbarMovieSliceId
         }));
 
         $("#" + this.menuButtonId).click(function() {
@@ -179,6 +181,15 @@
             initSlider(_this);
             initSliceSlider(_this);
             initVideoControls(_this);
+        });
+        this.viewer.addHandler("layer-changed", function() {
+            if (_this.viewer.zslice) {
+              $("#" + _this.sliceSliderId).show();
+              $("#" + _this.toolbarMovieSliceId).show();
+            } else {
+              $("#" + _this.sliceSliderId).hide();
+              $("#" + _this.toolbarMovieSliceId).hide();
+            }
         });
         this.viewer.addHandler("full-page", function(event) {
             if (event.fullPage) {
@@ -268,9 +279,7 @@
                   if (_this.viewer.zslice) {
                   _this.viewer.currentSliceIndex = ui.value;
                   var frameIndex = parseInt($("#" + _this.currentFrameId).val()) + '';
-                    movie.displayFrame(frameIndex + 1);
-                    movie.displayFrame(frameIndex - 1);
-                    movie.displayFrame(frameIndex);
+                    movie.displayFrame(frameIndex); //même frame -> pas d'actualisation
                   }
                 }
             }

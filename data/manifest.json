@@ -102,7 +102,7 @@
           "slicesPrefix": "slice",
           "slicesSuffix": ".dzi",
           "slicesOffset": 97,
-          "openOnSlice": 98,
+          "openOnSlice": 99,
           "numberOfSlices": 5,
           "paddingSliceSize": 5
         }]
