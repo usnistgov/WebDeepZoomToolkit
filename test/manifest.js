@@ -1,4 +1,4 @@
-/* 
+/*
  * This software was developed at the National Institute of Standards and
  * Technology by employees of the Federal Government in the course of
  * their official duties. Pursuant to title 17 Section 105 of the United
@@ -91,13 +91,13 @@
         var groups = manifest.getLayersGroups();
 
         ok(groups instanceof Array, "Layers groups should be an array.");
-        equal(groups.length, 8, "There should be 8 layers groups.");
+        equal(groups.length, 9, "There should be 9 layers groups.");
     });
 
     test("getLayers", function() {
         var allLayers = manifest.getLayers();
         ok(allLayers instanceof Array, "Layers should be an array.");
-        equal(allLayers.length, 11, "There should be 11 layers.");
+        equal(allLayers.length, 12, "There should be 12 layers.");
 
         var firstGroup = manifest.getLayersGroups()[0];
         var firstGroupLayers = manifest.getLayers(firstGroup);
@@ -129,6 +129,18 @@
         var func = manifest.getFrameUrlFunc(manifest.getLayer("moche_single_frame"));
         equal(typeof func, "function");
         equal(func(), "data/moche/xy-energy/slice00098.dzi");
+
+        var func = manifest.getFrameUrlFunc(manifest.getLayer("moche_xye"));
+        equal(typeof func, "function");
+        equal(func(3), "data/moche/xy-energy/slice00100.dzi");
+
+        var func = manifest.getFrameUrlFunc(manifest.getLayer("moche_xye_slice"));
+        equal(typeof func, "function");
+        equal(func(1, 4), "data/moche/xy-energy-slice/slice00101frame011.dzi");
+
+        var func = manifest.getFrameUrlFunc(manifest.getLayer("moche_xye_slice"));
+        equal(typeof func, "function");
+        equal(func(2, 2), "data/moche/xy-energy-slice/slice00099frame012.dzi");
     });
 
 })(WDZT);

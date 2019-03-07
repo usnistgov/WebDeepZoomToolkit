@@ -1,4 +1,4 @@
-/* 
+/*
  * This software was developed at the National Institute of Standards and
  * Technology by employees of the Federal Government in the course of
  * their official duties. Pursuant to title 17 Section 105 of the United
@@ -47,10 +47,10 @@
                 "No option should be present before opening.");
 
         wdzt.addHandler("open", function() {
-            equal(moduleInstance.layers.length, 11,
-                    "11 layers should be present after opening.");
-            equal($("#" + moduleInstance.selectId + " option").length, 11,
-                    "11 options should be present after opening.");
+            equal(moduleInstance.layers.length, 12,
+                    "12 layers should be present after opening.");
+            equal($("#" + moduleInstance.selectId + " option").length, 12,
+                    "12 options should be present after opening.");
             start();
         });
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * This software was developed at the National Institute of Standards and
  * Technology by employees of the Federal Government in the course of
  * their official duties. Pursuant to title 17 Section 105 of the United
@@ -107,7 +107,7 @@
                             "Play button should be hidden.");
                         ok($("#" + toolbar.pauseId).is(":visible"),
                             "Pause button should be visible.");
-                            
+
                         $("#" + toolbar.pauseId).trigger("click");
                         equal(movie.getCurrentFrame(), 2,
                                 "Current frame should be #2 after stopping video.");
@@ -123,4 +123,21 @@
         wdzt.open("data/manifest.json");
     });
 
+    /*test("slice_slider", function() {
+        var movie = wdzt.osdMovie;
+
+        wdzt.open("data/manifest.json", { layer: "moche_xye_slice" });
+        var toolbar = wdzt.toolbar;
+        ok($("#" + toolbar.sliceSliderId).is(":visible"),
+            "Slice slider should be visible.");
+        ok($("#" + toolbar.toolbarMovieSliceId).is(":visible"),
+            "Slice slider informations sould be visible.");
+
+        wdzt.open("data/manifest.json", { layer: "moche_xye" });
+        toolbar = wdzt.toolbar;
+        ok(!$("#" + toolbar.sliceSliderId).is(":visible"),
+            "Slice slider should be hidden.");
+        ok(!$("#" + toolbar.toolbarMovieSliceId).is(":visible"),
+            "Slice slider informations sould be hidden.");
+    });*/
 })();
