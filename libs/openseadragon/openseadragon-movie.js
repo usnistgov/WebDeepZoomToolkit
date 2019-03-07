@@ -1,4 +1,4 @@
-/* 
+/*
  * This software was developed at the National Institute of Standards and
  * Technology by employees of the Federal Government in the course of
  * their official duties. Pursuant to title 17 Section 105 of the United
@@ -14,7 +14,7 @@
  * Plugin allowing to traverse deep zoom images through time.
  * The zoom and pan position are preserved between two frames.
  * The main difference with providing a collection to an OpenSeadragon viewer is
- * that you provide a method (via options.getTileSourceOfFrame) to retrieve the 
+ * that you provide a method (via options.getTileSourceOfFrame) to retrieve the
  * URL of a frame.
  * It avoids to load the entire array of frames (usefull when having a huge
  * number of frames).
@@ -45,12 +45,18 @@
         var videoInterval = options.videoInterval || 2500;
         var keepZoomOnNewMovieRatio = options.keepZoomOnNewMovieRatio || 0.1;
 
+        var zslice = false;
+        var numberOfSlices = 0;
+        var currentSlice = 1;
+
+
         // Privileged methods
         this.openMovie = function(options) {
             options = options || {};
             if (options.movieName === movieName
                     && options.getTileSourceOfFrame === getTileSourceOfFrame
-                    && options.numberOfFrames === numberOfFrames) {
+                    && options.numberOfFrames === numberOfFrames
+                    && options.numberOfSlices === numberOfSlices) {
                 return;
             }
 
@@ -72,6 +78,10 @@
                 if (numberOfFrames !== options.numberOfFrames) {
                     numberOfFrames = options.numberOfFrames;
                     currentFrame = options.openOnFrame ? options.openOnFrame : 1;
+                }
+                if (numberOfSlices !== options.numberOfSlices) {
+                  numberOfSlices = options.numberOfSlices;
+                  currentSlice = options.openOnSlice ? options.openOnSlice : 1;
                 }
 
                 // If another layer is already open,
@@ -105,16 +115,18 @@
                 if (numberOfFrames < currentFrame) {
                     currentFrame = numberOfFrames;
                 }
-                var tileSource = getTileSourceOfFrame(currentFrame);
-                currentTileSource = tileSource;
+                if (numberOfSlices < currentSlice) {
+                    currentSlice = numberOfSlice;
+                }
+                var tileSource = getTileSourceOfFrame(currentFrame, currentSlice);
                 self.viewer.open(tileSource);
             };
             setTimeout(doOpenMovie, 0);
         };
 
-        this.displayFrame = function(frame) {
-            if (frame === currentFrame || frame < 1 ||
-                    frame > numberOfFrames) {
+        this.displayFrame = function(frame, slice) {
+            if ((frame === currentFrame || frame < 1 || frame > numberOfFrames) &&
+                (slice === currentSlice || slice < 1 || slice > numberOfSlices)) {
                 return;
             }
 
@@ -128,13 +140,14 @@
 
                 self.raiseEvent("frame-change", self);
                 currentFrame = frame;
-                var tileSource = getTileSourceOfFrame(frame);
+                currentSlice = slice;
+                var tileSource = getTileSourceOfFrame(frame, slice);
                 if (tileSource === currentTileSource) {
                     onOpeningDone();
                     return;
                 }
                 currentTileSource = tileSource;
-                
+
                 var refBounds = self.viewer.viewport.getBounds();
                 function zoomBackAnfFireEvent() {
                     self.viewer.removeHandler("open", zoomBackAnfFireEvent);
@@ -154,19 +167,19 @@
         };
 
         this.displayFirstFrame = function() {
-            this.displayFrame(1);
+            this.displayFrame(1, currentSlice);
         };
 
         this.displayPreviousFrame = function() {
-            this.displayFrame(currentFrame - 1);
+            this.displayFrame(currentFrame - 1, currentSlice);
         };
 
         this.displayNextFrame = function() {
-            this.displayFrame(currentFrame + 1);
+            this.displayFrame(currentFrame + 1, currentSlice);
         };
 
         this.displayLastFrame = function() {
-            this.displayFrame(numberOfFrames);
+            this.displayFrame(numberOfFrames, currentSlice);
         };
 
         this.startVideo = function() {
@@ -181,7 +194,7 @@
                     self.stopVideo();
                     return;
                 }
-                self.displayFrame(currentFrame + 1);
+                self.displayFrame(currentFrame + 1, currentSlice);
             }, videoInterval);
             this.raiseEvent("video-started", this);
         };
@@ -199,12 +212,20 @@
             return currentFrame;
         };
 
+        this.getCurrentSlice = function() {
+            return currentSlice;
+        };
+
         this.isOpen = function() {
             return movieName !== null;
         };
 
         this.getNumberOfFrames = function() {
             return numberOfFrames;
+        };
+
+        this.getNumberOfSlices = function() {
+            return numberOfSlices;
         };
 
         this.getMovieName = function() {

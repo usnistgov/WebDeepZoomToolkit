@@ -153,7 +153,7 @@
          * @param {Object} layer
          * @returns {Function}
          */
-        getFrameUrlFunc: function(layer, viewer) {
+        getFrameUrlFunc: function(layer) {
             if (layer.singleFrame) {
                 return function() {
                     return layer.baseUrl;
@@ -188,7 +188,7 @@
                 };
             }
 
-            return function(frame) {
+            return function(frame, slice) {
               var framesOffset = layer.framesOffset || 0;
               if (!layer.zslice) {
                 return layer.baseUrl + "/" + layer.framesPrefix +
@@ -197,7 +197,7 @@
               }
               var slicesOffset = layer.slicesOffset || 0;
 
-              var sliceIndex = viewer.currentSliceIndex;
+              var sliceIndex = slice;
               var frameIndex = frame;
 
               sliceIndex = $$.pad(parseInt(sliceIndex) + slicesOffset + "", layer.paddingSliceSize);

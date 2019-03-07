@@ -225,7 +225,8 @@
             change: function(event, ui) {
                 /*jshint unused:true */
                 if (!isChangingMovie) {
-                    movie.displayFrame(ui.value);
+                    var sliceIndex = parseInt($("#" + _this.currentSliceId).val()) + '' || 1;
+                    movie.displayFrame(ui.value, sliceIndex);
                   }
                 }
         });
@@ -254,8 +255,11 @@
         $("#" + _this.currentFrameId).keyup(function(event) {
             if (event.keyCode === 13) {
                 var frameIndex = parseInt($("#" + _this.currentFrameId).val());
-                if (frameIndex > 0 && frameIndex <= movie.getNumberOfFrames()) {
-                    movie.displayFrame(frameIndex);
+                var sliceIndex = parseInt($("#" + _this.currentSliceId).val());
+
+                if (frameIndex > 0 && frameIndex <= movie.getNumberOfFrames() &&
+                    (sliceIndex > 0 && sliceIndex <= movie.getNumberOfSlices())) {
+                    movie.displayFrame(frameIndex, sliceIndex);
                 } else {
                     _this.viewer.displayError("Invalid frame index.");
                 }
@@ -267,7 +271,7 @@
         var movie = _this.viewer.osdMovie;
 
         var isChangingMovie = false;
-        var numberOfSlices = _this.viewer.numberOfSlices;
+        var numberOfSlices = movie.getNumberOfSlices();
         $("#" + _this.sliceSliderId).slider({
             value: 1,
             min: 1,
@@ -277,9 +281,8 @@
                 /*jshint unused:true */
                 if (!isChangingMovie) {
                   if (_this.viewer.zslice) {
-                  _this.viewer.currentSliceIndex = ui.value;
                   var frameIndex = parseInt($("#" + _this.currentFrameId).val()) + '';
-                    movie.displayFrame(frameIndex); //même frame -> pas d'actualisation
+                    movie.displayFrame(frameIndex, ui.value); //même frame -> pas d'actualisation
                   }
                 }
             }
@@ -292,8 +295,8 @@
         movie.addHandler("movie-change", changeHandler);
 
         var updateSliders = function() {
-          var sliceNumber = _this.viewer.currentSliceIndex;
-          var numberOfSlices = _this.viewer.numberOfSlices;
+          var sliceNumber = movie.getCurrentSlice();
+          var numberOfSlices = movie.getNumberOfSlices();
           var length = (numberOfSlices + "").length;
           if (_this.viewer.zslice) {
             $("#" + _this.currentSliceId).val(sliceNumber);
@@ -303,12 +306,6 @@
             $("#" + _this.sliceSliderId).slider("option", "value", sliceNumber);
             $("#" + _this.sliceSliderId).slider("option", "max", numberOfSlices);
             isChangingMovie = false;
-          } else {
-            $("#" + _this.currentSliceId).val(1);
-            $("#" + _this.currentSliceId).prop("size", length);
-            $("#" + _this.totalSlicesId).text(1);
-            $("#" + _this.sliceSliderId).slider("option", "value", 1);
-            $("#" + _this.sliceSliderId).slider("option", "max", 1);
           }
         };
         movie.addHandler("frame-changed", updateSliders);
@@ -317,9 +314,11 @@
         $("#" + _this.currentSliceId).keyup(function(event) {
             if (event.keyCode === 13) {
                 var frameIndex = parseInt($("#" + _this.currentFrameId).val()) + '';
+                var sliceIndex = parseInt($("#" + _this.currentSliceId).val()) + '';
 
-                if (frameIndex > 0 && frameIndex <= movie.getNumberOfFrames()) {
-                    movie.displayFrame(frameIndex);
+                if (frameIndex > 0 && frameIndex <= movie.getNumberOfFrames() &&
+                    (sliceIndex > 0 && sliceIndex <= movie.getNumberOfSlices())) {
+                    movie.displayFrame(frameIndex, sliceIndex);
                 } else {
                     _this.viewer.displayError("Invalid slice index.");
                 }
