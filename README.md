@@ -60,3 +60,11 @@ no responsibility whatsoever for its use by other parties, and makes no
 guarantees, expressed or implied, about its quality, reliability, or
 any other characteristic. We would appreciate acknowledgement if the
 software is used.
+
+## 3D-Support
+
+To enable this software to navigate through slices image in adequation with the navigation per frame, the files : openseedragon-movie.js, manifest.js, toolbar.js and viewer.js, have been updated.
+
+A new slider provide the navigation per slice when a layer have correct properties, like them of "Moche xy-energy-slice" in the file manifest.json, whithout breaking the functionnality of navigation per frame.
+
+Then, a new module was created whithout any informations for the moment, but related to a layer when it is navigable per slice, like "Moche xy-energy-slice".
