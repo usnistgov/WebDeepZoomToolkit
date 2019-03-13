@@ -86,6 +86,27 @@
           }
         }]
     }, {
+      "id": "moche_slice",
+      "name": "Moche slice",
+      "layers": [{
+          "id": "moche_xye_slice",
+          "name": "Moche xy-energy-slice",
+          "baseUrl": "data/moche/xy-energy-slice",
+          "framesPrefix": "frame",
+          "framesSuffix": ".dzi",
+          "framesOffset": 10,
+          "openOnFrame": 11,
+          "numberOfFrames": 2,
+          "paddingSize": 3,
+          "zslice": true,
+          "slicesPrefix": "slice",
+          "slicesSuffix": ".dzi",
+          "slicesOffset": 97,
+          "openOnSlice": 99,
+          "numberOfSlices": 5,
+          "paddingSliceSize": 5
+        }]
+    }, {
       "id": "moche",
       "name": "Moche",
       "layers": [{

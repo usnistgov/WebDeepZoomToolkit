@@ -1,4 +1,4 @@
-/* 
+/*
  * This software was developed at the National Institute of Standards and
  * Technology by employees of the Federal Government in the course of
  * their official duties. Pursuant to title 17 Section 105 of the United
@@ -116,6 +116,9 @@
         this.manifest = null;
         this.selectedLayer = null;
         this.isMenuDisplayed = true;
+        this.zslice = false;
+        /*this.numberOfSlices = null;
+        this.currentSliceIndex = null;*/
         var _this = this;
 
         this.clickHandlerModule = null;
@@ -223,22 +226,28 @@
         },
         /**
          * Display the specified layer. The options allows to specify at what
-         * frame to open 
+         * frame to open
          */
         displayLayer: function(layer, options) {
             options = options || {};
 
             if (this.selectedLayer !== layer) {
                 this.selectedLayer = layer;
+                this.zslice = layer.zslice;
+                /*this.numberOfSlices = layer.numberOfSlices || 1;
+                this.currentSliceIndex = layer.openOnSlice - layer.slicesOffset;*/
                 this.osdMovie.openMovie({
                     movieName: layer.name,
-                    openOnFrame: options.frame || layer.openOnFrame || 1,
+                    openOnFrame: options.frame || layer.openOnFrame ? layer.openOnFrame - layer.framesOffset : 1,
                     numberOfFrames: layer.numberOfFrames || 1,
+                    zslice: layer.zslice,
+                    numberOfSlices: layer.numberOfSlices || 1,
+                    openOnSlice: layer.openOnSlice ? layer.openOnSlice - layer.slicesOffset : 1,
                     getTileSourceOfFrame: this.manifest.getFrameUrlFunc(layer)
                 });
             }
             if (options.frame) {
-                this.osdMovie.displayFrame(options.frame);
+                this.osdMovie.displayFrame(options.frame, 1);
             }
 
             for (var i = 0; i < this._modules.length; i++) {
