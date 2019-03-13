@@ -282,7 +282,7 @@
                 if (!isChangingMovie) {
                   if (_this.viewer.zslice) {
                   var frameIndex = parseInt($("#" + _this.currentFrameId).val()) + '';
-                    movie.displayFrame(frameIndex, ui.value); //même frame -> pas d'actualisation
+                    movie.displayFrame(frameIndex, ui.value);
                   }
                 }
             }

@@ -43,7 +43,7 @@ The repository is organized as follow:
 To implement a new module, create a new file your-module.js under src/modules
 and extend the module class.
 Add your module in the debug.html file for easy debugging.
-You should also create the corresponding unit tests under 
+You should also create the corresponding unit tests under
 test/modules/your-module.js. Your test file should be included in both test.html
 and test-debug.html.
 
@@ -65,6 +65,6 @@ software is used.
 
 To enable this software to navigate through slices image in adequation with the navigation per frame, the files : openseedragon-movie.js, manifest.js, toolbar.js and viewer.js, have been updated.
 
-A new slider provide the navigation per slice when a layer have correct properties, like them of "Moche xy-energy-slice" in the file manifest.json, whithout breaking the functionnality of navigation per frame.
+A new slider provides the navigation per slice when a layer has zslice properties (see example of such properties from "Moche xy-energy-slice" in the file manifest.json), without breaking the functionality of navigation per frame.
 
 Then, a new module was created whithout any informations for the moment, but related to a layer when it is navigable per slice, like "Moche xy-energy-slice".
