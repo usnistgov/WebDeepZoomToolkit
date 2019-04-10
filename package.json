@@ -21,5 +21,8 @@
         "grunt-closure-tools": "~0.9",
         "grunt-usemin": "~3.0",
         "grunt-bower-task": "~0.4"
-    }
+    },
+    "files": [
+        "build/deps/**/*"
+    ]
 }
