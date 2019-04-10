@@ -23,6 +23,6 @@
         "grunt-bower-task": "~0.4"
     },
     "files": [
-        "build/**/*"
+        "build/deps/**/*"
     ]
 }
