@@ -140,6 +140,7 @@
     // Register itself
     $$.Module.MODULES[name] = $$.ScalebarModule;
 
+    // Extend the module interface and implement some of the methods
     $.extend($$.ScalebarModule.prototype, $$.Module.prototype, {
         getOrderIndex: function() {
             return 90;

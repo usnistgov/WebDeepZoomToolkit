@@ -55,7 +55,7 @@
             return false;
         },
         /**
-         * Set specific state of the module to directly display usefull informations.
+         * Set specific state of the module to directly display useful informations.
          * @param {Object} options The state options (module specific).
          */
         loadState: function(options) {

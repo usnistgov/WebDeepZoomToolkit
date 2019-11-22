@@ -1,0 +1,21 @@
+to debug javascript for connectivity analysis:
+
+(1) run node.js in a command line console:
+npm install
+
+
+(2) run bower to download all js libraries
+bower install
+
+(3) compile the code
+grunt
+
+(4) install node http-server
+see https://www.npmjs.com/package/http-server
+
+(5) launch a local server
+http-server .
+
+(6) open browser and the URL: 
+http://localhost:8080/debug.html
+

@@ -3,10 +3,14 @@ module.exports = function(grunt) {
 
     var images = ['images/*'];
 
+    var bootstrap_css = ['bower_components/bootstrap/dist/css/bootstrap.min.css'];
+    var bootstrap_fonts = ['bower_components/bootstrap/dist/fonts/*'];
+
     var libImages = [
         'bower_components/jquery-ui/themes/smoothness/images/*',
         'libs/jquery/css/images/*'
     ];
+
 
     var hbsTemplateOutputFile = 'build/hbs-templates.js';
     var handlebarsFilesOption = {};
@@ -16,8 +20,9 @@ module.exports = function(grunt) {
 
     // Project configuration.
     grunt.initConfig({
-        // Metadata.
+        // Metadata. Make value inside package.json available in grunt.
         pkg: grunt.file.readJSON('package.json'),
+        // set from values read in package.json
         banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
                 '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
                 '* This software was developed at the National Institute of Standards and\n' +
@@ -85,6 +90,7 @@ module.exports = function(grunt) {
                                 name: 'cssmin',
                                 createConfig: function(context, block) {
                                     context.options.deps.src = block.src;
+                                    context.options.deps.src = context.options.deps.src.concat(bootstrap_css);
                                 }
 
                             }]
@@ -119,11 +125,16 @@ module.exports = function(grunt) {
             options: {
                 banner: '<%= banner %>'
             },
-            basic: {
+            basic: {   
                 src: '<%= concat.basic.dest %>',
                 dest: 'build/basic/<%= pkg.name %>.min.js'
             },
             deps: {
+                options: {
+                    compress: {
+                        drop_console: true
+                    }
+                },
                 src: '<%= concat.deps.dest %>',
                 dest: 'build/deps/<%= pkg.name %>-deps.min.js'
             }
@@ -203,7 +214,25 @@ module.exports = function(grunt) {
                         flatten: true
                     }
                 ]
-            }
+            },
+            fonts: {
+                files: [{
+                        expand: true,
+                        src: bootstrap_fonts,
+                        dest: "build/fonts",
+                        flatten: true
+                    }
+                ]
+            },
+            fontsDeps: {
+                files: [{
+                        expand: true,
+                        src: bootstrap_fonts,
+                        dest: "build/fonts",
+                        flatten: true
+                    }
+                ]
+            },
         },
         clean: ["build"],
         compress: {
@@ -216,7 +245,14 @@ module.exports = function(grunt) {
                         cwd: "build/basic/",
                         src: ["**"],
                         dest: "/WDZT/"
-                    }]
+                    },
+                    {
+                        expand: true,
+                        cwd: "build/fonts/",
+                        src: ["**"],
+                        dest: "fonts/"
+                    }
+                    ]
             },
             deps: {
                 options: {
@@ -227,7 +263,14 @@ module.exports = function(grunt) {
                         cwd: "build/deps/",
                         src: ["**"],
                         dest: "/WDZT/"
-                    }]
+                    },
+                    {
+                        expand: true,
+                        cwd: "build/fonts/",
+                        src: ["**"],
+                        dest: "fonts/"
+                    }
+                    ]
             }
         },
         watch: {
@@ -261,7 +304,7 @@ module.exports = function(grunt) {
     // Default task.
     grunt.registerTask('default', [
         'clean',
-        'jshint',
+    //    'jshint',
         'handlebars',
         'useminPrepare',
         'concat:basic',
@@ -271,7 +314,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('all', [
         'clean',
-        'jshint',
+     //   'jshint',
         'handlebars',
         'useminPrepare',
         'concat',

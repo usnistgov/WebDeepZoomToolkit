@@ -19,6 +19,8 @@
         <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>
         <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/theme.css"/>
         <link rel="stylesheet" href="libs/jquery/css/jquery.tree.css"/>
+        <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="bower_components/bootstrap-toggle/css/bootstrap-toggle.css" />
         <!-- endbuild -->
 
         <!-- build:csswdzt css/wdzt.css -->
@@ -32,6 +34,7 @@
         <link rel="stylesheet" href="css/colony-feature-module.css"/>
         <link rel="stylesheet" href="css/transitions-widgets.css"/>
         <link rel="stylesheet" href="css/connectivity-analysis-module.css"/>
+        <link rel="stylesheet" href="css/annotations-module.css"/>
         <!-- endbuild -->
 
         <style>
@@ -48,6 +51,7 @@
         <!-- build:deps js/deps.js -->
 
         <!-- jQuery and plugins -->
+        <script src="bower_components/babel-polyfill/browser-polyfill.js"></script>
         <script src="bower_components/jquery/dist/jquery.js"></script>
         <script src="bower_components/jquery-ui/jquery-ui.js"></script>
         <script src="libs/jquery/js/jquery-ui-dialog-html-title.js"></script>
@@ -61,6 +65,9 @@
         <script src="bower_components/noty/js/noty/layouts/bottomRight.js"></script>
         <script src="bower_components/noty/js/noty/themes/default.js"></script>
 
+        <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="bower_components/bootstrap-toggle/js/bootstrap-toggle.js"></script>
+        <script src="bower_components/fabric.js/dist/fabric.js"></script>
 
         <!-- OpenSeadragon and plugins -->
         <script src="libs/openseadragon/openseadragon.js"></script>
@@ -72,6 +79,7 @@
         <script src="libs/openseadragon/openseadragon-scalebar.js"></script>
         <script src="libs/openseadragon/openseadragon-xraytransitions.js"></script>
         <script src="libs/openseadragon/openseadragon-filtering.js"></script>
+        <script src="libs/openseadragon/openseadragon-fabricjs-overlay.js"></script>
 
 
         <!--Others--> 
@@ -91,8 +99,10 @@
         <script src="src/toolbar.js"></script>
         <script src="src/manifest.js"></script>
         <script src="src/module.js"></script>
+        <script src="src/config.js"></script>
 
         <!-- modules, sorted alphabetically -->
+        <script src="src/modules/annotations-module.js"></script>
         <script src="src/modules/colony-feature-module.js"></script>
         <script src="src/modules/colony-searching-module.js"></script>
         <script src="src/modules/connectivity-analysis-module.js"></script>
@@ -140,6 +150,7 @@
                     colony: 10
                 }
             });
+
         </script>
     </body>
 </html>
