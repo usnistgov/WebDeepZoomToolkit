@@ -26,6 +26,7 @@ To get started you need to:
 
 You are now ready to build via `grunt`.
 If you want to build and execute the tests type `grunt all`.
+If you are having trouble running the test with Karma (errors/warning during the `(qunit) task` step), you skip then by running `grunt all --force`.
 
 ### Folders contents
 
