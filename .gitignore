@@ -4,3 +4,7 @@ nbproject/private
 bower_components
 dist
 .directory
+**/.DS_Store
+.npmrc
+.project
+.settings
