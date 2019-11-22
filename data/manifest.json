@@ -1,11 +1,5 @@
 {
-  "layersGroups": [
-
-
-
-
-
-   {
+  "layersGroups": [{
       "id" : "grp1",
       "name" : "grp1",
       "layers" : [ {
@@ -25,11 +19,6 @@
         "fetching" : null
       } ]
     },
-
-
-
-
-
     {
       "id": "stemcells",
       "name": "Stem cells",
@@ -72,9 +61,6 @@
             "dataset": "stemcells"
           }
         }, 
-
-
-
         {
           "id": "gfp",
           "name": "GFP",
@@ -109,11 +95,6 @@
             "dataset": "stemcells"
           }
         },
-
-
-
-
-
         {
           "id": "masks",
           "name": "Masks",
@@ -128,16 +109,6 @@
             "unitType": "length"
           }
         }]
-
-
-
-
-
-
-
-
-
-
     }, {
       "id": "moche",
       "name": "Moche",

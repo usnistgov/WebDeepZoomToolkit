@@ -238,7 +238,7 @@ module.exports = function(grunt) {
         compress: {
             basic: {
                 options: {
-                    archive: 'build/WDZT-basic.zip',
+                    archive: 'build/WDZT-basic.zip'
                 },
                 files: [{
                         expand: true,
@@ -256,7 +256,7 @@ module.exports = function(grunt) {
             },
             deps: {
                 options: {
-                    archive: 'build/WDZT-deps.zip',
+                    archive: 'build/WDZT-deps.zip'
                 },
                 files: [{
                         expand: true,
