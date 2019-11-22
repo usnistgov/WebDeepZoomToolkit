@@ -1,8 +1,41 @@
 {
-  "layersGroups": [{
+  "layersGroups": [
+
+
+
+
+
+   {
+      "id" : "grp1",
+      "name" : "grp1",
+      "layers" : [ {
+        "id" : "pyr1",
+        "name" : "pyr1",
+        "baseUrl" : "/data/visualization/pyramids/5b647c27091aefcb4d52a981",
+        "singleFrame" : false,
+        "framesPrefix" : "",
+        "framesSuffix" : ".dzi",
+        "openOnFrame" : 1,
+        "numberOfFrames" : 100,
+        "framesOffset" : 0,
+        "framesList" : null,
+        "paddingSize" : 3,
+        "acquiredIntensity" : null,
+        "scalebar" : null,
+        "fetching" : null
+      } ]
+    },
+
+
+
+
+
+    {
       "id": "stemcells",
       "name": "Stem cells",
-      "layers": [{
+      "layers": [
+
+        {
           "id": "phasecontrast",
           "name": "Phase contrast",
           "baseUrl": "data/stemcells/phasecontrast",
@@ -38,7 +71,11 @@
             "serviceUrl": "/boundingbox",
             "dataset": "stemcells"
           }
-        }, {
+        }, 
+
+
+
+        {
           "id": "gfp",
           "name": "GFP",
           "baseUrl": "data/stemcells/gfp",
@@ -71,7 +108,13 @@
             "serviceUrl": "/boundingbox",
             "dataset": "stemcells"
           }
-        }, {
+        },
+
+
+
+
+
+        {
           "id": "masks",
           "name": "Masks",
           "baseUrl": "data/stemcells/masks",
@@ -85,6 +128,16 @@
             "unitType": "length"
           }
         }]
+
+
+
+
+
+
+
+
+
+
     }, {
       "id": "moche",
       "name": "Moche",

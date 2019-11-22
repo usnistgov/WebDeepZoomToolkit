@@ -1,0 +1,9 @@
+node_modules
+npm-debug.log
+bower_components
+build
+dist
+nbproject
+.git
+.gitignore
+**/.DS_Store

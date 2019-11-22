@@ -10,11 +10,14 @@
  * software is used.
  */
 
+// WDZT is a globally available function that returns a custom osd viewer.
+// the WDZT object is a namespace for writing our code and a set of helper functions.
 window.WDZT = window.WDZT || function(options) {
     return new WDZT.Viewer(options);
 };
 
-
+// idiomatic way of extending modules/objects in js.
+// Here we add methods globally available through WDZT.
 (function($$) {
 
     'use strict';
@@ -47,6 +50,7 @@ window.WDZT = window.WDZT || function(options) {
      */
     $$.isObjectURLSupported = typeof window.URL === "function" &&
             typeof window.URL.createObjectURL === "function";
+
 
     $$.getHbsTemplate = function(url, success, error) {
         if (Handlebars.templates && Handlebars.templates[url]) {

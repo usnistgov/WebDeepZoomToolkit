@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!-- 
+This document contains a project description
+-->
+<project id="bde-wdzt">
+    <description>
+        Web browser toolkit for deepzoom images display and analisys.
+    </description>
+    <documentation>
+        README.md
+    </documentation>
+    <installation>
+        <prerequisites>
+            <prerequisite name="Node.js">
+                <website>https://nodejs.org</website>
+                <version>5 or later</version>
+            </prerequisite>
+        </prerequisites>
+    </installation>
+    <miscellaneous>
+        <software_test>
+            QUnit 1.x
+        </software_test>
+        <development_OSplatform>
+            Linux 64 bit - Chrome and Firefox
+        </development_OSplatform>
+    </miscellaneous>
+    <compilation>
+        <compilation_instructions>
+            1. Run 'npm install' to install the development dependencies
+            2. Run 'bower install' to install the libraries dependencies
+            3. Run 'grunt' to compile
+        </compilation_instructions>
+        <compilation_configuration>
+            Gruntfile.js
+        </compilation_configuration>
+        <compilation_engine>
+            N/A
+        </compilation_engine>
+        <dependencies>
+            See package.json for development dependencies and bower.json for
+            libraries dependencies.
+        </dependencies>	 
+        <instructions>
+            To run, start a local server with 'http-server .'
+            Then, open a browser at http://localhost:8080/debug.html
+        </instructions>
+    </compilation>
+    <execution>
+        <run_time_engine>
+            Chrome or Firefox
+        </run_time_engine>
+        <main_test_class>
+            <name>
+                index.html (compiled) or debug.html (not compiled)
+            </name>
+            <arguments>
+            </arguments>             	
+            <test_files>
+                Files in data/
+            </test_files>
+            <dependencies>
+            </dependencies>	 
+        </main_test_class>
+    </execution>
+</project>

@@ -16,11 +16,14 @@ software is used.
         <meta charset="UTF-8">
         <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.14.0.css">
         <link rel="stylesheet" href="build/deps/wdzt-deps.css">
+        <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="bower_components/bootstrap-toggle/css/bootstrap-toggle.css" />
 
     </head>
     <body>
         <div id="qunit"></div>
         <div id="qunit-fixture"></div>
+        <script src="bower_components/babel-polyfill/browser-polyfill.js"></script>
 
         <script src="http://code.jquery.com/qunit/qunit-1.14.0.js"></script>
 
@@ -40,6 +43,9 @@ software is used.
         <script src="bower_components/noty/js/noty/layouts/bottomRight.js"></script>
         <script src="bower_components/noty/js/noty/themes/default.js"></script>
 
+        <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="bower_components/bootstrap-toggle/js/bootstrap-toggle.js"></script>
+        <script src="bower_components/fabric.js/dist/fabric.js"></script>
 
         <!-- OpenSeadragon and plugins -->
         <script src="libs/openseadragon/openseadragon.js"></script>
@@ -51,6 +57,7 @@ software is used.
         <script src="libs/openseadragon/openseadragon-scalebar.js"></script>
         <script src="libs/openseadragon/openseadragon-xraytransitions.js"></script>
         <script src="libs/openseadragon/openseadragon-filtering.js"></script>
+        <script src="libs/openseadragon/openseadragon-fabricjs-overlay.js"></script>
 
 
         <!--Others--> 
@@ -58,8 +65,10 @@ software is used.
         <script src="bower_components/jszip/dist/jszip.js"></script>
         <script src="bower_components/file-saver-saveas-js/FileSaver.js"></script>
         <script src="bower_components/caman/dist/caman.full.js"></script>
+        <script src="libs/IFJS/src/features-extractor.js"></script>
 
         <!-- endbuild -->
+
 
         <!-- build:wdzt js/wdzt.js -->
 
@@ -71,6 +80,7 @@ software is used.
         <script src="src/module.js"></script>
 
         <!-- modules, sorted alphabetically -->
+        <script src="src/modules/annotations-module.js"></script>
         <script src="src/modules/colony-feature-module.js"></script>
         <script src="src/modules/colony-searching-module.js"></script>
         <script src="src/modules/connectivity-analysis-module.js"></script>
