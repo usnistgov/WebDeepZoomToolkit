@@ -5,6 +5,12 @@ See it in action on https://isg.nist.gov.
 
 All the functionalities are described in the [https://isg.nist.gov/deepzoomweb/help](documentation).
 
+## Install WDZT from npm
+
+```
+npm install @wipp/wdzt
+```
+
 ## Development
 
 ### Configuring
@@ -26,7 +32,7 @@ To get started you need to:
 
 You are now ready to build via `grunt`.
 If you want to build and execute the tests type `grunt all`.
-If you are having trouble running the test with Karma (errors/warning during the `(qunit) task` step), you skip then by running `grunt all --force`.
+If you are having trouble running the test with Karma (errors/warning during the `(qunit) task` step), you can force the build to continue by running `grunt all --force`.
 
 ### Folders contents
 

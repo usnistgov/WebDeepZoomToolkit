@@ -1,25 +1,5 @@
 {
   "layersGroups": [{
-      "id" : "grp1",
-      "name" : "grp1",
-      "layers" : [ {
-        "id" : "pyr1",
-        "name" : "pyr1",
-        "baseUrl" : "/data/visualization/pyramids/5b647c27091aefcb4d52a981",
-        "singleFrame" : false,
-        "framesPrefix" : "",
-        "framesSuffix" : ".dzi",
-        "openOnFrame" : 1,
-        "numberOfFrames" : 100,
-        "framesOffset" : 0,
-        "framesList" : null,
-        "paddingSize" : 3,
-        "acquiredIntensity" : null,
-        "scalebar" : null,
-        "fetching" : null
-      } ]
-    },
-    {
       "id": "stemcells",
       "name": "Stem cells",
       "layers": [
