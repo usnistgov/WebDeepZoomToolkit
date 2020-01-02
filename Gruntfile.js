@@ -3,8 +3,8 @@ module.exports = function(grunt) {
 
     var images = ['images/*'];
 
-    var bootstrap_css = ['bower_components/bootstrap/dist/css/bootstrap.min.css'];
-    var bootstrap_fonts = ['bower_components/bootstrap/dist/fonts/*'];
+    // var bootstrap_css = ['bower_components/bootstrap/dist/css/bootstrap.min.css'];
+    // var bootstrap_fonts = ['bower_components/bootstrap/dist/fonts/*'];
 
     var libImages = [
         'bower_components/jquery-ui/themes/smoothness/images/*',
@@ -90,7 +90,7 @@ module.exports = function(grunt) {
                                 name: 'cssmin',
                                 createConfig: function(context, block) {
                                     context.options.deps.src = block.src;
-                                    context.options.deps.src = context.options.deps.src.concat(bootstrap_css);
+                                    //context.options.deps.src = context.options.deps.src.concat(bootstrap_css);
                                 }
 
                             }]
@@ -208,31 +208,32 @@ module.exports = function(grunt) {
             },
             imagesDeps: {
                 files: [{
-                        expand: true,
-                        src: allImages,
-                        dest: "build/deps/images",
-                        flatten: true
-                    }
+                    expand: true,
+                    src: allImages,
+                    dest: "build/deps/images",
+                    flatten: true
+                }
                 ]
-            },
-            fonts: {
-                files: [{
-                        expand: true,
-                        src: bootstrap_fonts,
-                        dest: "build/fonts",
-                        flatten: true
-                    }
-                ]
-            },
-            fontsDeps: {
-                files: [{
-                        expand: true,
-                        src: bootstrap_fonts,
-                        dest: "build/fonts",
-                        flatten: true
-                    }
-                ]
-            },
+            }
+            // },
+            // fonts: {
+            //     files: [{
+            //             expand: true,
+            //             src: bootstrap_fonts,
+            //             dest: "build/fonts",
+            //             flatten: true
+            //         }
+            //     ]
+            // },
+            // fontsDeps: {
+            //     files: [{
+            //             expand: true,
+            //             src: bootstrap_fonts,
+            //             dest: "build/fonts",
+            //             flatten: true
+            //         }
+            //     ]
+            // },
         },
         clean: ["build"],
         compress: {

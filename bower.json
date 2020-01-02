@@ -16,8 +16,6 @@
     "noty": "~2.2",
     "caman": "~4.1",
     "fabric.js": "fabric#1.7.21",
-    "bootstrap": "^3.3.7",
-    "bootstrap-toggle": "^2.2.2",
     "babel-polyfill": "^0.0.1"
   }
 }

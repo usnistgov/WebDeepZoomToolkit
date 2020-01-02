@@ -1141,7 +1141,14 @@
 
 
         function _addItem(o) {
-            var $row = $('<div style="width:100%; background-color:#f7f9fc;" class="row btn btn-sm" id='+ o.wdzt.id +'/>');
+            var $row = $('<div style="width:100%; background-color:#f7f9fc;" class="row btn" id='+ o.wdzt.id +'/>');
+            //var $row = $('<div class="row"><div style="width:100%; background-color:#f7f9fc;" class="btn btn-sm" id='+ o.wdzt.id +'/></div>');
+            //var $row = $('<div class="header"><div style="background-color:#f7f9fc;" class="btn btn-sm" id='+ o.wdzt.id +'/></div>');
+
+
+            console.log('row');
+            console.log($row);
+            console.log('end of row');
 
             close = Handlebars.compile ('<div class="GridCell"><img width="16" src="{{imageFolder}}/close.svg" alt="remove" title="remove" class="wdzt-img-button"></div>');
             var $close = $(close({imageFolder: WDZTViewer.imagesPrefix}));
@@ -1158,7 +1165,9 @@
             var $colorMarker = $('<div class="GridCell" style="background-color:' + color + '"></div>');
             $row.append($colorMarker);
 
-
+            console.log('row');
+            console.log($row);
+            console.log('end of row');
             //Zoom and Pan. Problem for displaying popup : [pan and zoom are asynchronous](https://github.com/openseadragon/openseadragon/issues/320) 
             $row.click(function() {
                 console.log("annotation clicked");
@@ -1296,6 +1305,8 @@
          */
         function registerControls() {
 
+            console.log(activeCheckboxId);
+
             $("#" + activeCheckboxId).click(function() {
                 if ($(this).is(':checked')) {
                     activateModule(true);
@@ -1313,29 +1324,83 @@
             //     canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;  
             // });
 
+            //$( function() {
+                console.log("checkbox!");
+                //$( "input" ).checkboxradio();
+           // } );
+
+            // $('input:radio[name=radio]').change(function() {
+            //     if (!$('#draw').is(":checked")) {
+            //         $('#rectangle').attr('disabled','disable
+            // d');
+            //         $('#circle').attr('disabled','disabled');
+            //     }
+            //
+            //     if (!$('#rectangle').is(":checked")) {
+            //         $('#draw').attr('disabled','disabled');
+            //         $('#circle').attr('disabled','disabled');
+            //     }
+            //
+            //     if (!$('#circle').is(":checked")) {
+            //         $('#draw').attr('disabled','disabled');
+            //         $('#rectangle').attr('disabled','disabled');
+            //     }
+            // });
+            //$('input:radio[name=rad]').button('refresh');
+
+            //var therad = $('input:radio[name=rad]:checked').val();
+            //$("#output").html(therad);
+
+            //$('selector').prop('checked','checked').button("refresh");
+
+            //$('#drawControl input').button();
+
+
+            // $(".chb").change(function () {
+            //     $(".chb").prop('checked', false);
+            //     $(this).prop('checked', true);
+            // });
+
+            //$("s").cli
+
             $("#draw").click(function(e) {
                 e.preventDefault()
                 e.stopPropagation()
                 var isOn = toggleDrawOptions(this);
                 toggleModeHandler('FREE_DRAW', isOn);
                 console.log("drawing_mode : " + isOn + ", " + canvas['isDrawingMode']);
+                // $("#draw").prop('checked', true).checkboxradio('refresh');
+                // $("#rectangle").prop('checked', false).checkboxradio('refresh');
+                // $("#circle").prop('checked', false).checkboxradio('refresh');
             });
+            //.prop('checked', true).button("refresh");
+            //.html(therad);
 
             $("#rectangle").click(function(e) {
+
                 e.preventDefault()
                 e.stopPropagation()
                 var isOn = toggleDrawOptions(this);
                 toggleModeHandler('RECTANGLE' , isOn);
                 console.log("rectangle_mode : " + isOn + ", " + canvas['isRectangleMode']);
+                // $("#draw").prop('checked', false).checkboxradio('refresh');
+                // $("#rectangle").prop('checked', true).checkboxradio('refresh');
+                // $("#circle").prop('checked', false).checkboxradio('refresh');
             });
+             //   .prop('checked', true).button("refresh");
 
             $("#circle").click(function(e) {
+
                 e.preventDefault()
                 e.stopPropagation()
                 var isOn = toggleDrawOptions(this);
                 toggleModeHandler('CIRCLE' , isOn);
                 console.log("circle_mode : " + isOn + ", " + canvas['isCircleMode']);
+                // $("#draw").prop('checked', false).checkboxradio('refresh');
+                // $("#rectangle").prop('checked', false).checkboxradio('refresh');
+                // $("#circle").prop('checked', true).checkboxradio('refresh');
             });
+               // .prop('checked', true).button("refresh");
 
             $('#import').click(function(e) {
                 $('#file-input').trigger('click');
