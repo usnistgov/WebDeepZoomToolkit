@@ -98,10 +98,10 @@ module.exports = function(grunt) {
                 stripBanners: true
             },
             basic: {
-                dest: 'build/basic/<%= pkg.name %>.js'
+                dest: 'build/basic/wdzt.js'
             },
             deps: {
-                dest: 'build/deps/<%= pkg.name %>-deps.js'
+                dest: 'build/deps/wdzt-deps.js'
             }
         },
         cssmin: {
@@ -121,11 +121,11 @@ module.exports = function(grunt) {
             },
             basic: {
                 src: '<%= concat.basic.dest %>',
-                dest: 'build/basic/<%= pkg.name %>.min.js'
+                dest: 'build/basic/wdzt.min.js'
             },
             deps: {
                 src: '<%= concat.deps.dest %>',
-                dest: 'build/deps/<%= pkg.name %>-deps.min.js'
+                dest: 'build/deps/wdzt-deps.min.js'
             }
         },
         closureCompiler: {
@@ -138,11 +138,11 @@ module.exports = function(grunt) {
             },
             basic: {
                 src: '<%= concat.basic.dest %>',
-                dest: 'build/basic/<%= pkg.name %>.closure.js'
+                dest: 'build/basic/wdzt.closure.js'
             },
             deps: {
                 src: '<%= concat.deps.dest %>',
-                dest: 'build/deps/<%= pkg.name %>-deps.closure.js'
+                dest: 'build/deps/wdzt-deps.closure.js'
             }
         },
         jshint: {
