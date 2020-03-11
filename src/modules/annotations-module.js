@@ -1142,13 +1142,6 @@
 
         function _addItem(o) {
             var $row = $('<div style="width:100%; background-color:#f7f9fc;" class="row btn" id='+ o.wdzt.id +'/>');
-            //var $row = $('<div class="row"><div style="width:100%; background-color:#f7f9fc;" class="btn btn-sm" id='+ o.wdzt.id +'/></div>');
-            //var $row = $('<div class="header"><div style="background-color:#f7f9fc;" class="btn btn-sm" id='+ o.wdzt.id +'/></div>');
-
-
-            console.log('row');
-            console.log($row);
-            console.log('end of row');
 
             close = Handlebars.compile ('<div class="GridCell"><img width="16" src="{{imageFolder}}/close.svg" alt="remove" title="remove" class="wdzt-img-button"></div>');
             var $close = $(close({imageFolder: WDZTViewer.imagesPrefix}));
@@ -1165,10 +1158,7 @@
             var $colorMarker = $('<div class="GridCell" style="background-color:' + color + '"></div>');
             $row.append($colorMarker);
 
-            console.log('row');
-            console.log($row);
-            console.log('end of row');
-            //Zoom and Pan. Problem for displaying popup : [pan and zoom are asynchronous](https://github.com/openseadragon/openseadragon/issues/320) 
+            //Zoom and Pan. Problem for displaying popup : [pan and zoom are asynchronous](https://github.com/openseadragon/openseadragon/issues/320)
             $row.click(function() {
                 console.log("annotation clicked");
                 // Solution 1 : without animation
