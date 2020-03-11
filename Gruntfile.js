@@ -246,13 +246,13 @@ module.exports = function(grunt) {
                         cwd: "build/basic/",
                         src: ["**"],
                         dest: "/WDZT/"
-                    },
-                    {
-                        expand: true,
-                        cwd: "build/fonts/",
-                        src: ["**"],
-                        dest: "fonts/"
                     }
+                    // {
+                    //     expand: true,
+                    //     cwd: "build/fonts/",
+                    //     src: ["**"],
+                    //     dest: "fonts/"
+                    // }
                     ]
             },
             deps: {
@@ -264,13 +264,13 @@ module.exports = function(grunt) {
                         cwd: "build/deps/",
                         src: ["**"],
                         dest: "/WDZT/"
-                    },
-                    {
-                        expand: true,
-                        cwd: "build/fonts/",
-                        src: ["**"],
-                        dest: "fonts/"
                     }
+                    // {
+                    //     expand: true,
+                    //     cwd: "build/fonts/",
+                    //     src: ["**"],
+                    //     dest: "fonts/"
+                    // }
                     ]
             }
         },
