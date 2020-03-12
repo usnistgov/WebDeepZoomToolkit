@@ -114,7 +114,7 @@
 #annotationList .row div:last-child {
   margin-left: auto;
   margin-right: -5px;
-  margin-bottom: 15px;
+  /*margin-bottom: 15px;*/
   border: black solid 1px;
   background-color: white;
 }
