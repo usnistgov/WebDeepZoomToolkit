@@ -16,20 +16,24 @@
         <label for="{{activeCheckboxId}}">Annotation mode</label>
     </div>
     <div id="controls">
-        <div class="btn-group" id="drawControl">
-            <button type="button" class="btn btn-default" id="draw">
-              <span class="glyphicon glyphicon-pencil"></span>
-            </button>
-            <button type="button" class="btn btn-default" id="rectangle">
-<!--               <span class="glyphicon glyphicon-unchecked"></span> -->
-              <span class="glyphicon"><img src="{{imagesPrefix}}rectangle.svg" style="width:16px;height:16px;"></span>
-              <span class="fa fa-mouse-pointer fa-lg"></span>
-            </button>
-            <button type="button" class="btn btn-default" id="circle">
-              <span class="glyphicon"><img src="{{imagesPrefix}}circle.svg" style="width:16px;height:16px;"></span>
-              <span class="fa fa-mouse-pointer fa-lg"></span>
-            </button>
+        <div id="drawControl">
+            <fieldset>
+                <legend>Draw method</legend>
+                <label>
+                    <span><img src="{{imagesPrefix}}pencil.svg" style="width:16px;height:16px;"></span>
+                    <input type="radio" name="draw-method" id="draw">
+                </label>
+                <label>
+                    <span><img src="{{imagesPrefix}}rectangle.svg" style="width:16px;height:16px;"></span>
+                    <input type="radio" name="draw-method" id="rectangle">
+                </label>
+                <label>
+                    <span><img src="{{imagesPrefix}}circle.svg" style="width:16px;height:16px;"></span>
+                    <input type="radio" name="draw-method" id="circle">
+                </label>
+            </fieldset>
         </div>
+
         <input type="color" id="colorpicker" value="#000000"/>
 <!--         <input type="number" id="lineWidth" value="1"/> -->
        
@@ -61,7 +65,7 @@
     </div>
     <div id="annotation-list-container">
         <div id="annotation-list-content">
-            <div id="annotationList" class="wdzt-distance-measurement-table"></div>
+            <div id="annotationList" class="wdzt-distance-measurement-table" style="margin-bottom: 15px;"></div>
         </div>
     </div>
 </div>

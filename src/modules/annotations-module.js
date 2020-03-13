@@ -1141,7 +1141,7 @@
 
 
         function _addItem(o) {
-            var $row = $('<div style="width:100%; background-color:#f7f9fc;" class="row btn btn-sm" id='+ o.wdzt.id +'/>');
+            var $row = $('<div style="width:100%; background-color:#f7f9fc;" class="row btn" id='+ o.wdzt.id +'/>');
 
             close = Handlebars.compile ('<div class="GridCell"><img width="16" src="{{imageFolder}}/close.svg" alt="remove" title="remove" class="wdzt-img-button"></div>');
             var $close = $(close({imageFolder: WDZTViewer.imagesPrefix}));
@@ -1158,8 +1158,7 @@
             var $colorMarker = $('<div class="GridCell" style="background-color:' + color + '"></div>');
             $row.append($colorMarker);
 
-
-            //Zoom and Pan. Problem for displaying popup : [pan and zoom are asynchronous](https://github.com/openseadragon/openseadragon/issues/320) 
+            //Zoom and Pan. Problem for displaying popup : [pan and zoom are asynchronous](https://github.com/openseadragon/openseadragon/issues/320)
             $row.click(function() {
                 console.log("annotation clicked");
                 // Solution 1 : without animation
@@ -1309,32 +1308,19 @@
                 console.log('selected color : ' + e.target.value);
             });
 
-            // $('#lineWidth').change(function() {
-            //     canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;  
-            // });
-
             $("#draw").click(function(e) {
-                e.preventDefault()
-                e.stopPropagation()
-                var isOn = toggleDrawOptions(this);
-                toggleModeHandler('FREE_DRAW', isOn);
-                console.log("drawing_mode : " + isOn + ", " + canvas['isDrawingMode']);
+                toggleModeHandler('FREE_DRAW', true);
+                console.log("drawing_mode : " + true + ", " + canvas['isDrawingMode']);
             });
 
             $("#rectangle").click(function(e) {
-                e.preventDefault()
-                e.stopPropagation()
-                var isOn = toggleDrawOptions(this);
-                toggleModeHandler('RECTANGLE' , isOn);
-                console.log("rectangle_mode : " + isOn + ", " + canvas['isRectangleMode']);
+                toggleModeHandler('RECTANGLE' , true);
+                console.log("rectangle_mode : " + true + ", " + canvas['isRectangleMode']);
             });
 
             $("#circle").click(function(e) {
-                e.preventDefault()
-                e.stopPropagation()
-                var isOn = toggleDrawOptions(this);
-                toggleModeHandler('CIRCLE' , isOn);
-                console.log("circle_mode : " + isOn + ", " + canvas['isCircleMode']);
+                toggleModeHandler('CIRCLE' , true);
+                console.log("circle_mode : " + true + ", " + canvas['isCircleMode']);
             });
 
             $('#import').click(function(e) {
@@ -1393,26 +1379,25 @@
 
         /**
          * @private
-         * Only one drawing option must be selected at all times.
-         * @param {Self} [self] button clicked
-         * @return {Boolean} true if the button is active
-         **/
-        function toggleDrawOptions(self) {
-            $(self).toggleClass('active');
-            $(self).siblings().removeClass('active');
-            return $(self).hasClass('active');
-        }
-
-        /**
-         * @private
          * Disable module controls
          **/
         function disable_control() {
+            $('input[name="draw-method"]').prop('checked', false);
+            $('input[name="draw-method"]').attr("disabled",true);
             $('#controls button').attr('disabled','disabled');
             $('#colorpicker').attr('disabled','disabled');
-            $("#draw").removeClass('active');
-            $("#rectangle").removeClass('active');
-            $("#circle").removeClass('active');
+            $("#draw").attr('disabled', 'disabled');
+            $("#rectangle").attr('disabled', 'disabled');
+            $("#circle").attr('disabled', 'disabled');
+            if (canvas.isFreeDrawingMode) {
+                toggleModeHandler('FREE_DRAW', false);
+            }
+            if (canvas.isRectangleMode) {
+                toggleModeHandler('RECTANGLE', false);
+            }
+            if (canvas.isCircleMode) {
+                toggleModeHandler('CIRCLE', false);
+            }
         }
 
         /**
@@ -1420,6 +1405,7 @@
          * Enable module controls
          **/
         function enable_control() {
+            $('input[name="draw-method"]').attr("disabled",false);
             $('#controls button').removeAttr('disabled');
             $('#colorpicker').removeAttr('disabled');
         }
