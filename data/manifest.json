@@ -2,7 +2,9 @@
   "layersGroups": [{
       "id": "stemcells",
       "name": "Stem cells",
-      "layers": [{
+      "layers": [
+
+        {
           "id": "phasecontrast",
           "name": "Phase contrast",
           "baseUrl": "data/stemcells/phasecontrast",
@@ -38,7 +40,8 @@
             "serviceUrl": "/boundingbox",
             "dataset": "stemcells"
           }
-        }, {
+        }, 
+        {
           "id": "gfp",
           "name": "GFP",
           "baseUrl": "data/stemcells/gfp",
@@ -71,7 +74,8 @@
             "serviceUrl": "/boundingbox",
             "dataset": "stemcells"
           }
-        }, {
+        },
+        {
           "id": "masks",
           "name": "Masks",
           "baseUrl": "data/stemcells/masks",

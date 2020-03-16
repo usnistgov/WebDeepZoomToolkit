@@ -1,0 +1,71 @@
+{{!--
+    This software was developed at the National Institute of Standards and
+    Technology by employees of the Federal Government in the course of
+    their official duties. Pursuant to title 17 Section 105 of the United
+    States Code this software is not subject to copyright protection and is
+    in the public domain. This software is an experimental system. NIST assumes
+    no responsibility whatsoever for its use by other parties, and makes no
+    guarantees, expressed or implied, about its quality, reliability, or
+    any other characteristic. We would appreciate acknowledgement if the
+    software is used.
+--}}
+
+<div>
+    <div>
+        <input type="checkbox" id="{{activeCheckboxId}}"/>
+        <label for="{{activeCheckboxId}}">Annotation mode</label>
+    </div>
+    <div id="controls">
+        <div id="drawControl">
+            <fieldset>
+                <legend>Draw method</legend>
+                <label>
+                    <span><img src="{{imagesPrefix}}pencil.svg" style="width:16px;height:16px;"></span>
+                    <input type="radio" name="draw-method" id="draw">
+                </label>
+                <label>
+                    <span><img src="{{imagesPrefix}}rectangle.svg" style="width:16px;height:16px;"></span>
+                    <input type="radio" name="draw-method" id="rectangle">
+                </label>
+                <label>
+                    <span><img src="{{imagesPrefix}}circle.svg" style="width:16px;height:16px;"></span>
+                    <input type="radio" name="draw-method" id="circle">
+                </label>
+            </fieldset>
+        </div>
+
+        <input type="color" id="colorpicker" value="#000000"/>
+<!--         <input type="number" id="lineWidth" value="1"/> -->
+       
+<!--         <div class="btn-group" id="modelControl">
+            <label for="models">
+                models : 
+                <select id="models">
+                    {{#each models}}
+                    <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                </select>
+            </label>
+        </div> -->
+
+    </div>
+    <div id="commands">
+        <span><button id="import">import</button></span>
+         <input id="file-input" type="file" name="name" style="display: none;" />
+        <span id="list-controls">
+            <span><button id="export">export</button></span>
+            <label for="sort"> Sort By </label>
+            <select id="sort">
+              <option disabled selected value></option>
+              <option value="shape">Shape</option>
+              <option value="color">Color</option>
+              <option value="labels.annotationText">Annotations</option>
+            </select>
+        </span>
+    </div>
+    <div id="annotation-list-container">
+        <div id="annotation-list-content">
+            <div id="annotationList" class="wdzt-distance-measurement-table" style="margin-bottom: 15px;"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+<div id="imageDialog" class="roundbox boxshadow">
+    
+    <div class="anno-inputs">
+        <label class="input-title" id="annotation-id">Annotation</label>
+        <label class="input-title" for="annotation-author"> Author
+          <input type="text" id="annotation-author" class="form-control" name="author" placeholder="author's name"/>
+        </label>
+        <label class="input-title" for="annotation-text"> Annotations
+          <input type="text" id="annotation-text" class="form-control" name="annotations" placeholder="type your annotations here..."/>
+        </label>
+    </div>
+
+    <!-- single choice tags -->
+<!--     <div class="single-choice-btn-grp" id="tags" data-toggle="buttons" >
+      <div><label class="input-title">Tags</label></div>
+      {{#each tags}}
+      <label for="{{tag}}" class="btn btn-primary btn-sm">
+        <input type="radio" name="options" id="{{tag}}" autocomplete="off"> {{tag}}
+      </label>
+      {{/each}}
+    </div> -->
+
+    <div id="actionsBtngrp">
+        <button type="button" id="cancelBtn" style="background-color: red">Cancel</button>
+        <button type="button" id="saveBtn" style="background-color: green">Ok</button>
+    </div>
+</div>

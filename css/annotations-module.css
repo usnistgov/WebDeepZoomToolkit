@@ -1,0 +1,153 @@
+
+#imageDialog {
+    max-width: 200px;
+    width:200px;
+    background-color: white;
+    opacity: 1;
+    position:absolute;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-shadow: 0 0 5px 1px black;
+    z-index:300;
+    font-family: "Roboto", sans-serif;
+    font-weight: 100;
+    display: none;
+}
+
+#imageDialog .single-choice-btn-grp {
+    margin-top: 10px;
+}
+
+#imageDialog .anno-inputs {
+    display: inherit;
+}
+
+#imageDialog input[type="text"] {
+    font-family: "Roboto", sans-serif;
+    font-weight: 100;
+    width: 100%;
+    font-size: smaller;
+}
+
+#imageDialog label {
+    font-family: "Roboto", sans-serif;
+    font-weight: 100;
+}
+
+#annotation-id {
+    display: block;
+    padding: 2px;
+    font-size: 9px;
+}
+
+#imageDialog .btn {
+    font-size: 11px;
+    height: auto;
+    margin-bottom :5px;
+    padding: 2px;
+    margin-right: 2px;
+    font-weight: 400;
+}
+
+#imageDialog .input-title {
+  font-size: 10px;
+}
+
+#imageDialog .anno-inputs label {
+    width: 100%;
+}
+
+#actionsBtngrp {
+    display:  flex;
+    justify-content: flex-end;
+}
+
+#imageDialog  .boxshadow 
+{
+  -moz-box-shadow: 3px 3px 5px #535353;
+  -webkit-box-shadow: 3px 3px 5px #535353;       
+  box-shadow: 3px 3px 5px #535353;
+}
+#imageDialog  .roundbox
+{  
+  -moz-border-radius: 6px 6px 6px 6px;
+  -webkit-border-radius: 6px;  
+  border-radius: 6px 6px 6px 6px;
+}
+
+#saveBtn {
+  /*box-shadow: 3px 3px 5px #535353;*/
+}
+
+#lineWidth {
+    display: inline;
+    width: 40px;
+}
+
+#commands
+{
+  margin-top: 10px;
+}
+
+#list-controls
+{
+  display: none;
+}
+
+
+#annotationList 
+{
+  display: flex;
+  width:100%;
+  flex-direction: column;
+}
+
+#annotationList .row
+{
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  width: 100%;
+  justify-content: space-between;
+}
+
+#annotationList .row div:last-child {
+  margin-left: auto;
+  margin-right: -5px;
+  border: black solid 1px;
+  background-color: white;
+}
+
+#annotationList .row div:first-child {
+  width:20px;
+}
+
+#annotationList .GridCell
+{
+  min-width: 20px;
+  overflow-x: auto;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+
+#annotation-list-container
+{
+   margin-right: 5px;
+   max-height: 200px;
+   overflow-y: scroll !important;
+}
+
+#annotation-list-container table {
+    border: 1px solid black;
+}
+
+#annotation-list-container button {
+    font-family: "Roboto", sans-serif;
+    font-weight: 100;
+}
+
+/*#annotation-list-content
+{
+  min-height:101%;
+}*/

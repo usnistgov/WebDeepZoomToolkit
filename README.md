@@ -5,7 +5,18 @@ See it in action on https://isg.nist.gov.
 
 All the functionalities are described in the [https://isg.nist.gov/deepzoomweb/help](documentation).
 
+## Install WDZT from npm
+
+```
+npm install @wipp/wdzt
+```
+
 ## Development
+
+### Configuring
+
+Import can be disabled or enabled by editing the config.js file and setting the `enableImport` property to true or false.
+
 
 ### Building
 
@@ -15,12 +26,13 @@ To get started you need to:
 1. Install [Node.js](http://nodejs.org/).
 1. Install Grunt via `npm install -g grunt-cli`.
 1. Clone the WDZT repository.
-1. Run `npm install` inside the cloned repository.
-1. Install bower `npm install -g bower`.
+1. Run `npm ci` inside the cloned repository.
+1. Install bower `npm install -g bower`.	
 1. Run `bower install`.
 
 You are now ready to build via `grunt`.
 If you want to build and execute the tests type `grunt all`.
+If you are having trouble running the test with Karma (errors/warning during the `(qunit) task` step), you can force the build to continue by running `grunt all --force`.
 
 ### Folders contents
 

@@ -26,7 +26,7 @@
     </head>
 
     <body>
-        <h3>WDZT DEBUG</h3>
+        <h3>Web Deep Zoom Toolkit</h3>
         <div id="container"></div>
         
         <script src="build/deps/wdzt-deps.min.js"></script>
@@ -44,13 +44,7 @@
                 autoAdjustMinHeight: 500,
                 imagesPrefix: "build/deps/images/"
             });
-            wdzt.open("data/manifest.json", {
-                layer: "gfp",
-                frame: 3,
-                ColonySearchingModule: {
-                    colony: 10
-                }
-            });
+            wdzt.open("data/manifest.json");
         </script>
     </body>
 </html>

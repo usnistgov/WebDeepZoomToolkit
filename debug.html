@@ -32,6 +32,7 @@
         <link rel="stylesheet" href="css/colony-feature-module.css"/>
         <link rel="stylesheet" href="css/transitions-widgets.css"/>
         <link rel="stylesheet" href="css/connectivity-analysis-module.css"/>
+        <link rel="stylesheet" href="css/annotations-module.css"/>
         <!-- endbuild -->
 
         <style>
@@ -61,6 +62,7 @@
         <script src="bower_components/noty/js/noty/layouts/bottomRight.js"></script>
         <script src="bower_components/noty/js/noty/themes/default.js"></script>
 
+        <script src="bower_components/fabric.js/dist/fabric.js"></script>
 
         <!-- OpenSeadragon and plugins -->
         <script src="libs/openseadragon/openseadragon.js"></script>
@@ -72,6 +74,7 @@
         <script src="libs/openseadragon/openseadragon-scalebar.js"></script>
         <script src="libs/openseadragon/openseadragon-xraytransitions.js"></script>
         <script src="libs/openseadragon/openseadragon-filtering.js"></script>
+        <script src="libs/openseadragon/openseadragon-fabricjs-overlay.js"></script>
 
 
         <!--Others--> 
@@ -91,8 +94,10 @@
         <script src="src/toolbar.js"></script>
         <script src="src/manifest.js"></script>
         <script src="src/module.js"></script>
+        <script src="src/config.js"></script>
 
         <!-- modules, sorted alphabetically -->
+        <script src="src/modules/annotations-module.js"></script>
         <script src="src/modules/colony-feature-module.js"></script>
         <script src="src/modules/colony-searching-module.js"></script>
         <script src="src/modules/connectivity-analysis-module.js"></script>
@@ -140,6 +145,7 @@
                     colony: 10
                 }
             });
+
         </script>
     </body>
 </html>

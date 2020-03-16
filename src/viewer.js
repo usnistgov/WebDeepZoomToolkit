@@ -10,12 +10,31 @@
  * software is used.
  */
 
+/**
+
+Viewer is intended to be a singleton declared in the WDZT namespace and accessible via its property Viewer.
+
+Viewer definition is splitted in two :
+- the initialization is achieved by a constructor function
+- the api is defined as a prototype extension.
+
+The drawback of this approach is the lack of encapsulation. Everything is public (the object properties through 'this',
+the methods through the prototype.
+
+Responsability : creating UI elements through DOM manipulation, loading modules, handling click and resizing, handling reading the manifest.
+
+**/
 (function($$) {
 
     'use strict';
 
     $$.Viewer = function(options) {
 
+        //Way to pass parameters and add them directly as property of this object.
+        //Jquery function : Merge the contents of two or more objects together into the first object.
+        //true indicate a deep copy.
+        //here this is extended first by the anonymous object that defines allowed parameters and set defaults,
+        // then by the actual configuration (thus the test of id existence after).
         $.extend(true, this, {
             /**
              * The unique id of this viewer
@@ -45,10 +64,18 @@
             throw new Error("An id must be specified to WDZT.");
         }
 
+        //According to osd docs : "For use by classes which want to support custom, non-browser events.""
+        //basically a basic implementation of a publish/subscribe pattern.
         OpenSeadragon.EventSource.call(this);
+
+        //The openseadragon library has a cut-and-paste version of the extend function from jQuery 1.6.1
+        // methods from OpenSeadragon.EventSource are added to our object so we can add event handlers directly from Viewer.
         OpenSeadragon.extend($$.Viewer.prototype, OpenSeadragon.EventSource.prototype);
 
-        this.$container = $("#" + (this.$container || this.id));
+        /*
+        ======= Create the whole layout (menu,toolbar,osd movie viewer) ===========
+        */
+        this.$container = $("#" + (this.$container || this.id)); //retrieve the original osd container.
         this.$container.addClass("wdzt-container");
 
         this.$toolbarContainer = $("<div/>")
@@ -100,6 +127,7 @@
         };
         $.extend(true, osdMovieOptions, options["OpenSeadragon"], {
             // Not modifiable options
+            /* not quite useful has those are purely graphical options */
             id: this.$osdContainer.attr("id"),
             zoomInButton: this.toolbar.zoomInButtonId,
             zoomOutButton: this.toolbar.zoomOutButtonId,
@@ -119,6 +147,10 @@
         var _this = this;
 
         this.clickHandlerModule = null;
+
+        /*
+        [plugin for manipulating osd event system](https://github.com/msalsbery/OpenSeadragonViewerInputHook/blob/master/README.md)
+        */
         this.osd.addViewerInputHook({
             hooks: [{
                     tracker: "viewer",
@@ -133,10 +165,14 @@
             ]
         });
 
+
         $(window).resize(function() {
             autoAdjustHeight(_this);
         });
 
+        /**
+        Add all the modules to the menu
+        **/
         this._modules = [];
         for (var moduleName in $$.Module.MODULES) {
             var $div = $("<div/>").appendTo(this.$menuSubContainer);
@@ -168,6 +204,7 @@
             return a.instance.getOrderIndex() - b.instance.getOrderIndex();
         });
 
+
         // Re-insert all modules in correct order, remove the ones without title,
         // and hide them by default.
         for (var i = 0; i < this._modules.length; i++) {
@@ -181,6 +218,7 @@
         }
     };
 
+    //API
     $$.Viewer.prototype = {
         /**
          * Open a new manifest.
@@ -201,7 +239,7 @@
                 manifest: manifest,
                 success: function() {
                     _this.manifest = manifestObj;
-                    _this.raiseEvent("open");
+                    _this.raiseEvent("open"); //use of EventSource extension
                     var layer = manifestObj.getFirstLayer();
                     if (options.layer) {
                         layer = manifestObj.getLayer(options.layer);
@@ -214,6 +252,9 @@
                     if (layer) {
                         _this.displayLayer(layer, options);
                     }
+
+
+
                 },
                 error: function(message) {
                     var txt = "Cannot open the specified manifest.<br>" + message;
@@ -223,7 +264,8 @@
         },
         /**
          * Display the specified layer. The options allows to specify at what
-         * frame to open 
+         * frame to open.
+         Delegate actual image loading to osd movie.
          */
         displayLayer: function(layer, options) {
             options = options || {};

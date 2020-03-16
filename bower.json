@@ -1,5 +1,5 @@
 {
-  "name": "WDZT",
+  "name": "wdzt",
   "description": "Web Deep Zoom Toolkit",
   "version": "0.0.1",
   "homepage": "https://isg.nist.gov",
@@ -8,12 +8,14 @@
   "dependencies": {
     "file-saver-saveas-js": "*",
     "handlebars": "~3.0",
-    "jquery": "~1.12",
+    "jquery": "~1.12.4",
     "jquery-ui": "~1.11",
     "jquery-color": "~2.1",
     "jquery-file-download": "~1.4",
     "jszip": "~2.5",
     "noty": "~2.2",
-    "caman": "~4.1"
+    "caman": "~4.1",
+    "fabric.js": "fabric#1.7.21",
+    "babel-polyfill": "^0.0.1"
   }
 }

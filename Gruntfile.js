@@ -8,6 +8,7 @@ module.exports = function(grunt) {
         'libs/jquery/css/images/*'
     ];
 
+
     var hbsTemplateOutputFile = 'build/hbs-templates.js';
     var handlebarsFilesOption = {};
     handlebarsFilesOption[hbsTemplateOutputFile] = 'src/**/*.hbs';
@@ -16,8 +17,9 @@ module.exports = function(grunt) {
 
     // Project configuration.
     grunt.initConfig({
-        // Metadata.
+        // Metadata. Make value inside package.json available in grunt.
         pkg: grunt.file.readJSON('package.json'),
+        // set from values read in package.json
         banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
                 '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
                 '* This software was developed at the National Institute of Standards and\n' +
@@ -119,11 +121,16 @@ module.exports = function(grunt) {
             options: {
                 banner: '<%= banner %>'
             },
-            basic: {
+            basic: {   
                 src: '<%= concat.basic.dest %>',
                 dest: 'build/basic/wdzt.min.js'
             },
             deps: {
+                options: {
+                    compress: {
+                        drop_console: true
+                    }
+                },
                 src: '<%= concat.deps.dest %>',
                 dest: 'build/deps/wdzt-deps.min.js'
             }
@@ -197,11 +204,11 @@ module.exports = function(grunt) {
             },
             imagesDeps: {
                 files: [{
-                        expand: true,
-                        src: allImages,
-                        dest: "build/deps/images",
-                        flatten: true
-                    }
+                    expand: true,
+                    src: allImages,
+                    dest: "build/deps/images",
+                    flatten: true
+                }
                 ]
             }
         },
@@ -216,7 +223,8 @@ module.exports = function(grunt) {
                         cwd: "build/basic/",
                         src: ["**"],
                         dest: "/WDZT/"
-                    }]
+                    }
+                    ]
             },
             deps: {
                 options: {
@@ -227,7 +235,8 @@ module.exports = function(grunt) {
                         cwd: "build/deps/",
                         src: ["**"],
                         dest: "/WDZT/"
-                    }]
+                    }
+                    ]
             }
         },
         watch: {
@@ -261,7 +270,7 @@ module.exports = function(grunt) {
     // Default task.
     grunt.registerTask('default', [
         'clean',
-        'jshint',
+    //    'jshint',
         'handlebars',
         'useminPrepare',
         'concat:basic',
@@ -271,7 +280,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('all', [
         'clean',
-        'jshint',
+     //   'jshint',
         'handlebars',
         'useminPrepare',
         'concat',
