@@ -877,6 +877,50 @@
             this.init(movie, canvas);
         };
 
+        // to be used in loadFrame outside of ToolBoxUI
+        this.getAnnotationFile = function() {
+            console.log("Get annotation file");
+            var annotId;
+            var frameId = movie.getCurrentFrame();
+            var pyramidId = WDZTViewer.selectedLayer.id;
+            var settings = WDZTViewer.selectedLayer.pyramidAnnotations;
+            var serviceUrl = settings.serviceUrl;
+
+            // Search for already existing pyramidAnnotation by pyramidId
+            $.ajax({
+                url: serviceUrl + "/search/findByPyramid",
+                async: false,
+                type: 'GET',
+                data: {
+                    pyramid: pyramidId
+                },
+                success: function (response){
+                    console.log("SUCCESS : ", response);
+                    annotId = response.id;
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
+
+            // Get annotation file by annotationId and frameId
+            $.ajax({
+                url: serviceUrl + "/" + annotId + "/timeSlices/"+ frameId +"/annotationPositions",
+                async: false,
+                type: 'GET',
+                success: function (data){
+                    console.log("SUCCESS : ", data);
+                    var objects = JSON.parse(data);
+                    console.log('content : ', objects);
+                    //importObjects(objects);
+                    canvas.trigger('object:import', objects);
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
+        };
+
         /**
          * TODO should be a rest call
          * Load all objects registered with the current frame.
@@ -885,8 +929,8 @@
         this.loadFrame = function() {
             var annotations = this.data[movie.getCurrentFrame()];
             canvas.trigger('frame:reloaded', annotations);
+            //this.getAnnotationFile();
             return annotations;
-
         };
 
         /**
@@ -1253,6 +1297,8 @@
         var activeCheckboxId = "wdzt-annotations-active-" + WDZT.guid();
         var template;
 
+        var settings = WDZTViewer.selectedLayer.pyramidAnnotations;
+
         //TODO REMOVE MODELS
         //load the module toolbox in the left panel
         $$.getHbsTemplate('src/modules/annotations-module-template.hbs', function(_template) {
@@ -1277,16 +1323,6 @@
                     activeCheckboxId: activeCheckboxId, //inject value in template
                 }));
             });
-        } 
-
-        /**
-         ** API
-         */
-
-        function activateModule(active) {
-            console.log("activate module", active);
-            (!active) ? disable_control() : enable_control();
-            activeModuleHandler(active);
         }
 
         function getAnnotationFile(){
@@ -1294,11 +1330,11 @@
             var annotId;
             var frameId = movie.getCurrentFrame();
             var pyramidId = WDZTViewer.selectedLayer.id;
-            var serviceUrl = WDZTViewer.selectedLayer.colonyFeatures.annotations.serviceUrl;
+            var serviceUrl = settings.serviceUrl;
 
             // Search for already existing pyramidAnnotation by pyramidId
             $.ajax({
-                url: serviceUrl + "/pyramidAnnotations/search/findByPyramid",
+                url: serviceUrl + "/search/findByPyramid",
                 async: false,
                 type: 'GET',
                 data: {
@@ -1315,7 +1351,7 @@
 
             // Get annotation file by annotationId and frameId
             $.ajax({
-                url: serviceUrl + "/pyramidAnnotations/" + annotId + "/timeSlices/"+ frameId +"/annotationPositions",
+                url: serviceUrl + "/" + annotId + "/timeSlices/"+ frameId +"/annotationPositions",
                 async: false,
                 type: 'GET',
                 success: function (data){
@@ -1328,6 +1364,16 @@
                     console.log("ERROR : ", e);
                 }
             });
+        };
+
+        /**
+         ** API
+         */
+
+        function activateModule(active) {
+            console.log("activate module", active);
+            (!active) ? disable_control() : enable_control();
+            activeModuleHandler(active);
         }
 
         /**
@@ -1339,6 +1385,7 @@
             $("#" + activeCheckboxId).click(function() {
                 if ($(this).is(':checked')) {
                     activateModule(true);
+                    //persistence.getAnnotationFile();
                     getAnnotationFile();
                 } else {
                     activateModule(false);
@@ -1415,7 +1462,7 @@
             var pyramidId = WDZTViewer.selectedLayer.id;
             var annotName = WDZTViewer.selectedLayer.name + "-annotations";
             var annotId;
-            var serviceUrl = WDZTViewer.selectedLayer.colonyFeatures.annotations.serviceUrl;
+            var serviceUrl = settings.serviceUrl;
 
             // Create a FormData object
             var data = new FormData();
@@ -1423,7 +1470,7 @@
 
             // Search for already existing pyramidAnnotation by pyramidId
             $.ajax({
-                url: serviceUrl + "/pyramidAnnotations/search/findByPyramid",
+                url: serviceUrl + "/search/findByPyramid",
                 async: false,
                 type: 'GET',
                 data: {
@@ -1445,7 +1492,7 @@
             if(annotId === undefined){
                 console.log("creating new annotId");
                 $.ajax({
-                    url: serviceUrl + "/pyramidAnnotations",
+                    url: serviceUrl,
                     async: false,
                     dataType: 'json',
                     contentType: 'application/json',
@@ -1466,7 +1513,7 @@
             $.ajax({
                 type: "POST",
                 enctype: 'multipart/form-data',
-                url: serviceUrl + "/pyramidAnnotations/" + annotId + "/timeSlices/"+ frameId +"/annotationPositions",
+                url: serviceUrl + "/" + annotId + "/timeSlices/"+ frameId +"/annotationPositions",
                 data: data,
                 processData: false,
                 contentType: false,
