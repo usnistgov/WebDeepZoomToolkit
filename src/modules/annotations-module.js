@@ -31,6 +31,7 @@
 
     var name = "AnnotationsModule";
     var WDZTViewer;
+    var moduleActivatedStatus;
 
     $$.AnnotationsModule = function(options) {
         //Module registration boilerplate
@@ -878,6 +879,52 @@
         };
 
         /**
+         * Load all objects for the current frame through a call to WIPP's backend.
+         */
+        this.getAnnotationFile = function() {
+            console.log("Get annotation file");
+            var annotId;
+            var frameId = movie.getCurrentFrame();
+            var pyramidId = WDZTViewer.selectedLayer.id;
+            var settings = WDZTViewer.selectedLayer.pyramidAnnotations;
+            var serviceUrl = settings.serviceUrl;
+
+            // Search for already existing pyramidAnnotation by pyramidId
+            $.ajax({
+                url: serviceUrl + "/search/findByPyramid",
+                async: false,
+                type: 'GET',
+                data: {
+                    pyramid: pyramidId
+                },
+                success: function (response){
+                    console.log("SUCCESS : ", response);
+                    annotId = response.id;
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
+
+            // Get annotation file by annotationId and frameId
+            $.ajax({
+                url: serviceUrl + "/" + annotId + "/timeSlices/"+ frameId +"/annotationPositions",
+                async: false,
+                type: 'GET',
+                success: function (data){
+                    console.log("SUCCESS : ", data);
+                    var objects = JSON.parse(data);
+                    console.log('content : ', objects);
+                    //importObjects(objects);
+                    canvas.trigger('object:import', objects);
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
+        };
+
+        /**
          * TODO should be a rest call
          * Load all objects registered with the current frame.
          * @return {Object} all objects.
@@ -885,8 +932,11 @@
         this.loadFrame = function() {
             var annotations = this.data[movie.getCurrentFrame()];
             canvas.trigger('frame:reloaded', annotations);
+            if(moduleActivatedStatus) {
+                console.log('annotation mode is checked.');
+                this.getAnnotationFile();
+            }
             return annotations;
-
         };
 
         /**
@@ -1253,6 +1303,8 @@
         var activeCheckboxId = "wdzt-annotations-active-" + WDZT.guid();
         var template;
 
+        var settings = WDZTViewer.selectedLayer.pyramidAnnotations;
+
         //TODO REMOVE MODELS
         //load the module toolbox in the left panel
         $$.getHbsTemplate('src/modules/annotations-module-template.hbs', function(_template) {
@@ -1277,7 +1329,7 @@
                     activeCheckboxId: activeCheckboxId, //inject value in template
                 }));
             });
-        } 
+        }
 
         /**
          ** API
@@ -1297,8 +1349,11 @@
 
             $("#" + activeCheckboxId).click(function() {
                 if ($(this).is(':checked')) {
+                    moduleActivatedStatus = true;
                     activateModule(true);
+                    persistence.getAnnotationFile();
                 } else {
+                    moduleActivatedStatus = false;
                     activateModule(false);
                 }
             });
@@ -1368,8 +1423,75 @@
             var objects = JSON.stringify(annotations);
 
             var blob = new Blob([objects], {type: 'text/plain'});
-            var fileName = "annotations-frame" + frameId + ".json"
-            saveAs(blob, fileName);
+            var fileName = "annotations-frame" + frameId + ".json";
+
+            var pyramidId = WDZTViewer.selectedLayer.id;
+            var annotName = WDZTViewer.selectedLayer.name + "-annotations";
+            var annotId;
+            var serviceUrl = settings.serviceUrl;
+
+            // Create a FormData object
+            var data = new FormData();
+            data.append("file", blob, fileName);
+
+            // Search for already existing pyramidAnnotation by pyramidId
+            $.ajax({
+                url: serviceUrl + "/search/findByPyramid",
+                async: false,
+                type: 'GET',
+                data: {
+                    pyramid: pyramidId
+                },
+                success: function (response){
+                    console.log("SUCCESS : ", response);
+                    annotId = response.id;
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
+
+            var annotData = '{"name": "' + annotName + '", "pyramid": "' + pyramidId +'"}';
+            //var annotStr = JSON.stringify(annotData);
+
+            // If no pyramidAnnotation was found, create a new one
+            if(annotId === undefined){
+                console.log("creating new annotId");
+                $.ajax({
+                    url: serviceUrl,
+                    async: false,
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    type: 'POST',
+                    data: annotData,
+                    processData: false,
+                    success: function (response){
+                        console.log("SUCCESS : ", response);
+                        annotId = response.id;
+                    },
+                    error: function (e) {
+                        console.log("ERROR : ", e);
+                    }
+                });
+            }
+
+            // Store pyramidAnnotation file
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: serviceUrl + "/" + annotId + "/timeSlices/"+ frameId +"/annotationPositions",
+                data: data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function (data) {
+                    console.log("SUCCESS : ", data);
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
         }
 
         function importObjects(objects) {

@@ -39,6 +39,9 @@
           "colonySearching": {
             "serviceUrl": "/boundingbox",
             "dataset": "stemcells"
+          },
+          "pyramidAnnotations": {
+            "serviceUrl": "/pyramidAnnotations"
           }
         }, 
         {
