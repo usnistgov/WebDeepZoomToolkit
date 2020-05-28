@@ -76,6 +76,9 @@
           "colonySearching": {
             "serviceUrl": "/boundingbox",
             "dataset": "stemcells"
+          },
+          "pyramidAnnotations": {
+            "serviceUrl": "/pyramidAnnotations"
           }
         },
         {
@@ -90,6 +93,9 @@
           "scalebar": {
             "pixelsPerMeter": 1552795,
             "unitType": "length"
+          },
+          "pyramidAnnotations": {
+            "serviceUrl": "/pyramidAnnotations"
           }
         }]
     }, {
@@ -104,7 +110,10 @@
           "framesOffset": 97,
           "openOnFrame": 98,
           "numberOfFrames": 5,
-          "paddingSize": 5
+          "paddingSize": 5,
+          "pyramidAnnotations": {
+            "serviceUrl": "/pyramidAnnotations"
+          }
         }]
     }, {
       "id": "moche_eyx",
@@ -123,7 +132,10 @@
             "pixelsPerMeter": 0.1,
             "unitType": "energy"
           },
-          "xrayTransitions": true
+          "xrayTransitions": true,
+          "pyramidAnnotations": {
+            "serviceUrl": "/pyramidAnnotations"
+          }
         }]
     }, {
       "id": "moche_single_frame",
@@ -132,7 +144,10 @@
           "id": "moche_single_frame",
           "name": "Moche single frame",
           "baseUrl": "data/moche/xy-energy/slice00098.dzi",
-          "singleFrame": true
+          "singleFrame": true,
+          "pyramidAnnotations": {
+            "serviceUrl": "/pyramidAnnotations"
+          }
         }]
     }, {
       "id": "phase_contrast_holes",
@@ -150,6 +165,9 @@
           "fetching": {
             "url": "/fetching/phase_contrast_holes",
             "originalResolutionOnly": true
+          },
+          "pyramidAnnotations": {
+            "serviceUrl": "/pyramidAnnotations"
           }
         }, {
           "id": "gfp_holes",
@@ -160,7 +178,10 @@
           "framesList": [2, 5],
           "openOnFrame": 1,
           "numberOfFrames": 5,
-          "paddingSize": 3
+          "paddingSize": 3,
+          "pyramidAnnotations": {
+            "serviceUrl": "/pyramidAnnotations"
+          }
         }]
     }, {
       "id": "synthetic1_single_frame",
@@ -169,7 +190,10 @@
           "id": "binary1_single_frame",
           "name": "Binary1 single frame",
           "baseUrl": "data/synthetic/binary/binary1.dzi",
-          "singleFrame": true
+          "singleFrame": true,
+          "pyramidAnnotations": {
+            "serviceUrl": "/pyramidAnnotations"
+          }
         }]
     }, {
       "id": "synthetic2_single_frame",
@@ -178,7 +202,10 @@
           "id": "binary2_single_frame",
           "name": "Binary2 single frame",
           "baseUrl": "data/synthetic/binary/binary2.dzi",
-          "singleFrame": true
+          "singleFrame": true,
+          "pyramidAnnotations": {
+            "serviceUrl": "/pyramidAnnotations"
+          }
         }]
     }, {
       "id": "synthetic3_single_frame",
@@ -187,7 +214,10 @@
           "id": "binary3_single_frame",
           "name": "Binary3 single frame",
           "baseUrl": "data/synthetic/binary/binary3.dzi",
-          "singleFrame": true
+          "singleFrame": true,
+          "pyramidAnnotations": {
+            "serviceUrl": "/pyramidAnnotations"
+          }
         }]
     }]
 }
