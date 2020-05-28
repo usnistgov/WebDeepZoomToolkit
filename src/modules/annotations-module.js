@@ -31,6 +31,7 @@
 
     var name = "AnnotationsModule";
     var WDZTViewer;
+    var moduleActivatedStatus;
 
     $$.AnnotationsModule = function(options) {
         //Module registration boilerplate
@@ -877,7 +878,9 @@
             this.init(movie, canvas);
         };
 
-        // to be used in loadFrame outside of ToolBoxUI
+        /**
+         * Load all objects for the current frame through a call to WIPP's backend.
+         */
         this.getAnnotationFile = function() {
             console.log("Get annotation file");
             var annotId;
@@ -929,7 +932,10 @@
         this.loadFrame = function() {
             var annotations = this.data[movie.getCurrentFrame()];
             canvas.trigger('frame:reloaded', annotations);
-            //this.getAnnotationFile();
+            if(moduleActivatedStatus) {
+                console.log('annotation mode is checked.');
+                this.getAnnotationFile();
+            }
             return annotations;
         };
 
@@ -1325,47 +1331,6 @@
             });
         }
 
-        function getAnnotationFile(){
-            console.log("Get annotation file");
-            var annotId;
-            var frameId = movie.getCurrentFrame();
-            var pyramidId = WDZTViewer.selectedLayer.id;
-            var serviceUrl = settings.serviceUrl;
-
-            // Search for already existing pyramidAnnotation by pyramidId
-            $.ajax({
-                url: serviceUrl + "/search/findByPyramid",
-                async: false,
-                type: 'GET',
-                data: {
-                    pyramid: pyramidId
-                },
-                success: function (response){
-                    console.log("SUCCESS : ", response);
-                    annotId = response.id;
-                },
-                error: function (e) {
-                    console.log("ERROR : ", e);
-                }
-            });
-
-            // Get annotation file by annotationId and frameId
-            $.ajax({
-                url: serviceUrl + "/" + annotId + "/timeSlices/"+ frameId +"/annotationPositions",
-                async: false,
-                type: 'GET',
-                success: function (data){
-                    console.log("SUCCESS : ", data);
-                    var objects = JSON.parse(data);
-                    console.log('content : ', objects);
-                    importObjects(objects);
-                },
-                error: function (e) {
-                    console.log("ERROR : ", e);
-                }
-            });
-        };
-
         /**
          ** API
          */
@@ -1384,10 +1349,11 @@
 
             $("#" + activeCheckboxId).click(function() {
                 if ($(this).is(':checked')) {
+                    moduleActivatedStatus = true;
                     activateModule(true);
-                    //persistence.getAnnotationFile();
-                    getAnnotationFile();
+                    persistence.getAnnotationFile();
                 } else {
+                    moduleActivatedStatus = false;
                     activateModule(false);
                 }
             });
