@@ -921,7 +921,6 @@
         };
 
         /**
-         * TODO should be a rest call
          * Load all objects registered with the current frame.
          * @return {Object} all objects.
          */
@@ -1299,8 +1298,6 @@
         var activeCheckboxId = "wdzt-annotations-active-" + WDZT.guid();
         var template;
 
-        var settings = WDZTViewer.selectedLayer.pyramidAnnotations;
-
         //TODO REMOVE MODELS
         //load the module toolbox in the left panel
         $$.getHbsTemplate('src/modules/annotations-module-template.hbs', function(_template) {
@@ -1424,7 +1421,7 @@
             var pyramidId = WDZTViewer.selectedLayer.id;
             var annotName = WDZTViewer.selectedLayer.name + "-annotations";
             var annotId;
-            var serviceUrl = settings.serviceUrl;
+            var serviceUrl = WDZTViewer.selectedLayer.pyramidAnnotations.serviceUrl;
 
             // Create a FormData object
             var data = new FormData();
