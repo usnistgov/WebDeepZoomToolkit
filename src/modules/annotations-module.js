@@ -52,7 +52,7 @@
             return 81; //after distance measurement module
         },
         supportLayer: function(layer) {
-            return true;
+            return !!layer.pyramidAnnotations;
         },
         clickHandler: function(event) {
             if (this.isEnabled) {
@@ -67,10 +67,6 @@
         },
         destroy: function() {
             this.disable();
-        },
-
-        yo: function(){
-            console.log('yo');
         }
     });
 

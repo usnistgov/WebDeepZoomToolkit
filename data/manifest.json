@@ -41,7 +41,7 @@
             "dataset": "stemcells"
           },
           "pyramidAnnotations": {
-            "serviceUrl": "/pyramidAnnotations"
+            "serviceUrl": "/api/pyramidAnnotations"
           }
         }, 
         {
@@ -78,7 +78,7 @@
             "dataset": "stemcells"
           },
           "pyramidAnnotations": {
-            "serviceUrl": "/pyramidAnnotations"
+            "serviceUrl": "/api/pyramidAnnotations"
           }
         },
         {
@@ -93,9 +93,6 @@
           "scalebar": {
             "pixelsPerMeter": 1552795,
             "unitType": "length"
-          },
-          "pyramidAnnotations": {
-            "serviceUrl": "/pyramidAnnotations"
           }
         }]
     }, {
@@ -110,10 +107,7 @@
           "framesOffset": 97,
           "openOnFrame": 98,
           "numberOfFrames": 5,
-          "paddingSize": 5,
-          "pyramidAnnotations": {
-            "serviceUrl": "/pyramidAnnotations"
-          }
+          "paddingSize": 5
         }]
     }, {
       "id": "moche_eyx",
@@ -132,10 +126,7 @@
             "pixelsPerMeter": 0.1,
             "unitType": "energy"
           },
-          "xrayTransitions": true,
-          "pyramidAnnotations": {
-            "serviceUrl": "/pyramidAnnotations"
-          }
+          "xrayTransitions": true
         }]
     }, {
       "id": "moche_single_frame",
@@ -144,10 +135,7 @@
           "id": "moche_single_frame",
           "name": "Moche single frame",
           "baseUrl": "data/moche/xy-energy/slice00098.dzi",
-          "singleFrame": true,
-          "pyramidAnnotations": {
-            "serviceUrl": "/pyramidAnnotations"
-          }
+          "singleFrame": true
         }]
     }, {
       "id": "phase_contrast_holes",
@@ -165,9 +153,6 @@
           "fetching": {
             "url": "/fetching/phase_contrast_holes",
             "originalResolutionOnly": true
-          },
-          "pyramidAnnotations": {
-            "serviceUrl": "/pyramidAnnotations"
           }
         }, {
           "id": "gfp_holes",
@@ -178,10 +163,7 @@
           "framesList": [2, 5],
           "openOnFrame": 1,
           "numberOfFrames": 5,
-          "paddingSize": 3,
-          "pyramidAnnotations": {
-            "serviceUrl": "/pyramidAnnotations"
-          }
+          "paddingSize": 3
         }]
     }, {
       "id": "synthetic1_single_frame",
@@ -190,10 +172,7 @@
           "id": "binary1_single_frame",
           "name": "Binary1 single frame",
           "baseUrl": "data/synthetic/binary/binary1.dzi",
-          "singleFrame": true,
-          "pyramidAnnotations": {
-            "serviceUrl": "/pyramidAnnotations"
-          }
+          "singleFrame": true
         }]
     }, {
       "id": "synthetic2_single_frame",
@@ -202,10 +181,7 @@
           "id": "binary2_single_frame",
           "name": "Binary2 single frame",
           "baseUrl": "data/synthetic/binary/binary2.dzi",
-          "singleFrame": true,
-          "pyramidAnnotations": {
-            "serviceUrl": "/pyramidAnnotations"
-          }
+          "singleFrame": true
         }]
     }, {
       "id": "synthetic3_single_frame",
@@ -214,10 +190,7 @@
           "id": "binary3_single_frame",
           "name": "Binary3 single frame",
           "baseUrl": "data/synthetic/binary/binary3.dzi",
-          "singleFrame": true,
-          "pyramidAnnotations": {
-            "serviceUrl": "/pyramidAnnotations"
-          }
+          "singleFrame": true
         }]
     }]
 }
