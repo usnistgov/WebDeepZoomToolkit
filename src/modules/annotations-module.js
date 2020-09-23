@@ -890,6 +890,7 @@
                 url: serviceUrl + "/search/findByPyramid",
                 async: false,
                 type: 'GET',
+                headers: WDZTViewer.osd.ajaxHeaders,
                 data: {
                     pyramid: pyramidId
                 },
@@ -907,6 +908,7 @@
                 url: serviceUrl + "/" + annotId + "/timeSlices/"+ frameId +"/annotationPositions",
                 async: false,
                 type: 'GET',
+                headers: WDZTViewer.osd.ajaxHeaders,
                 success: function (data){
                     console.log("SUCCESS : ", data);
                     var objects = JSON.parse(data);
@@ -1432,6 +1434,7 @@
                 url: serviceUrl + "/search/findByPyramid",
                 async: false,
                 type: 'GET',
+                headers: WDZTViewer.osd.ajaxHeaders,
                 data: {
                     pyramid: pyramidId
                 },
@@ -1456,6 +1459,7 @@
                     dataType: 'json',
                     contentType: 'application/json',
                     type: 'POST',
+                    headers: WDZTViewer.osd.ajaxHeaders,
                     data: annotData,
                     processData: false,
                     success: function (response){
@@ -1471,6 +1475,7 @@
             // Store pyramidAnnotation file
             $.ajax({
                 type: "POST",
+                headers: WDZTViewer.osd.ajaxHeaders,
                 enctype: 'multipart/form-data',
                 url: serviceUrl + "/" + annotId + "/timeSlices/"+ frameId +"/annotationPositions",
                 data: data,
