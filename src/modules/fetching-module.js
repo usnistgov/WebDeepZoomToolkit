@@ -307,11 +307,27 @@
             }
         }
 
-        $.fileDownload(url, {
-            prepareCallback: settings.prepareCallback,
-            successCallback: settings.successCallback,
-            failCallback: settings.failCallback
-        });
+        // Two-steps fetching is auth headers are present
+        if(!$.isEmptyObject(viewer.osd.ajaxHeaders)) {
+            var requestFetchingOptions = {
+                url: url,
+                headers: viewer.osd.ajaxHeaders,
+                withCredentials: false,
+                success: function(result) {
+                    var downloadLink = JSON.parse(result.response);
+                    if ($.isEmptyObject(downloadLink) || !downloadLink.hasOwnProperty('url')) {
+                        settings.failCallback();
+                        return;
+                    }
+                    fetchImages(downloadLink.url, settings);
+                },
+                error: settings.failCallback
+            };
+            OpenSeadragon.makeAjaxRequest(requestFetchingOptions);
+        } else {
+            fetchImages(url, settings);
+        }
+
 
         // We need to manually remove the iframes from file download before
         // going or leaving fullscreen to avoid to restart the download.
@@ -324,6 +340,14 @@
                     $(this).remove();
                 }
             });
+        });
+    }
+
+    function fetchImages(url, settings) {
+        $.fileDownload(url, {
+            prepareCallback: settings.prepareCallback,
+            successCallback: settings.successCallback,
+            failCallback: settings.failCallback
         });
     }
 
