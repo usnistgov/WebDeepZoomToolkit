@@ -314,10 +314,8 @@
                 headers: viewer.osd.ajaxHeaders,
                 withCredentials: false,
                 success: function(result) {
-                    console.log(result);
                     var downloadLink = JSON.parse(result.response);
                     if ($.isEmptyObject(downloadLink) || !downloadLink.hasOwnProperty('url')) {
-                        console.log("fail")
                         settings.failCallback();
                         return;
                     }
