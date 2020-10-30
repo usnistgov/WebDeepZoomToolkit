@@ -1231,9 +1231,6 @@
 
         function _removeItem($row) {
             $row.remove();
-            if(!annotationsExist()){
-                $('#list-controls').hide();
-            }
         }
 
         function _updateList(annotations) {
@@ -1485,9 +1482,15 @@
                 timeout: 600000,
                 success: function (data) {
                     console.log("SUCCESS : ", data);
+                    WDZTViewer.displayNotification("Annotations saved");
                 },
                 error: function (e) {
                     console.log("ERROR : ", e);
+                    var message = "Unable to save annotations";
+                    if (e.statusText) {
+                        message += "<br>" + e.statusText;
+                    }
+                    WDZTViewer.displayWarning(message);
                 }
             });
         }
