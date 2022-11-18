@@ -30,6 +30,7 @@
         this.sortableId = "wdzt-layer-composition-sortable-" + this.id;
         this.inputClass = "wdzt-layer-composition-input-" + this.id;
         this.sliderClass = "wdzt-layer-composition-slider-" + this.id;
+        this.colorPickClass = "wdzt-layer-composition-colorpick-" + this.id;
         var _this = this;
 
         var template = Handlebars.compile([
@@ -46,8 +47,16 @@
             '                   data-layer-id="{{id}}"',
             '                   type="checkbox"/>',
             '        </div>',
-            '        <div class="wdzt-cell-layout wdzt-no-wrap">',
+            '        <div class="wdzt-cell-layout">',
             '            <label for="{{../prefix}}-{{id}}-{{../suffix}}">{{name}}</label>',
+            '        </div>',
+            '       <div class="wdzt-cell-layout wdzt-no-wrap">',
+            '            <input name="value"',
+            '                   class="{{../colorPickClass}}"',
+            '                   data-layer-id="{{id}}"',
+            '                   value="#ffffff"',
+            '                   disabled="true"',
+            '                   type="color"/>',
             '        </div>',
             '        <div class="wdzt-cell-layout wdzt-full-width">',
             '            <div class="{{../sliderClass}} wdzt-menu-slider"',
@@ -70,7 +79,10 @@
             var slider = $("." + _this.sliderClass +
                     "[data-layer-id='" + layer.id + "']");
             var opacity = slider.slider("value");
+            var colorPick = $("." + _this.colorPickClass +
+                "[data-layer-id='" + layer.id + "']");
             var index = getLayerIndex(layerId);
+            var color = colorPick[0].value;
 
             var options = {
                 tileSource: url,
@@ -79,6 +91,7 @@
                 error: function(event) {
                     checkBox.prop("checked", false);
                     slider.slider("disable");
+                    colorPick[0].disabled = true;
                     _this.viewer.displayError("Cannot superpose layer \"" +
                             layer.name + "\": " + event.message);
                 },
@@ -86,6 +99,10 @@
                     superposedLayers[layer.id] = event.item;
                     checkBox.prop("checked", true);
                     slider.slider("enable");
+                    colorPick[0].disabled = false;
+                    if (color != "#ffffff") {
+                        updateFilters(event.item, color);
+                    }
                 }
             };
             _this.viewer.osd.addTiledImage(options);
@@ -101,6 +118,7 @@
                     prop("checked", false);
             $("." + _this.sliderClass + "[data-layer-id='" + layerId + "']").
                     slider("disable");
+            $("." + _this.colorPickClass + "[data-layer-id='" + layerId + "']")[0].disabled = true;
         }
 
         function refreshLayersOrder() {
@@ -119,8 +137,50 @@
             var $layer = $("." + _this.inputClass + "[data-layer-id='" +
                     layerId + "']");
             var layersCount = _this.viewer.osd.world.getItemCount();
-            return layersCount -
-                    $("." + _this.inputClass + ":checked").index($layer);
+            var layerIndex = $("." + _this.inputClass + ":checked").index($layer) + 1;
+            return layerIndex;
+        }
+
+        function updateFilters(item, color) {
+            var currentFilterOptions = _this.viewer.osd.getFilterOptions();
+            var filterOptions = {
+                filters: [],
+                sync: false
+            }
+            if(currentFilterOptions) {
+                filterOptions.filters = currentFilterOptions.filters;
+                var currentItemIndex = filterOptions.filters.findIndex($$.FilteringHelper.containsItemFilter, item);
+                if (currentItemIndex > -1) {
+                    filterOptions.filters.splice(currentItemIndex, 1);
+                }
+            }
+            Caman.Store.put = function() {};
+            var hexColorValue = color.replace('#','');
+            var colorChannels = {
+                'red' : parseInt(hexColorValue.substring(0,2), 16)-255,
+                'green' : parseInt(hexColorValue.substring(2,4), 16)-255,
+                'blue' : parseInt(hexColorValue.substring(4,6), 16)-255,
+                'a' : 1
+            }
+
+            filterOptions.filters.push(
+                {
+                    items: [item],
+                    processors: [
+                        function(context, callback) {
+                            Caman(context.canvas, colorChannels, function() {
+                                this.channels(
+                                    {red: colorChannels.red,
+                                        blue: colorChannels.blue,
+                                        green: colorChannels.green}
+                                )
+                                this.render(callback);
+                            });
+                        }]
+                }
+            );
+            _this.viewer.osd.setFilterOptions(
+                filterOptions);
         }
 
         this._layerChangedHandler = function(event) {
@@ -135,6 +195,7 @@
                 layers: layers,
                 sortableId: _this.sortableId,
                 inputClass: _this.inputClass,
+                colorPickClass: _this.colorPickClass,
                 prefix: "wdzt-layer-composition",
                 suffix: _this.id,
                 sliderClass: _this.sliderClass
@@ -179,6 +240,15 @@
                     addSuperposedLayer(layerId);
                 } else {
                     removeSuperposedLayer(layerId);
+                }
+            });
+
+            $("." + _this.colorPickClass).change(function(colorPickEvent) {
+                var layerId = $(colorPickEvent.target).attr("data-layer-id");
+                var color = $(colorPickEvent.target).prop("value");
+                var item = superposedLayers[layerId];
+                if (item) {
+                    updateFilters(item, color);
                 }
             });
         };

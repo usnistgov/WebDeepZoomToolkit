@@ -42,6 +42,10 @@
         }
     };
 
+    $.Viewer.prototype.getFilterOptions = function() {
+        return this.filterPluginInstance ? this.filterPluginInstance : null;
+    };
+
     /**
      * @class FilterPlugin
      * @param {Object} options The options

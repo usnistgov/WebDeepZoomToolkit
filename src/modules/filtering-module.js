@@ -88,11 +88,23 @@
                 $filtersList.append("<li>" + filter.name + ": " +
                         filter.generatedFilter.getParams() + "</li>");
             });
-            _this.viewer.osd.setFilterOptions({
-                filters: {
+            var currentFilters = [];
+            var filterOptions = _this.viewer.osd.getFilterOptions();
+            if (filterOptions) {
+                currentFilters = filterOptions.filters;
+            }
+            var updatedFilters = $$.FilteringHelper.updateFilters(
+                _this.viewer.osd.world.getItemAt(0),
+                {
                     items: [_this.viewer.osd.world.getItemAt(0)],
                     processors: filters
                 },
+                currentFilters);
+            if (updatedFilters.length > 1) {
+                sync = false;
+            }
+            _this.viewer.osd.setFilterOptions({
+                filters: updatedFilters,
                 loadMode: sync ? 'sync' : 'async'
             });
         }
